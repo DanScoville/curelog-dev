@@ -1,0 +1,3589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDI0IDEwMjQiPjxyZWN0IHdpZHRoPSIxMDI0IiBoZWlnaHQ9IjEwMjQiIHJ4PSIyMjQiIGZpbGw9IiMwZTFhMjgiLz48Y2lyY2xlIGN4PSI1MTIiIGN5PSI1MTIiIHI9IjQ1MCIgZmlsbD0iIzBmMjAzNSIvPjxjaXJjbGUgY3g9IjUxMiIgY3k9IjUxMiIgcj0iNDUwIiBmaWxsPSJub25lIiBzdHJva2U9IiMxRDlFNzUiIHN0cm9rZS13aWR0aD0iODIiLz48Y2lyY2xlIGN4PSI1MTIiIGN5PSI1MTIiIHI9IjI5NyIgZmlsbD0iIzBhMTUyMCIvPjxjaXJjbGUgY3g9IjUxMiIgY3k9IjUxMiIgcj0iMjk3IiBmaWxsPSJub25lIiBzdHJva2U9IiMxYTNhNWMiIHN0cm9rZS13aWR0aD0iNDEiLz48Y2xpcFBhdGggaWQ9IndjIj48Y2lyY2xlIGN4PSI1MTIiIGN5PSI1MTIiIHI9IjI1NiIvPjwvY2xpcFBhdGg+PGcgY2xpcC1wYXRoPSJ1cmwoI3djKSI+PHBvbHlsaW5lIHBvaW50cz0iMjU2LDUxMiAzMjgsNTEyIDM2OSwzNzkgNDIwLDY0NSA0NjEsNDUxIDUwMiw1NzQgNTQzLDQxMCA1ODQsNTEyIDc2OCw1MTIiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzFEOUU3NSIgc3Ryb2tlLXdpZHRoPSI1NiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PC9nPjwvc3ZnPg==">
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDI0IDEwMjQiPjxyZWN0IHdpZHRoPSIxMDI0IiBoZWlnaHQ9IjEwMjQiIHJ4PSIyMjQiIGZpbGw9IiMwZTFhMjgiLz48Y2lyY2xlIGN4PSI1MTIiIGN5PSI1MTIiIHI9IjQ1MCIgZmlsbD0iIzBmMjAzNSIvPjxjaXJjbGUgY3g9IjUxMiIgY3k9IjUxMiIgcj0iNDUwIiBmaWxsPSJub25lIiBzdHJva2U9IiMxRDlFNzUiIHN0cm9rZS13aWR0aD0iODIiLz48Y2lyY2xlIGN4PSI1MTIiIGN5PSI1MTIiIHI9IjI5NyIgZmlsbD0iIzBhMTUyMCIvPjxjaXJjbGUgY3g9IjUxMiIgY3k9IjUxMiIgcj0iMjk3IiBmaWxsPSJub25lIiBzdHJva2U9IiMxYTNhNWMiIHN0cm9rZS13aWR0aD0iNDEiLz48Y2xpcFBhdGggaWQ9IndjIj48Y2lyY2xlIGN4PSI1MTIiIGN5PSI1MTIiIHI9IjI1NiIvPjwvY2xpcFBhdGg+PGcgY2xpcC1wYXRoPSJ1cmwoI3djKSI+PHBvbHlsaW5lIHBvaW50cz0iMjU2LDUxMiAzMjgsNTEyIDM2OSwzNzkgNDIwLDY0NSA0NjEsNDUxIDUwMiw1NzQgNTQzLDQxMCA1ODQsNTEyIDc2OCw1MTIiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzFEOUU3NSIgc3Ryb2tlLXdpZHRoPSI1NiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+PC9nPjwvc3ZnPg==">
+<meta name="theme-color" content="#0e1a28">
+<link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiQ3VyZUxvZyBBbmRyb2lkIE1vYmlsZSBUcnVjayBBcHAiLCJzaG9ydF9uYW1lIjoiQ3VyZUxvZyIsInN0YXJ0X3VybCI6Ii4iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjMGUxYTI4IiwidGhlbWVfY29sb3IiOiIjMUQ5RTc1IiwiaWNvbnMiOlt7InNyYyI6ImRhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlp5QjRiV3h1Y3owaWFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNQzl6ZG1jaUlIWnBaWGRDYjNnOUlqQWdNQ0F4TURJMElERXdNalFpUGp4eVpXTjBJSGRwWkhSb1BTSXhNREkwSWlCb1pXbG5hSFE5SWpFd01qUWlJSEo0UFNJeU1qUWlJR1pwYkd3OUlpTXdaVEZoTWpnaUx6NDhZMmx5WTJ4bElHTjRQU0kxTVRJaUlHTjVQU0kxTVRJaUlISTlJalExTUNJZ1ptbHNiRDBpSXpCbU1qQXpOU0l2UGp4amFYSmpiR1VnWTNnOUlqVXhNaUlnWTNrOUlqVXhNaUlnY2owaU5EVXdJaUJtYVd4c1BTSnViMjVsSWlCemRISnZhMlU5SWlNeFJEbEZOelVpSUhOMGNtOXJaUzEzYVdSMGFEMGlPRElpTHo0OFkybHlZMnhsSUdONFBTSTFNVElpSUdONVBTSTFNVElpSUhJOUlqSTVOeUlnWm1sc2JEMGlJekJoTVRVeU1DSXZQanhqYVhKamJHVWdZM2c5SWpVeE1pSWdZM2s5SWpVeE1pSWdjajBpTWprM0lpQm1hV3hzUFNKdWIyNWxJaUJ6ZEhKdmEyVTlJaU14WVROaE5XTWlJSE4wY205clpTMTNhV1IwYUQwaU5ERWlMejQ4WTJ4cGNGQmhkR2dnYVdROUluZGpJajQ4WTJseVkyeGxJR040UFNJMU1USWlJR041UFNJMU1USWlJSEk5SWpJMU5pSXZQand2WTJ4cGNGQmhkR2crUEdjZ1kyeHBjQzF3WVhSb1BTSjFjbXdvSTNkaktTSStQSEJ2Ykhsc2FXNWxJSEJ2YVc1MGN6MGlNalUyTERVeE1pQXpNamdzTlRFeUlETTJPU3d6TnprZ05ESXdMRFkwTlNBME5qRXNORFV4SURVd01pdzFOelFnTlRRekxEUXhNQ0ExT0RRc05URXlJRGMyT0N3MU1USWlJR1pwYkd3OUltNXZibVVpSUhOMGNtOXJaVDBpSXpGRU9VVTNOU0lnYzNSeWIydGxMWGRwWkhSb1BTSTFOaUlnYzNSeWIydGxMV3hwYm1WallYQTlJbkp2ZFc1a0lpQnpkSEp2YTJVdGJHbHVaV3B2YVc0OUluSnZkVzVrSWk4K1BDOW5Qand2YzNablBnPT0iLCJzaXplcyI6ImFueSIsInR5cGUiOiJpbWFnZS9zdmcreG1sIn1dfQ==">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>CureLog Android Mobile Truck App</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --g:#1D9E75;--gd:#0F6E56;--gl:#e8f7f2;
+  --b:#378ADD;--bd:#185FA5;--bl:#e8f2fd;
+  --am:#E8A838;--al:#fef6e4;
+  --re:#E24B4A;--rl:#fdf0f0;
+  --bg:#f0f4f8;--card:#fff;--bor:#e2e6ea;
+  --t1:#1a2332;--t2:#4a5568;--t3:#8896a5;--t4:#b0bac5;
+  --sh:0 2px 8px rgba(0,0,0,.08);
+  --r:12px;--rl2:16px;
+  --nav:60px;
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+  --safe-top:env(safe-area-inset-top,0px);
+}
+html,body{height:100%;overflow:hidden;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif}
+#app{display:flex;flex-direction:column;height:100%;padding-top:var(--safe-top)}
+
+/* ── TOP BAR ── */
+#topbar{
+  background:#0e1a28;
+  padding:8px 16px;
+  display:flex;align-items:center;gap:10px;
+  flex-shrink:0;z-index:100;
+  box-shadow:0 2px 12px rgba(0,0,0,.3);
+}
+
+
+
+
+.tb-badges{display:flex;align-items:center;gap:6px;margin-left:auto}
+#tb-truck-badge{font-size:10px;font-weight:700;background:rgba(255,255,255,.12);color:#fff;padding:3px 8px;border-radius:20px;display:none}
+#tb-job-badge{font-size:10px;font-weight:700;background:rgba(29,158,117,.25);color:var(--g);padding:3px 8px;border-radius:20px;display:none}
+#tb-cloud{display:flex;align-items:center;gap:4px}
+.cdot{width:7px;height:7px;border-radius:50%;background:var(--t4)}
+.cdot.on{background:var(--g);box-shadow:0 0 6px var(--g)}
+.cdot.off{background:var(--re)}
+#tb-cloud span{font-size:10px;color:var(--t3)}
+.tb-ver{font-size:9px;font-weight:700;color:var(--g);font-family:monospace;background:rgba(29,158,117,.15);padding:2px 5px;border-radius:4px}
+#tb-end-btn{background:var(--re);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;flex-shrink:0;display:none;min-height:36px;-webkit-tap-highlight-color:rgba(0,0,0,.1)}
+
+/* ── PAGES ── */
+#pages{flex:1;overflow:hidden;position:relative}
+.page{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding:12px 12px calc(var(--nav) + 12px + var(--safe-bottom));display:none}
+.page.active{display:block}
+
+/* ── BOTTOM NAV ── */
+#nav{
+  position:fixed;bottom:0;left:0;right:0;
+  height:calc(var(--nav) + var(--safe-bottom));
+  padding-bottom:var(--safe-bottom);
+  background:#fff;border-top:1px solid var(--bor);
+  display:flex;z-index:200;
+  box-shadow:0 -2px 12px rgba(0,0,0,.08);
+}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:none;background:none;cursor:pointer;padding:8px 4px;color:var(--t4);transition:color .15s}
+.nav-btn.active{color:var(--g)}
+.nav-btn svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.nav-btn span{font-size:10px;font-weight:600}
+
+/* ── STARTUP PAGE ── */
+#page-setup{background:var(--bg);padding-bottom:calc(var(--nav) + 90px + env(safe-area-inset-bottom,0px)) !important}
+.su-card{background:var(--card);border-radius:var(--rl2);padding:16px;margin-bottom:12px;box-shadow:var(--sh)}
+.su-card-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--t3);margin-bottom:12px}
+.su-field{margin-bottom:10px}
+.su-field label{display:block;font-size:11px;font-weight:600;color:var(--t3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px}
+.su-inp{width:100%;padding:11px 14px;border:1.5px solid var(--bor);border-radius:10px;font-size:15px;color:var(--t1);background:#fff;outline:none;transition:border-color .2s}
+.su-inp:focus{border-color:var(--g)}
+.su-inp-prefix{display:flex;align-items:center;border:1.5px solid var(--bor);border-radius:10px;overflow:hidden;background:#fff;transition:border-color .2s}
+.su-inp-prefix:focus-within{border-color:var(--g)}
+.su-prefix-lbl{padding:0 10px;font-size:14px;font-weight:700;color:var(--g);background:var(--gl);height:44px;display:flex;align-items:center;border-right:1.5px solid var(--bor);flex-shrink:0}
+.su-inp-prefix input{flex:1;padding:11px 12px;border:none;font-size:15px;color:var(--t1);outline:none;background:transparent}
+.sensor-card{background:var(--card);border-radius:var(--rl2);padding:14px;margin-bottom:10px;box-shadow:var(--sh);border:2px solid transparent;transition:border-color .2s}
+.sensor-card.ok-s1{border-color:var(--g);background:var(--gl)}
+.sensor-card.ok-s2{border-color:var(--b);background:var(--bl)}
+.sc-row{display:flex;align-items:center;gap:10px}
+.sc-dot{width:10px;height:10px;border-radius:50%;background:var(--t4);flex-shrink:0;transition:background .3s}
+.sc-dot.g{background:var(--g);box-shadow:0 0 8px var(--g)}
+.sc-dot.b{background:var(--b);box-shadow:0 0 8px var(--b)}
+.sc-title{font-size:14px;font-weight:700;color:var(--t1);flex:1}
+.sc-status{font-size:12px;color:var(--t3)}
+.sc-status.ok{color:var(--g);font-weight:600}
+.sc-status.err{color:var(--re)}
+.sc-btn{padding:8px 16px;border-radius:9px;border:none;font-size:13px;font-weight:700;cursor:pointer;flex-shrink:0}
+.sc-btn.conn{background:var(--g);color:#fff}
+.sc-btn.disc{background:transparent;border:1.5px solid var(--re);color:var(--re)}
+.sc-name-inp{width:100%;margin-top:8px;padding:8px 12px;border:1px solid var(--bor);border-radius:8px;font-size:13px;color:var(--t3);background:#f8f9fa}
+.su-hint{font-size:12px;color:var(--t3);text-align:center;padding:6px;margin-bottom:8px}
+.su-hint.ok{color:var(--g);font-weight:600}
+/* btn-start moved to sticky footer */
+.dev-bypass-btn{width:100%;padding:10px;background:transparent;border:1px dashed var(--am);border-radius:8px;color:var(--am);font-size:12px;font-weight:600;cursor:pointer;margin-top:8px}
+
+/* ── CONN LOG ── */
+#su-clog{background:#0e1a28;border-radius:10px;padding:10px;height:180px;overflow-y:auto;font-family:monospace;font-size:11px;margin-top:8px;-webkit-overflow-scrolling:touch}
+.cl-ok{color:#4ade80}.cl-err{color:#f87171}.cl-warn{color:#fbbf24}.cl-info{color:#7dd3fc}
+
+/* ── MONITOR PAGE ── */
+.coll-bar{background:var(--card);border-radius:12px;padding:12px 14px;margin-bottom:10px;box-shadow:var(--sh);display:none}
+#collection-timer-bar.active{display:block}
+.coll-top{display:flex;align-items:center;gap:10px}
+#collect-dot{width:8px;height:8px;border-radius:50%;background:var(--t4);flex-shrink:0}
+.coll-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--t3)}
+#collect-elapsed{font-size:28px;font-weight:700;font-family:monospace;color:var(--g);letter-spacing:1px;line-height:1}
+.coll-stats{display:flex;gap:14px;margin-top:6px;padding-top:6px;border-top:1px solid var(--bor)}
+.coll-stat{font-size:10px;color:var(--t3)}
+.coll-stat b{color:var(--t2);font-weight:700}
+
+/* Sensor tiles */
+.tiles-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.stile{background:var(--card);border-radius:var(--rl2);overflow:hidden;box-shadow:var(--sh);border:2px solid transparent;transition:border-color .3s}
+.stile.con-s1{border-color:var(--g)}
+.stile.con-s2{border-color:var(--b)}
+.stile-hdr{padding:8px 12px;display:flex;align-items:center;gap:6px;border-bottom:1px solid var(--bor);background:#fafbfc}
+.stile-led{width:7px;height:7px;border-radius:50%;background:var(--t4);flex-shrink:0}
+.stile-led.lg{background:var(--g);box-shadow:0 0 6px var(--g)}
+.stile-led.lb{background:var(--b);box-shadow:0 0 6px var(--b)}
+.stile-name{font-size:11px;font-weight:700;color:var(--t2);flex:1;text-transform:uppercase;letter-spacing:.3px}
+.stile-batt{font-size:10px;color:var(--t3)}
+.stile-badge{font-size:9px;padding:2px 6px;border-radius:10px;font-weight:700}
+.stile-badge.on{background:var(--gl);color:var(--gd)}
+.stile-badge.off{background:#f0f4f8;color:var(--t4)}
+.stile-body{padding:12px;text-align:center}
+.stile-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--t4);margin-bottom:4px}
+.stile-val{font-size:40px;font-weight:700;line-height:1;letter-spacing:-1.5px;color:var(--t1)}
+.stile-val span{font-size:14px;font-weight:600;color:var(--t3);margin-left:2px}
+.stile-val.gv{color:var(--gd)}
+.stile-val.bv{color:var(--bd)}
+.stile-stats{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--bor)}
+.stile-stat{padding:8px;text-align:center;border-right:1px solid var(--bor)}
+.stile-stat:last-child{border-right:none}
+.stile-stat-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--t4);margin-bottom:2px}
+.stile-stat-val{font-size:14px;font-weight:700;color:var(--t2);font-family:monospace}
+
+/* Chart section */
+.chart-card{background:var(--card);border-radius:var(--rl2);margin-bottom:10px;box-shadow:var(--sh);overflow:hidden}
+.chart-hdr{padding:10px 12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;border-bottom:1px solid var(--bor)}
+.chart-leg{display:flex;align-items:center;gap:10px;flex:1;flex-wrap:wrap}
+.leg-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--t2);white-space:nowrap}
+.chart-range-wrap{display:flex;gap:4px;width:100%;padding-top:8px;border-top:1px solid var(--bor)}
+.cr-btn{flex:1;padding:5px;border:1px solid var(--bor);border-radius:6px;background:var(--card);color:var(--t3);font-size:10px;font-weight:600;cursor:pointer;text-align:center}
+.cr-btn.active{background:var(--g);color:#fff;border-color:var(--g)}
+#sparkCanvas{width:100%!important;height:220px!important;display:block}
+
+/* ── LOGS PAGE ── */
+.log-card{background:var(--card);border-radius:var(--rl2);margin-bottom:10px;box-shadow:var(--sh);overflow:hidden}
+.log-card-hdr{padding:12px 14px;display:flex;align-items:center;gap:8px;background:#fafbfc;border-bottom:1px solid var(--bor)}
+.log-card-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--t2);flex:1}
+.log-cnt{font-size:12px;font-weight:700;color:var(--g)}
+.log-btn{padding:5px 10px;border:1px solid var(--bor);border-radius:6px;background:var(--card);color:var(--t2);font-size:11px;font-weight:600;cursor:pointer}
+#alog{height:180px;overflow-y:auto;font-family:monospace;font-size:10.5px;background:#fafbfc;padding:10px 12px}
+.al-ok{color:var(--gd)}.al-err{color:var(--re)}.al-warn{color:var(--am)}.al-info{color:var(--t2)}
+.rdg-tbl-wrap{overflow-x:auto}
+#rdg-tbl{width:100%;border-collapse:collapse;font-size:11px;min-width:320px}
+#rdg-tbl thead th{background:#f5f6f8;padding:7px 8px;text-align:left;font-size:9px;font-weight:700;color:var(--t3);border-bottom:1px solid var(--bor);text-transform:uppercase;letter-spacing:.4px}
+#rdg-tbl tbody td{padding:7px 8px;border-bottom:1px solid #f5f6f8;color:var(--t1);font-size:11px}
+.ucl-row td{background:var(--rl)!important;color:var(--re)!important}
+.lcl-row td{background:var(--al)!important;color:#8a5e0a!important}
+
+/* ── SETTINGS PAGE ── */
+.ssec{background:var(--card);border:1px solid var(--bor);border-radius:var(--rl2);margin-bottom:10px;overflow:hidden;box-shadow:var(--sh)}
+.ssec-hdr{padding:10px 14px;background:#fafbfc;border-bottom:1px solid var(--bor);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--t3);display:flex;align-items:center}
+.ssec-bdy{padding:12px 14px}
+.srow{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.srow:last-child{margin-bottom:0}
+.srow label:first-child{flex:1;font-size:13px;color:var(--t2)}
+.ssel{padding:8px 10px;border:1.5px solid var(--bor);border-radius:8px;font-size:13px;color:var(--t1);background:var(--card);min-width:110px}
+.snum{width:80px;padding:8px 10px;border:1.5px solid var(--bor);border-radius:8px;font-size:13px;color:var(--t1);text-align:right}
+.sbtn{padding:8px 14px;border:1.5px solid var(--bor);border-radius:8px;background:#f5f6f8;color:var(--t2);font-size:12px;font-weight:600;cursor:pointer}
+.sinp{flex:1;padding:8px 12px;border:1.5px solid var(--bor);border-radius:8px;font-size:13px;color:var(--t1);background:#fff}
+.tgl-wrap{position:relative;width:44px;min-width:44px;height:24px;flex-shrink:0}
+.tgl-wrap input{opacity:0;width:0;height:0;position:absolute}
+.tgl{position:absolute;inset:0;background:#d0d5dd;border-radius:12px;cursor:pointer;transition:.2s}
+.tgl-wrap input:checked+.tgl{background:var(--g)}
+.tgl:before{content:'';position:absolute;width:20px;height:20px;left:2px;top:2px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.tgl-wrap input:checked+.tgl:before{transform:translateX(20px)}
+.igrid{display:grid;grid-template-columns:auto 1fr;gap:5px 12px;font-size:12px}
+.igrid .lbl{color:var(--t3)}
+.igrid .val{font-weight:600;color:var(--t1);font-family:monospace;font-size:11px}
+.raw-ble{font-family:monospace;font-size:11px;color:var(--t2);background:#f5f6f8;border-radius:6px;padding:6px 8px;word-break:break-all}
+.sfooter{padding:10px 14px 16px;font-size:10px;color:var(--t3);font-family:monospace;text-align:center;border-top:1px solid var(--bor);margin-top:4px}
+.ver{font-size:11px;font-weight:700;color:var(--g)}
+
+/* Gen5 features */
+.approx-cell{background:#fffbe6!important;color:#7a5c00!important;font-style:italic;position:relative;cursor:default}
+
+/* ── END SESSION MODAL ── */
+#sd-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:9999;align-items:flex-end;justify-content:center;padding-bottom:env(safe-area-inset-bottom,0px)}
+#sd-overlay.show{display:flex}
+#sd-card{background:#fff;border-radius:20px 20px 0 0;width:100%;max-height:92vh;overflow-y:auto;padding-bottom:env(safe-area-inset-bottom,0px);-webkit-overflow-scrolling:touch}
+.sd-hdr{background:#1a2332;padding:16px 20px;border-radius:20px 20px 0 0;display:flex;align-items:center;gap:10px}
+.sd-hdr-title{font-size:16px;font-weight:700;color:#fff}
+.sd-hdr-sub{font-size:11px;color:#8896a5;margin-top:2px}
+#sd-step1,#sd-step2,#sd-step3{padding:16px}
+.sd-choice-btn{width:100%;padding:14px;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:10px;border:2px solid}
+.sd-save-btn{background:#e8f7f2;color:#0F6E56;border-color:var(--g)}
+.sd-skip-btn{background:#f5f6f8;color:#4a5568;border-color:#e2e6ea}
+.sd-cancel-btn{width:100%;padding:10px;background:transparent;border:1px solid #e2e6ea;border-radius:10px;color:#8896a5;font-size:13px;cursor:pointer}
+.sd-file-row{border:1.5px solid #e2e6ea;border-radius:12px;padding:12px;margin-bottom:8px}
+.sd-file-check{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.sd-file-check input[type=checkbox]{width:18px;height:18px;accent-color:var(--g);flex-shrink:0}
+.sd-fn-wrap{display:flex;align-items:center;gap:6px;background:#f8f9fa;border-radius:8px;padding:6px 10px;border:1px solid #e2e6ea}
+.sd-fn-inp{flex:1;border:none;background:transparent;font-size:11px;font-family:monospace;color:#1a2332;outline:none}
+#sd-shutdown-log{background:#f5f6f8;border-radius:8px;padding:12px;margin-bottom:14px;font-size:11px;color:#4a5568;line-height:1.8;max-height:140px;overflow-y:auto}
+.sd-action-row{display:flex;gap:8px}
+.sd-keep-btn{flex:1;padding:13px;border:1.5px solid #e2e6ea;border-radius:10px;background:#f5f6f8;color:#4a5568;font-size:14px;font-weight:600;cursor:pointer}
+.sd-close-btn{flex:1;padding:13px;border:none;border-radius:10px;background:var(--re);color:#fff;font-size:14px;font-weight:700;cursor:pointer}
+
+/* Pulse animation for active collection */
+@keyframes dp{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* Scrollbar styling */
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--bor);border-radius:2px}
+
+/* ── SETUP PAGE PADDING for sticky footer ── */
+#page-setup{padding-bottom:calc(var(--nav) + 120px + env(safe-area-inset-bottom,0px)) !important}
+
+/* ── STICKY START SESSION FOOTER ───────────────────────────────── */
+#start-footer{
+  position:fixed;
+  bottom:calc(var(--nav) + var(--safe-bottom));
+  left:0;right:0;
+  background:var(--card);
+  border-top:1px solid var(--bor);
+  padding:12px 16px;
+  box-shadow:0 -4px 16px rgba(0,0,0,.12);
+  z-index:300;
+}
+/* btn-start moved to sticky footer */
+
+
+/* ── START SESSION BUTTON ─────────────────────────────────────────── */
+.btn-start{
+  width:100%;
+  padding:18px 16px;
+  background:var(--g);
+  color:#fff;
+  border:none;
+  border-radius:14px;
+  font-size:18px;
+  font-weight:700;
+  cursor:pointer;
+  opacity:0.32;
+  transition:opacity .15s, transform .1s, box-shadow .1s;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  box-shadow: 0 4px 12px rgba(29,158,117,0.0);
+  display:block;
+  min-height:56px;
+  letter-spacing:0.3px;
+}
+.btn-start:not(:disabled){
+  opacity:1;
+  box-shadow: 0 4px 16px rgba(29,158,117,0.35);
+}
+.btn-start:not(:disabled):active{
+  transform: scale(0.97);
+  box-shadow: 0 2px 8px rgba(29,158,117,0.2);
+  opacity:0.9;
+}
+.btn-start.tapping{
+  transform: scale(0.96);
+  opacity:0.85;
+}
+
+
+/* ── ABOUT MODAL ─────────────────────────────────────────────────── */
+#about-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:9998;background:rgba(0,0,0,.65)}
+#about-overlay.show{display:block}
+#about-card{position:fixed;top:20px;left:16px;right:16px;bottom:20px;background:#fff;border-radius:16px;box-shadow:0 8px 40px rgba(0,0,0,.4)}
+#about-hdr-bar{position:absolute;top:0;left:0;right:0;height:48px;background:#0e1a28;border-radius:16px 16px 0 0;display:flex;align-items:center;padding:0 16px;gap:10px;box-sizing:border-box}
+#about-hdr-bar h2{font-size:16px;font-weight:700;color:#fff;margin:0;flex:1}
+#about-close-btn{background:rgba(255,255,255,.15);border:none;color:#fff;width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:18px;line-height:32px;text-align:center;flex-shrink:0;-webkit-tap-highlight-color:transparent}
+#about-cur-block{position:absolute;top:48px;left:0;right:0;height:72px;background:#e8f7f2;border-bottom:2px solid #1D9E75;padding:8px 16px;box-sizing:border-box;overflow:hidden}
+#about-cur-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#1D9E75;margin-bottom:2px}
+#about-cur-ver{font-size:20px;font-weight:700;font-family:monospace;color:#0F6E56;line-height:1.2}
+#about-cur-desc{font-size:10px;color:#4a5568;margin-top:2px;line-height:1.3;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+#about-search-bar{position:absolute;top:120px;left:0;right:0;height:52px;padding:8px 16px;border-bottom:1px solid #e2e8f0;background:#fafbfc;box-sizing:border-box}
+#about-search-inp{width:100%;height:34px;padding:0 10px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:13px;outline:none;box-sizing:border-box}
+#about-search-inp:focus{border-color:#1D9E75}
+#about-scroll{position:absolute;top:172px;left:0;right:0;bottom:0;overflow-y:scroll;-webkit-overflow-scrolling:touch}
+#about-scroll table{width:100%;border-collapse:collapse;font-size:12px}
+#about-scroll thead th{padding:6px 12px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;color:#7a8fa8;border-bottom:2px solid #e2e8f0;background:#f5f6f8}
+#about-scroll tbody tr{border-bottom:1px solid #f0f4f8}
+#about-scroll tbody tr.cur{background:#e8f7f2}
+#about-scroll td{padding:8px 12px;vertical-align:top}
+.abv{display:inline-block;font-family:monospace;font-size:11px;font-weight:700;padding:2px 6px;border-radius:4px;background:#f0f4f8;color:#3a4f6a;white-space:nowrap}
+.abv.cur{background:#1D9E75;color:#fff}
+.abt{color:#1a2332;line-height:1.5;font-size:12px}
+
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ── TOP BAR ── -->
+  <div id="topbar">
+    <div style="display:flex;align-items:center;gap:12px;flex-shrink:0"><div style="width:44px;height:44px;flex-shrink:0;border-radius:11px;background:#1a2e44;padding:4px;box-sizing:border-box"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%" style="display:block"><circle cx="50" cy="50" r="44" fill="#0f2035"/><circle cx="50" cy="50" r="44" fill="none" stroke="#1D9E75" stroke-width="8"/><circle cx="50" cy="50" r="29" fill="#0a1520"/><circle cx="50" cy="50" r="29" fill="none" stroke="#1a3a5c" stroke-width="4"/><clipPath id="ic"><circle cx="50" cy="50" r="25"/></clipPath><g clip-path="url(#ic)"><polyline points="25,50 32,50 36,37 41,63 45,44 49,56 53,40 57,50 75,50" fill="none" stroke="#1D9E75" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/></g></svg></div><div style="display:flex;flex-direction:column;justify-content:center;line-height:1.2"><span style="font-size:20px;font-weight:700;color:#ffffff;letter-spacing:-.3px">CureLog</span><span style="font-size:11px;font-weight:400;color:#6ab4d4;letter-spacing:.1px">Azuria Water Solutions</span></div></div>
+    <div class="tb-badges">
+      <span id="tb-truck-badge"></span>
+      <span id="tb-job-badge"></span>
+      <div id="tb-cloud"><div class="cdot off" id="cdot"></div><span id="clbl">Offline</span></div>
+      <span class="tb-ver" id="tb-ver">v0</span>
+    </div>
+    <button id="tb-end-btn" onclick="shutdownApp()">⏹ End</button>
+  </div>
+
+  <!-- ── PAGES ── -->
+  <div id="pages">
+
+    <!-- SETUP PAGE -->
+    <div class="page active" id="page-setup">
+      <div class="su-card">
+        <div class="su-card-title">📋 Session Info</div>
+        <div class="su-field">
+          <label>Truck ID</label>
+          <div class="su-inp-prefix">
+            <span class="su-prefix-lbl">BTK-</span>
+            <input id="fi-truck" type="text" inputmode="numeric" maxlength="5" placeholder="00001" oninput="chkReady()">
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div class="su-field">
+            <label>Job #</label>
+            <input class="su-inp" id="fi-job" type="text" inputmode="numeric" placeholder="190889" oninput="chkReady()">
+          </div>
+          <div class="su-field">
+            <label>Shot #</label>
+            <input class="su-inp" id="fi-shot" type="text" inputmode="numeric" placeholder="001" oninput="chkReady()">
+          </div>
+        </div>
+        <div class="su-field">
+          <label>Segment #</label>
+          <input class="su-inp" id="fi-seg" type="text" inputmode="numeric" placeholder="001" oninput="chkReady()">
+        </div>
+        <!-- Connection log - shown right after sensors so user sees BLE activity -->
+        <div style="height:1px;background:var(--bor);margin:12px 0 10px"></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;margin-bottom:6px" onclick="toggleConnLog()">
+          <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--t3)">🔌 Connection Log <span id="su-log-dot" style="display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--g);margin-left:4px;box-shadow:0 0 5px var(--g)"></span></span>
+          <span id="clog-arrow" style="font-size:12px;color:var(--t3);transition:transform .2s;transform:rotate(180deg)">▼</span>
+        </div>
+        <div id="su-clog-wrap" style="display:block"><div id="su-clog"></div></div>
+        <div style="height:1px;background:var(--bor);margin:12px 0 10px"></div>
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--t3);margin-bottom:10px">Tube Specs</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+          <div>
+            <div style="font-size:10px;font-weight:600;color:var(--t3);margin-bottom:4px">Diameter <span style="font-weight:400">in</span></div>
+            <input class="su-inp" id="fi-tube-dia" type="number" inputmode="decimal" step="0.001" placeholder="6.0">
+          </div>
+          <div>
+            <div style="font-size:10px;font-weight:600;color:var(--t3);margin-bottom:4px">Thickness <span style="font-weight:400">mm</span></div>
+            <input class="su-inp" id="fi-tube-thick" type="number" inputmode="decimal" step="0.1" placeholder="6.4">
+          </div>
+          <div>
+            <div style="font-size:10px;font-weight:600;color:var(--t3);margin-bottom:4px">Length <span style="font-weight:400">ft</span></div>
+            <input class="su-inp" id="fi-tube-len" type="number" inputmode="decimal" step="0.1" placeholder="250">
+          </div>
+        </div>
+      </div>
+
+      <div class="su-card">
+        <div class="su-card-title">📡 Sensors</div>
+        <!-- S1 -->
+        <div class="sensor-card" id="sc1">
+          <div class="sc-row">
+            <div class="sc-dot" id="sd1"></div>
+            <div>
+              <div class="sc-title">S1 — Pressure (TDWLB5)</div>
+              <div class="sc-status" id="ss1">Not connected</div>
+            </div>
+            <button class="sc-btn conn" id="scb1" onclick="blePickS1()">Connect</button>
+          </div>
+          <input class="sc-name-inp" id="sf1" type="text" placeholder="Sensor name filter (optional)" oninput="if(!this.value.trim()){const cb=document.getElementById('sf1-use');if(cb){cb.checked=false;localStorage.setItem('cl_fuse1','0');}}">
+          <label style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--t3);margin-top:6px;cursor:pointer">
+            <input type="checkbox" id="sf1-use" style="width:14px;height:14px;accent-color:var(--g)" onchange="localStorage.setItem('cl_fuse1',this.checked?'1':'0')"> Use as filter
+          </label>
+          <button class="sc-btn disc" id="sdb1" onclick="discS1()" style="display:none;width:100%;margin-top:8px">Disconnect</button>
+        </div>
+        <!-- S2 -->
+        <div class="sensor-card" id="sc2">
+          <div class="sc-row">
+            <div class="sc-dot" id="sd2"></div>
+            <div>
+              <div class="sc-title">S2 — Temperature (WETS02)</div>
+              <div class="sc-status" id="ss2">Not connected</div>
+            </div>
+            <button class="sc-btn conn" id="scb2" onclick="blePickS2()">Connect</button>
+          </div>
+          <input class="sc-name-inp" id="sf2" type="text" placeholder="Sensor name filter (optional)" oninput="if(!this.value.trim()){const cb=document.getElementById('sf2-use');if(cb){cb.checked=false;localStorage.setItem('cl_fuse2','0');}}">
+          <label style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--t3);margin-top:6px;cursor:pointer">
+            <input type="checkbox" id="sf2-use" style="width:14px;height:14px;accent-color:var(--g)" onchange="localStorage.setItem('cl_fuse2',this.checked?'1':'0')"> Use as filter
+          </label>
+          <button class="sc-btn disc" id="sdb2" onclick="discS2()" style="display:none;width:100%;margin-top:8px">Disconnect</button>
+        </div>
+      </div>
+
+      <button class="dev-bypass-btn" onclick="devBypass()">🔧 Dev Bypass</button>
+
+      <!-- Start Session Footer — fixed to screen bottom, shown only on Setup tab -->
+      <div id="start-footer" style="display:block">
+        <div class="su-hint" id="su-hint" style="margin-bottom:8px">Connect at least one sensor to continue</div>
+        <button class="btn-start" id="btn-start" disabled
+          onclick="startSession()"
+          ontouchstart="this.classList.add('tapping')"
+          ontouchend="this.classList.remove('tapping');startSession()"
+          ontouchcancel="this.classList.remove('tapping')">▶ Start Session</button>
+      </div>
+    </div>
+
+    <!-- MONITOR PAGE -->
+    <div class="page" id="page-monitor">
+      <!-- Active Collection Timer -->
+      <div class="coll-bar" id="collection-timer-bar">
+        <div style="display:flex;align-items:flex-start;gap:7px;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--bor)">
+          <div style="width:8px;height:8px;border-radius:50%;background:var(--g);flex-shrink:0;margin-top:2px;box-shadow:0 0 5px var(--g)"></div>
+          <div style="flex:1;min-width:0">
+            <div id="coll-session-path" style="font-size:11px;font-weight:500;color:var(--t2);line-height:1.5">—</div>
+            <div id="coll-tube-info" style="font-size:11px;font-weight:500;color:var(--t2);margin-top:1px"></div>
+          </div>
+        </div>
+        <div class="coll-top">
+          <div id="collect-dot"></div>
+          <span class="coll-lbl">Active Collection</span>
+          <div id="collect-elapsed" style="font-size:24px;font-weight:700;font-family:monospace;color:var(--g)">00:00:00</div>
+        </div>
+        <div class="coll-stats">
+          <div class="coll-stat">Readings: <b id="collect-readings">0</b></div>
+          <div class="coll-stat">S1: <b id="collect-rate-s1" style="color:var(--gd)">—</b></div>
+          <div class="coll-stat">S2: <b id="collect-rate-s2" style="color:var(--bd)">—</b></div>
+        </div>
+      </div>
+
+      <!-- Sensor Tiles -->
+      <div class="tiles-grid">
+        <!-- S1 Pressure -->
+        <div class="stile" id="sec-s1">
+          <div class="stile-hdr">
+            <div class="stile-led" id="ml1"></div>
+            <span class="stile-name s1" style="color:var(--gd)">S1 — INLET</span>
+            <span class="stile-badge off" id="mb1">OFF</span>
+          </div>
+          <div class="stile-body dim" id="sb1">
+            <div class="stile-lbl">INLET PRESSURE</div>
+            <div class="stile-val gv" id="sv1">—<span id="su1">PSI</span></div>
+          </div>
+          <div class="stile-stats">
+            <div class="stile-stat"><div class="stile-stat-lbl">MIN</div><div class="stile-stat-val" id="smn1">--</div></div>
+            <div class="stile-stat"><div class="stile-stat-lbl">MAX</div><div class="stile-stat-val" id="smx1">--</div></div>
+          </div>
+        </div>
+        <!-- S2 Temperature -->
+        <div class="stile" id="sec-s2">
+          <div class="stile-hdr">
+            <div class="stile-led" id="ml2"></div>
+            <span class="stile-name s2" style="color:var(--bd)">S2 — INLET</span>
+            <span class="stile-badge off" id="mb2">OFF</span>
+          </div>
+          <div class="stile-body dim" id="sb2">
+            <div class="stile-lbl">INLET TEMPERATURE</div>
+            <div class="stile-val bv" id="sv2">—<span id="su2">°F</span></div>
+          </div>
+          <div class="stile-stats">
+            <div class="stile-stat"><div class="stile-stat-lbl">MIN</div><div class="stile-stat-val" id="smn2">--</div></div>
+            <div class="stile-stat"><div class="stile-stat-lbl">MAX</div><div class="stile-stat-val" id="smx2">--</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chart -->
+      <div class="chart-card">
+        <div class="chart-hdr">
+          <div id="chart-session-info" style="width:100%;font-size:10px;font-weight:500;color:var(--t3);padding-bottom:6px;margin-bottom:6px;border-bottom:1px solid var(--bor);display:none"></div>
+          <div class="chart-leg" id="chart-leg">
+            <div class="leg-item"><svg id="leg-sw-s1" width="24" height="12" viewBox="0 0 24 12" style="display:block;flex-shrink:0"></svg><span id="leg-lbl-s1">Inlet Press</span></div>
+            <div class="leg-item"><svg id="leg-sw-s2" width="24" height="12" viewBox="0 0 24 12" style="display:block;flex-shrink:0"></svg><span id="leg-lbl-s2">Inlet Temp</span></div>
+            <div class="leg-item"><svg width="24" height="12" viewBox="0 0 24 12" style="display:block;flex-shrink:0"><line x1="0" y1="6" x2="24" y2="6" stroke="#E24B4A" stroke-width="1.5" stroke-dasharray="5,3"/></svg>UCL</div>
+            <div class="leg-item"><svg width="24" height="12" viewBox="0 0 24 12" style="display:block;flex-shrink:0"><line x1="0" y1="6" x2="24" y2="6" stroke="#E8A838" stroke-width="1.5" stroke-dasharray="5,3"/></svg>LCL</div>
+          </div>
+          <div class="chart-range-wrap">
+            <button class="cr-btn" onclick="setRange('all')">All</button>
+            <button class="cr-btn" onclick="setRange(30)">30m</button>
+            <button class="cr-btn" onclick="setRange(15)">15m</button>
+            <button class="cr-btn active" onclick="setRange(5)">5m</button>
+            <button class="cr-btn" onclick="setRange(1)">1m</button>
+          </div>
+        </div>
+        <canvas id="sparkCanvas"></canvas>
+      </div>
+    </div>
+
+    <!-- LOGS PAGE -->
+    <div class="page" id="page-logs">
+      <!-- Activity Log -->
+      <div class="log-card">
+        <div class="log-card-hdr">
+          <span class="log-card-title">Activity Log</span>
+          <button class="log-btn" onclick="exportLog(event)">⬇ Save</button>
+        </div>
+        <div id="alog"></div>
+      </div>
+      <!-- Readings Log -->
+      <div class="log-card">
+        <div class="log-card-hdr">
+          <span class="log-card-title">Readings Log</span>
+          <span class="log-cnt" id="rdg-cnt">0</span>
+          <button class="log-btn" onclick="doCSV()">⬇ CSV</button>
+        </div>
+        <div id="rdg-session-strip" style="display:none;padding:8px 12px;background:#f5f6f8;border-bottom:1px solid var(--bor);font-size:10px;color:var(--t2);line-height:1.7"></div>
+        <div class="rdg-tbl-wrap">
+          <table id="rdg-tbl">
+            <thead><tr><th>Time</th><th>Press</th><th>Temp</th><th>Job</th><th>Shot</th><th>Seg</th></tr></thead>
+            <tbody id="rdg-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- SETTINGS PAGE -->
+    <div class="page" id="page-settings">
+
+      <!-- About & Version -->
+      <div class="ssec" style="margin-bottom:12px">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div>
+            <div style="font-size:14px;font-weight:700;color:var(--t1)" id="settings-ver-display">v—</div>
+            <div style="font-size:11px;color:var(--t3);margin-top:2px">CureLog Android Mobile Truck App</div>
+          </div>
+          <button onclick="openAbout()" style="padding:10px 18px;background:var(--g);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;-webkit-tap-highlight-color:transparent;min-height:44px">ℹ About</button>
+        </div>
+      </div>
+
+      <!-- Display -->
+      <div class="ssec">
+        <div class="ssec-hdr">🖥 Display</div>
+        <div class="ssec-bdy">
+          <div class="srow"><label>Temperature unit</label><select class="ssel" id="set-tunit" onchange="applySet()"><option value="F">°F Fahrenheit</option><option value="C">°C Celsius</option></select></div>
+          <div class="srow"><label>Pressure unit</label><select class="ssel" id="set-punit" onchange="applySet()"><option value="PSI">PSI</option><option value="Bar">Bar</option><option value="kPa">kPa</option></select></div>
+        </div>
+      </div>
+
+      <!-- Control Limits -->
+      <div class="ssec">
+        <div class="ssec-hdr">📏 Control Limits</div>
+        <div class="ssec-bdy">
+          <div class="srow"><label>UCL</label><label class="tgl-wrap"><input type="checkbox" id="set-ucl-en" checked onchange="applySet()"><span class="tgl"></span></label><input type="number" class="snum" id="set-ucl" value="40" onchange="applySet()"><span style="font-size:11px;color:var(--t3)">PSI</span></div>
+          <div class="srow"><label>LCL</label><label class="tgl-wrap"><input type="checkbox" id="set-lcl-en" checked onchange="applySet()"><span class="tgl"></span></label><input type="number" class="snum" id="set-lcl" value="5" onchange="applySet()"><span style="font-size:11px;color:var(--t3)">PSI</span></div>
+        </div>
+      </div>
+
+      <!-- Chart Scale -->
+      <div class="ssec">
+        <div class="ssec-hdr">📐 Chart Scale (Y-Axis)</div>
+        <div class="ssec-bdy">
+          <div style="font-size:11px;font-weight:700;color:var(--gd);margin-bottom:8px">● Pressure — Left Axis</div>
+          <div class="srow"><label style="font-size:12px">Auto scale</label><label class="tgl-wrap"><input type="checkbox" id="yp-auto" checked onchange="applyScales()"><span class="tgl"></span></label></div>
+          <div id="yp-range-wrap" style="display:none">
+            <div class="srow"><label style="font-size:12px;width:36px;flex-shrink:0">Min</label><input type="number" class="snum" id="yp-min" value="0" step="1" onchange="applyScales()"><span style="font-size:11px;color:var(--t3)" id="yp-unit-lbl">PSI</span></div>
+            <div class="srow"><label style="font-size:12px;width:36px;flex-shrink:0">Max</label><input type="number" class="snum" id="yp-max" value="60" step="1" onchange="applyScales()"><span style="font-size:11px;color:var(--t3)" id="yp-unit-lbl2">PSI</span></div>
+          </div>
+          <div class="srow"><label style="font-size:12px">Y-axis decimals</label><select class="ssel" id="yp-dec" onchange="applyScales()"><option value="0">None (22)</option><option value="1" selected>1 place (22.1)</option><option value="2">2 places</option></select></div>
+          <div style="font-size:11px;font-weight:700;color:var(--bd);margin:10px 0 8px">● Temperature — Right Axis</div>
+          <div class="srow"><label style="font-size:12px">Auto scale</label><label class="tgl-wrap"><input type="checkbox" id="yt-auto" checked onchange="applyScales()"><span class="tgl"></span></label></div>
+          <div id="yt-range-wrap" style="display:none">
+            <div class="srow"><label style="font-size:12px;width:36px;flex-shrink:0">Min</label><input type="number" class="snum" id="yt-min" value="50" step="1" onchange="applyScales()"><span style="font-size:11px;color:var(--t3)" id="yt-unit-lbl">°F</span></div>
+            <div class="srow"><label style="font-size:12px;width:36px;flex-shrink:0">Max</label><input type="number" class="snum" id="yt-max" value="120" step="1" onchange="applyScales()"><span style="font-size:11px;color:var(--t3)" id="yt-unit-lbl2">°F</span></div>
+          </div>
+          <div class="srow"><label style="font-size:12px">Y-axis decimals</label><select class="ssel" id="yt-dec" onchange="applyScales()"><option value="0">None (80)</option><option value="1" selected>1 place (80.4)</option><option value="2">2 places</option></select></div>
+        </div>
+      </div>
+
+      <!-- Chart Line Styles -->
+      <div class="ssec">
+        <div class="ssec-hdr">✏ Chart Line Styles</div>
+        <div class="ssec-bdy">
+          <div style="font-size:11px;font-weight:700;color:var(--gd);margin-bottom:8px">● S1 Pressure</div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+            <input type="color" id="clr-s1" value="#1D9E75" onchange="applySet()" style="width:36px;height:32px;border:1.5px solid var(--bor);border-radius:8px;padding:1px;cursor:pointer;flex-shrink:0">
+            <select class="ssel" id="style-s1" onchange="applySet()" style="flex:1"><option value="solid">Solid</option><option value="dashed">Dashed</option><option value="dotdash">Dot-Dash</option></select>
+            <select class="ssel" id="thick-s1" onchange="applySet()"><option value="1.5">Thin</option><option value="2" selected>Med</option><option value="3">Thick</option></select>
+          </div>
+          <div style="font-size:11px;font-weight:700;color:var(--bd);margin-bottom:8px">● S2 Temperature</div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <input type="color" id="clr-s2" value="#378ADD" onchange="applySet()" style="width:36px;height:32px;border:1.5px solid var(--bor);border-radius:8px;padding:1px;cursor:pointer;flex-shrink:0">
+            <select class="ssel" id="style-s2" onchange="applySet()" style="flex:1"><option value="solid">Solid</option><option value="dashed" selected>Dashed</option><option value="dotdash">Dot-Dash</option></select>
+            <select class="ssel" id="thick-s2" onchange="applySet()"><option value="1.5" selected>Thin</option><option value="2">Med</option><option value="3">Thick</option></select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pressure Calibration -->
+      <div class="ssec">
+        <div class="ssec-hdr">⚖ Pressure Calibration</div>
+        <div class="ssec-bdy">
+          <div style="font-size:11px;color:var(--t3);margin-bottom:8px">PSI offset applied after scaling.</div>
+          <div class="srow"><label>Inlet Offset</label><input type="number" class="snum" id="set-cal" value="0" step="0.1" onchange="saveCal()"><button class="sbtn" onclick="zeroAtm()">Zero</button><button class="sbtn" onclick="resetCal()">Reset</button></div>
+        </div>
+      </div>
+
+      <!-- Sensor Names -->
+      <div class="ssec">
+        <div class="ssec-hdr">🏷 Sensor Names</div>
+        <div class="ssec-bdy">
+          <div class="srow"><label>S1</label><input type="text" class="sinp" id="set-n1" value="Inlet" oninput="applySet()"></div>
+          <div class="srow"><label>S2</label><input type="text" class="sinp" id="set-n2" value="In Temp" oninput="applySet()"></div>
+        </div>
+      </div>
+
+      <!-- S1 Gen5 Radio -->
+      <div class="ssec" id="sec-gen5">
+        <div class="ssec-hdr" style="display:flex;align-items:center">
+          <span style="flex:1">📡 S1 Gen5 Radio</span>
+          <button id="btn-gen5-refresh" onclick="readGen5Features(true)" style="font-size:10px;padding:4px 10px;border:1px solid var(--bor);border-radius:6px;background:var(--card);color:var(--t2);cursor:pointer;font-weight:600"><span id="gen5-refresh-spin" style="display:none">⏳</span>↺ Read</button>
+        </div>
+        <div class="ssec-bdy">
+          <div id="gen5-status" style="background:#f5f6f8;border:1px solid var(--bor);border-radius:8px;padding:10px 12px;margin-bottom:12px;font-size:11px">
+            <div id="gen5-status-text" style="color:var(--t3);font-style:italic">Connect S1 to read settings.</div>
+          </div>
+          <div class="srow" style="margin-bottom:12px">
+            <label style="flex:1"><span style="font-weight:700">Long Range</span><span style="display:block;font-size:11px;color:var(--t3);font-weight:400;margin-top:2px">BT4 &amp; BT5 long-range modes</span></label>
+            <div style="display:flex;align-items:center;gap:8px"><span id="si-lr-confirmed" style="font-size:10px;color:var(--t3);min-width:80px;text-align:right">—</span><label class="tgl-wrap"><input type="checkbox" id="set-lr" onchange="setLongRange(this.checked)" disabled><span class="tgl"></span></label></div>
+          </div>
+          <div class="srow">
+            <label style="flex:1"><span style="font-weight:700">High Power</span><span style="display:block;font-size:11px;color:var(--t3);font-weight:400;margin-top:2px">Requires M8 external DC power</span></label>
+            <div style="display:flex;align-items:center;gap:8px"><span id="si-hp-confirmed" style="font-size:10px;color:var(--t3);min-width:80px;text-align:right">—</span><label class="tgl-wrap"><input type="checkbox" id="set-hp" onchange="setHighPower(this.checked)" disabled><span class="tgl"></span></label></div>
+          </div>
+          <div id="hp-support-note" style="display:none;margin-top:8px;font-size:10px;color:var(--re);background:var(--rl);border-radius:6px;padding:6px 10px">⚠ Hardware does not support High Power (X bit = 0).</div>
+          <!-- HP bit display (compact) -->
+          <div style="margin-top:10px;padding:8px 10px;background:#f5f6f8;border:1px solid var(--bor);border-radius:8px">
+            <div style="font-size:9px;font-weight:700;color:var(--t3);letter-spacing:.4px;text-transform:uppercase;margin-bottom:6px">High Power Register (UUID18)</div>
+            <div style="display:flex;align-items:center;gap:6px">
+              <div id="hp-bit3" style="width:32px;height:32px;border-radius:6px;background:#e2e6ea;border:1.5px solid #c8d0d8;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#8896a5">0</div>
+              <div id="hp-bit2" style="width:32px;height:32px;border-radius:6px;background:#e2e6ea;border:1.5px solid #c8d0d8;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#8896a5">0</div>
+              <div id="hp-bit1" style="width:32px;height:32px;border-radius:6px;background:#e2e6ea;border:1.5px solid #c8d0d8;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#8896a5">?</div>
+              <div id="hp-bit0" style="width:32px;height:32px;border-radius:6px;background:#e2e6ea;border:1.5px solid #c8d0d8;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#8896a5">?</div>
+              <div style="margin-left:4px"><div style="font-size:9px;color:var(--t3)">Raw</div><div id="hp-raw-hex" style="font-size:14px;font-weight:700;color:var(--t2);font-family:monospace">0x??</div></div>
+            </div>
+            <div style="display:flex;gap:6px;margin-top:4px;font-size:9px;color:var(--t4)">
+              <span style="width:32px;text-align:center">b3</span><span style="width:32px;text-align:center">b2</span><span style="width:32px;text-align:center">X=sup</span><span style="width:32px;text-align:center">Y=en</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Raw BLE + Sensor Info -->
+      <div class="ssec">
+        <div class="ssec-hdr">🔢 Raw BLE Data</div>
+        <div class="ssec-bdy">
+          <div style="font-size:10px;color:var(--t4);margin-bottom:3px">S1 Pressure bytes</div>
+          <div class="raw-ble" id="raw-p">—</div>
+          <div style="font-size:10px;color:var(--t4);margin:8px 0 3px">S2 Temperature bytes</div>
+          <div class="raw-ble" id="raw-t">—</div>
+        </div>
+      </div>
+      <div class="ssec">
+        <div class="ssec-hdr">📡 Sensor Info</div>
+        <div class="ssec-bdy">
+          <div style="font-size:11px;font-weight:700;color:var(--gd);margin-bottom:6px">S1 — Pressure (TDWLB5)</div>
+          <div class="igrid" style="margin-bottom:10px">
+            <span class="lbl">Name</span><span class="val" id="si-n1">—</span>
+            <span class="lbl">Battery</span><span class="val" id="si-b1">—</span>
+            <span class="lbl">Scale</span><span class="val" id="si-sc">—</span>
+            <span class="lbl">TX Power</span><span class="val" id="si-tx">—</span>
+          </div>
+          <div style="font-size:11px;font-weight:700;color:var(--bd);margin-bottom:6px">S2 — Temperature (WETS02)</div>
+          <div class="igrid">
+            <span class="lbl">Name</span><span class="val" id="si-n2">—</span>
+            <span class="lbl">Battery</span><span class="val" id="si-b2">—</span>
+            <span class="lbl">Period</span><span class="val" id="si-per2">500 ms</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Job Info -->
+      <div class="ssec">
+        <div class="ssec-hdr">📋 Job Information</div>
+        <div class="ssec-bdy">
+          <div id="si-no-session" style="font-size:11px;color:var(--t3);font-style:italic;margin-bottom:8px">No active session — start a session on the Setup tab</div>
+          <div class="igrid">
+            <span class="lbl">Truck</span><span class="val" id="si-truck">—</span>
+            <span class="lbl">Job</span><span class="val" id="si-job">—</span>
+            <span class="lbl">Shot</span><span class="val" id="si-shot">—</span>
+            <span class="lbl">Segment</span><span class="val" id="si-seg">—</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sfooter">
+        <div>CureLog Phase 1 Mobile</div>
+        <div class="ver" id="sf-ver">v0</div>
+        <div style="font-size:9px;margin-top:2px">Firebase: <span id="sf-fb">—</span></div>
+      </div>
+    </div>
+
+  </div><!-- /pages -->
+
+  <!-- ── BOTTOM NAV ── -->
+  <nav id="nav">
+    <button class="nav-btn active" id="nav-setup" onclick="goPage('setup')">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+      <span>Setup</span>
+    </button>
+    <button class="nav-btn" id="nav-monitor" onclick="goPage('monitor')">
+      <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      <span>Monitor</span>
+    </button>
+    <button class="nav-btn" id="nav-logs" onclick="goPage('logs')">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      <span>Logs</span>
+    </button>
+    <button class="nav-btn" id="nav-settings" onclick="goPage('settings')">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      <span>Settings</span>
+    </button>
+  </nav>
+
+</div><!-- /app -->
+
+<!-- End Session Sheet -->
+<div id="sd-overlay">
+  <div id="sd-card">
+    <div class="sd-hdr">
+      <span style="font-size:24px">⏹</span>
+      <div><div class="sd-hdr-title">End Session</div><div class="sd-hdr-sub" id="sd-session-info"></div></div>
+    </div>
+    <div id="sd-step1">
+      <p style="font-size:13px;color:var(--t2);margin-bottom:16px">Would you like to save the session logs?</p>
+      <button class="sd-choice-btn sd-save-btn" onclick="sdChooseSave()">💾 Save Logs</button>
+      <button class="sd-choice-btn sd-skip-btn" onclick="sdSkipSave()">Skip — Don't Save</button>
+      <button class="sd-cancel-btn" onclick="sdCancel()">Cancel — Return to App</button>
+    </div>
+    <div id="sd-step2" style="display:none">
+      <p style="font-size:12px;color:var(--t3);margin-bottom:12px">Select logs to save to Downloads</p>
+      <div class="sd-file-row" id="sd-row-conn">
+        <div class="sd-file-check"><input type="checkbox" id="sd-cb-conn" checked onchange="sdUpdateRow('conn')"><div><div style="font-size:13px;font-weight:600;color:var(--t1)">Connection Log</div><div style="font-size:11px;color:var(--t3)"><span id="sd-conn-count"></span></div></div></div>
+        <div class="sd-fn-wrap"><span style="font-size:11px;color:var(--t3)">📄</span><input type="text" class="sd-fn-inp" id="sd-fn-conn"><span style="font-size:11px;color:var(--t3)">.txt</span></div>
+      </div>
+      <div class="sd-file-row" id="sd-row-act">
+        <div class="sd-file-check"><input type="checkbox" id="sd-cb-act" checked onchange="sdUpdateRow('act')"><div><div style="font-size:13px;font-weight:600;color:var(--t1)">Activity Log</div><div style="font-size:11px;color:var(--t3)"><span id="sd-act-count"></span></div></div></div>
+        <div class="sd-fn-wrap"><span style="font-size:11px;color:var(--t3)">📄</span><input type="text" class="sd-fn-inp" id="sd-fn-act"><span style="font-size:11px;color:var(--t3)">.txt</span></div>
+      </div>
+      <div class="sd-file-row" id="sd-row-rdg">
+        <div class="sd-file-check"><input type="checkbox" id="sd-cb-rdg" checked onchange="sdUpdateRow('rdg')"><div><div style="font-size:13px;font-weight:600;color:var(--t1)">Readings CSV</div><div style="font-size:11px;color:var(--t3)"><span id="sd-rdg-count"></span> rows</div></div></div>
+        <div class="sd-fn-wrap"><span style="font-size:11px;color:var(--t3)">📊</span><input type="text" class="sd-fn-inp" id="sd-fn-rdg"><span style="font-size:11px;color:var(--t3)">.csv</span></div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <button onclick="sdBackToStep1()" style="padding:12px 16px;border:1.5px solid var(--bor);border-radius:10px;background:#f5f6f8;color:var(--t2);font-size:13px;font-weight:600;cursor:pointer">← Back</button>
+        <button onclick="sdProceed()" style="flex:1;padding:12px;border:none;border-radius:10px;background:var(--g);color:#fff;font-size:14px;font-weight:700;cursor:pointer">Save &amp; Continue →</button>
+      </div>
+    </div>
+    <div id="sd-step3" style="display:none;padding:16px">
+      <div style="text-align:center;margin-bottom:12px"><div style="font-size:36px">✓</div><div style="font-size:14px;font-weight:700;color:var(--g);margin:6px 0" id="sd-save-result">Done</div><div style="font-size:12px;color:var(--t3)" id="sd-saved-summary"></div></div>
+      <div id="sd-shutdown-log">Shutting down…</div>
+      <div class="sd-action-row">
+        <button class="sd-keep-btn" onclick="sdKeepOpen()">Keep Open</button>
+        <button class="sd-close-btn" onclick="sdClose()">Close App</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- About Modal -->
+<div id="about-overlay" onclick="if(event.target===this)closeAbout()">
+  <div id="about-card">
+    <div id="about-hdr-bar">
+      <h2>CureLog</h2>
+      <button id="about-close-btn" onclick="closeAbout()">X</button>
+    </div>
+    <div id="about-cur-block">
+      <div id="about-cur-lbl">Current Version</div>
+      <div id="about-cur-ver">--</div>
+      <div id="about-cur-desc">--</div>
+    </div>
+    <div id="about-search-bar">
+      <input id="about-search-inp" type="text"
+        placeholder="Search versions or changes..."
+        oninput="filterAbout(this.value)">
+    </div>
+    <div id="about-scroll">
+      <table>
+        <thead><tr><th style="width:90px">Version</th><th>Changes</th></tr></thead>
+        <tbody id="about-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+
+
+
+
+
+
+
+
+
+
+
+// ── MOBILE NAV ────────────────────────────────────────────────
+function goPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  const pg = document.getElementById('page-' + name);
+  if (pg) pg.classList.add('active');
+  const nb = document.getElementById('nav-' + name);
+  if (nb) nb.classList.add('active');
+  // Show Start Session footer only on Setup tab before session starts
+  const sf = $('start-footer');
+  if (sf) sf.style.display = (name === 'setup' && !A.sess.active) ? 'block' : 'none';
+  // Keep End Session button visible on all tabs when session is active
+  const endBtn = $('tb-end-btn');
+  if (endBtn && A.sess.active) endBtn.style.display = 'block';
+  // Refresh job info whenever Settings tab is opened
+  if (name === 'settings') refreshJobInfo();
+  if (name === 'setup') setTimeout(chkReady, 100);
+}
+
+function refreshJobInfo() {
+  const vd = $('settings-ver-display');
+  if (vd) vd.textContent = 'v' + (typeof VER !== 'undefined' ? VER : '?');
+  const active = A.sess && A.sess.active;
+  const note = $('si-no-session');
+  if (note) note.style.display = active ? 'none' : '';
+  if (active) {
+    if ($('si-truck')) $('si-truck').textContent = A.sess.truck || '--';
+    if ($('si-job'))   $('si-job').textContent   = A.sess.job   || '--';
+    if ($('si-shot'))  $('si-shot').textContent  = A.sess.shot  || '--';
+    if ($('si-seg'))   $('si-seg').textContent   = A.sess.seg   || '--';
+  }
+}
+
+function setRange(val) {
+  document.querySelectorAll('.cr-btn').forEach(b => {
+    const bv = b.onclick.toString().includes("'all'") ? 'all' : parseInt(b.textContent);
+    b.classList.toggle('active', bv == val || (val === 'all' && b.textContent === 'All'));
+  });
+  A._chartRange = val;
+  applyChartRange();
+}
+
+function toggleConnLog() {
+  const w     = document.getElementById('su-clog-wrap');
+  const arrow = document.getElementById('clog-arrow');
+  if (!w) return;
+  const open = w.style.display === 'none';
+  w.style.display = open ? 'block' : 'none';
+  if (arrow) arrow.style.transform = open ? 'rotate(180deg)' : '';
+  // Scroll to bottom when opened
+  if (open) {
+    const sl = document.getElementById('su-clog');
+    if (sl) sl.scrollTop = sl.scrollHeight;
+  }
+}
+
+
+'use strict';
+const VER = '2.1.58-m';
+
+// ── FIREBASE ─────────────────────────────────────────────────
+const FB_CFG = {
+  apiKey:            'AIzaSyD3FSkjfxfGPnVQ1i7IIHTcGdToBo93ORk',
+  authDomain:        'curelog-phase1.firebaseapp.com',
+  databaseURL:       'https://curelog-phase1-default-rtdb.firebaseio.com',
+  projectId:         'curelog-phase1',
+  storageBucket:     'curelog-phase1.firebasestorage.app',
+  messagingSenderId: '306221200717',
+  appId:             '1:306221200717:web:934242d11d9a653e23b304'
+};
+
+// ── BLE UUIDs ─────────────────────────────────────────────────
+// IMPORTANT: only SERVICE UUIDs in optionalServices, never characteristic UUIDs
+// Service UUIDs split by sensor so each picker only declares what it needs.
+// CRITICAL: Chrome hides devices from the BLE picker if they don't match
+// ANY of the optionalServices. Using separate, minimal lists per sensor
+// prevents the WETS02 (custom UUIDs) from being hidden when picking S1,
+// and vice versa.
+//
+// Rule: ONLY service UUIDs here, NEVER characteristic UUIDs.
+const OPT_SVCS_S1 = [
+  'cc4a6a80-51e0-11e3-b451-0002a5d5c51b', // TDWLB5 pressure service
+  '0000180f-0000-1000-8000-00805f9b34fb', // Battery
+  '00001804-0000-1000-8000-00805f9b34fb', // TX Power
+  '000018ff-0000-1000-8000-00805f9b34fb', // Advertising blob
+  '8dd67da0-da9b-11e3-9087-0002a5d5c51b', // Gen5 Long Range
+  '8ed67da0-da9b-11e3-9087-0002a5d5c51b', // Gen5 High Power
+  '00001800-0000-1000-8000-00805f9b34fb', // Generic Access
+  '0000180a-0000-1000-8000-00805f9b34fb'  // Device Information
+];
+const OPT_SVCS_S2 = [
+  'a76420a4-b986-4693-bc60-3028002646f2', // WETS02 Settings
+  'a764ab30-b986-4693-bc60-3028002646f2', // WETS02 Diagnostics
+  '00001800-0000-1000-8000-00805f9b34fb', // Generic Access
+  '00001801-0000-1000-8000-00805f9b34fb', // Generic Attribute
+  '0000180a-0000-1000-8000-00805f9b34fb'  // Device Information
+];
+const SVC1  = 'cc4a6a80-51e0-11e3-b451-0002a5d5c51b';
+const CHR1  = '835ab4c0-51e4-11e3-a5bd-0002a5d5c51b';
+const INT1  = '00002a21-0000-1000-8000-00805f9b34fb';
+const BAT1S = '0000180f-0000-1000-8000-00805f9b34fb';
+const BAT1C = '00002a19-0000-1000-8000-00805f9b34fb';
+const TX1S  = '00001804-0000-1000-8000-00805f9b34fb';
+const TX1C  = '00002a07-0000-1000-8000-00805f9b34fb';
+const BLB1S = '000018ff-0000-1000-8000-00805f9b34fb';
+const BLB1C = '00002aff-0000-1000-8000-00805f9b34fb';
+const LR1   = '8dd67da0-da9b-11e3-9087-0002a5d5c51b'; // Gen5 Long Range
+const HP1   = '8ed67da0-da9b-11e3-9087-0002a5d5c51b'; // Gen5 High Power
+const SVC2  = 'a764ab30-b986-4693-bc60-3028002646f2';
+const CHR2  = 'a764ab32-b986-4693-bc60-3028002646f2';
+const SET2  = 'a76420a4-b986-4693-bc60-3028002646f2';
+const PER2  = 'a7643787-b986-4693-bc60-3028002646f2';
+const BAT2C = 'a7642a19-b986-4693-bc60-3028002646f2';
+
+// ── STATE ─────────────────────────────────────────────────────
+const A = { // app state -- single object, no nested mutation issues
+  sess: { truck:'',job:'',shot:'',seg:'',tubeDia:'',tubeThick:'',tubeLen:'',active:false },
+  dev:  false,
+  s1: { con:false, dev:null, srv:null, svc:null, chr:null, scale:1.0, useNotify:false,
+        psi:null, batt:null, name:'', tx:null, calOff:0,
+        minP:null, maxP:null,
+        lrEnabled:null, hpSupported:null, hpEnabled:null,
+        manualDisc:false, reConAttempts:0, reConHandle:null, lastReadMs:0 },
+  s2: { con:false, dev:null, srv:null, chr:null,
+        tempC:null, batt:null, name:'',
+        minT:null, maxT:null,
+        manualDisc:false,    // true when user clicked Disconnect -- suppresses auto-reconnect
+        reConAttempts:0,     // backoff counter
+        reConHandle:null,    // setTimeout handle for next reconnect
+        keepAliveH:null, lastReadMs:0 },
+  set: { tUnit:'F', pUnit:'PSI', uclEn:true, ucl:40, lclEn:true, lcl:5, s1Color:'#1D9E75', s2Color:'#378ADD', s1Style:'solid', s2Style:'dashed', s1Width:2, s2Width:1.5,
+         yPauto:true, yPmin:0,   yPmax:60,
+         yTauto:true, yTmin:50,  yTmax:120,
+         psiDecimals:1, tmpDecimals:1 },
+  chart: { lbl:[], psi:[], tmp:[] },
+  rdMap: {}, upQ: [],
+  poll: { run:false, h:null, inFlight:false, slowCount:0 },
+  dispH:null, uplH:null, elH:null, diagH:null,
+  fbDb:null, fbPath:null, fbWrites:0, fbErrors:0, fbLastWrite:null,
+  logPaused:false, sessStart:null, collectStart:null, collectActive:false, collectPaused:0, collectPauseStart:null,
+  collOpen: { act:false, rdg:false, settings:false }
+};
+
+// ── UTILS ─────────────────────────────────────────────────────
+const sleep  = ms => new Promise(r => setTimeout(r, ms));
+const cToF   = c  => c * 9/5 + 32;
+const psiConv = (v,u) => u==='Bar' ? (v*.0689476).toFixed(3) : u==='kPa' ? (v*6.89476).toFixed(1) : v.toFixed(1);
+const hex    = dv => { if(!dv) return '--'; const a=[]; for(let i=0;i<dv.byteLength;i++) a.push(dv.getUint8(i).toString(16).padStart(2,'0').toUpperCase()); return a.join(' '); };
+const $ = id => document.getElementById(id);
+
+// ── DUAL LOGGER ───────────────────────────────────────────────
+// Writes to BOTH the startup card log AND the monitor activity log
+function LOG(msg, type='info') {
+  const ts   = new Date().toLocaleTimeString();
+  const text = `[${ts}] ${msg}`;
+  const cls  = { ok:'cl-ok', err:'cl-err', warn:'cl-warn', info:'cl-info' }[type] || 'cl-info';
+
+  // Startup log (dark terminal box on setup page)
+  const sl = $('su-clog');
+  if (sl) {
+    const d = document.createElement('div');
+    d.className = cls;
+    d.textContent = text;
+    sl.appendChild(d);
+    // No FIFO limit on connection log -- lightweight BLE events only
+    sl.scrollTop = sl.scrollHeight;
+    // Auto-expand the connection log on first real entry
+    const wrap = $('su-clog-wrap');
+    if (wrap && wrap.style.display === 'none') {
+      wrap.style.display = 'block';
+      const arrow = $('clog-arrow');
+      if (arrow) arrow.style.transform = 'rotate(180deg)';
+    }
+    // Scroll the setup page to show the log
+    const setupPage = document.getElementById('page-setup');
+    if (setupPage && wrap && wrap.offsetParent !== null) {
+      const wrapTop = wrap.getBoundingClientRect().top + setupPage.scrollTop;
+      if (wrapTop > setupPage.clientHeight * 0.5) {
+        setupPage.scrollTop = wrapTop - 80;
+      }
+    }
+    // Pulse the dot when activity happens
+    const dot = $('su-log-dot');
+    if (dot) { dot.classList.add('active'); clearTimeout(dot._t); dot._t = setTimeout(() => dot.classList.remove('active'), 600); }
+  }
+
+  // Monitor activity log
+  const al = $('alog');
+  if (al) {
+    const d2 = document.createElement('div');
+    d2.className = 'al-' + type;
+    d2.textContent = text;
+    al.appendChild(d2);
+    // No FIFO limit on activity log -- text entries are lightweight
+    if (!A.logPaused) al.scrollTop = al.scrollHeight;
+  }
+}
+
+// ── UI HELPERS ────────────────────────────────────────────────
+function setCloud(st, lbl) {
+  $('cdot').className = 'cdot ' + st;
+  $('clbl').textContent = lbl;
+}
+function switchTab(name) {
+  document.querySelectorAll('.tbtn').forEach((b,i) => b.classList.toggle('on', ['monitor'][i] === name));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('on'));
+  const panel = $('panel-' + name);
+  if (panel) panel.classList.add('on');
+}
+function toggleSettings() { goPage('settings'); }
+
+
+function togColl(name) {
+  A.collOpen[name] = !A.collOpen[name];
+  const isOpen = A.collOpen[name];
+  $('cbdy-' + name).classList.toggle('open', isOpen);
+  // coll-arr indicators removed -- no arrow elements
+  const hdr = $('coll-' + name).querySelector('.coll-hdr');
+  if (hdr) hdr.classList.toggle('open', isOpen);
+  // Settings: manage margin so it doesn't leave a gap when closed
+  if (name === 'settings') {
+    const el = $('coll-settings');
+    if (el) el.style.marginBottom = isOpen ? '10px' : '0';
+  }
+}
+function resumeLog(e) {
+  e.stopPropagation();
+  A.logPaused = false;
+  $('pause-bdg').style.display = 'none';
+  const al = $('alog'); if (al) al.scrollTop = al.scrollHeight;
+}
+$('alog').addEventListener('scroll', function() {
+  const atBot = this.scrollHeight - this.scrollTop - this.clientHeight < 30;
+  if (atBot && A.logPaused) { A.logPaused = false; $('pause-bdg').style.display = 'none'; }
+  else if (!atBot && !A.logPaused) { A.logPaused = true; $('pause-bdg').style.display = 'inline'; }
+});
+
+// ── SETTINGS ─────────────────────────────────────────────────
+function loadCal()  { A.s1.calOff = parseFloat(localStorage.getItem('cl_cal') || '0'); $('set-cal').value = A.s1.calOff; }
+function saveCal()  { A.s1.calOff = parseFloat($('set-cal').value) || 0; localStorage.setItem('cl_cal', A.s1.calOff); saveSettings(); }
+function zeroAtm()  { if (A.s1.psi !== null) { A.s1.calOff = -A.s1.psi; $('set-cal').value = A.s1.calOff.toFixed(1); saveCal(); LOG('S1 zeroed','ok'); } }
+function resetCal() { A.s1.calOff = 0; $('set-cal').value = 0; saveCal(); LOG('S1 cal reset','info'); }
+function applyScales() {
+  const s = A.set;
+  // Read auto toggles
+  s.yPauto = $('yp-auto') ? $('yp-auto').checked : true;
+  s.yTauto = $('yt-auto') ? $('yt-auto').checked : true;
+  // Show/hide manual range inputs
+  const ypWrap = $('yp-range-wrap');
+  const ytWrap = $('yt-range-wrap');
+  if (ypWrap) ypWrap.style.display = s.yPauto ? 'none' : 'block';
+  if (ytWrap) ytWrap.style.display = s.yTauto ? 'none' : 'block';
+  // Read manual values
+  if (!s.yPauto) {
+    s.yPmin = parseFloat($('yp-min').value) || 0;
+    s.yPmax = parseFloat($('yp-max').value) || 60;
+  }
+  if (!s.yTauto) {
+    s.yTmin = parseFloat($('yt-min').value) || 50;
+    s.yTmax = parseFloat($('yt-max').value) || 120;
+  }
+  // Update unit labels to match current pressure/temp units
+  const pu = s.pUnit;
+  const tu = 'deg' + s.tUnit;
+  ['yp-unit-lbl','yp-unit-lbl2'].forEach(id => { const el=$(id); if(el) el.textContent=pu; });
+  ['yt-unit-lbl','yt-unit-lbl2'].forEach(id => { const el=$(id); if(el) el.textContent=tu; });
+  // Read precision settings
+  const ypDec = $('yp-dec') ? parseInt($('yp-dec').value) : 1;
+  const ytDec = $('yt-dec') ? parseInt($('yt-dec').value) : 1;
+  A.set.psiDecimals = ypDec;
+  A.set.tmpDecimals = ytDec;
+
+  // Apply to chart
+  if (sparkChart) {
+    const yP = sparkChart.options.scales.yP;
+    const yT = sparkChart.options.scales.yT;
+    if (s.yPauto) {
+      yP.min = undefined;
+      yP.max = undefined;
+    } else {
+      yP.min = s.yPmin;
+      yP.max = s.yPmax;
+    }
+    if (s.yTauto) {
+      yT.min = undefined;
+      yT.max = undefined;
+    } else {
+      yT.min = s.yTmin;
+      yT.max = s.yTmax;
+    }
+    // Update tick callbacks with current precision
+    yP.ticks.callback = v => Number(v).toFixed(A.set.psiDecimals);
+    yT.ticks.callback = v => Number(v).toFixed(A.set.tmpDecimals);
+    sparkChart.update('none');
+  }
+  saveSettings();
+}
+
+function applySet() {
+  A.set.tUnit = $('set-tunit').value;
+  A.set.pUnit = $('set-punit').value;
+  A.set.uclEn = $('set-ucl-en').checked;
+  A.set.ucl   = parseFloat($('set-ucl').value) || 40;
+  A.set.lclEn = $('set-lcl-en').checked;
+  A.set.lcl   = parseFloat($('set-lcl').value) || 5;
+  if ($('clr-s1'))   A.set.s1Color = $('clr-s1').value;
+  if ($('clr-s2'))   A.set.s2Color = $('clr-s2').value;
+  if ($('style-s1')) A.set.s1Style = $('style-s1').value;
+  if ($('style-s2')) A.set.s2Style = $('style-s2').value;
+  if ($('thick-s1')) A.set.s1Width = parseFloat($('thick-s1').value) || 2;
+  if ($('thick-s2')) A.set.s2Width = parseFloat($('thick-s2').value) || 1.5;
+  if (sparkChart) {
+    const toDash = s => s==='dashed'?[5,3]:s==='dotdash'?[2,3,8,3]:[];
+    sparkChart.data.datasets[0].borderColor     = A.set.s1Color;
+    sparkChart.data.datasets[0].backgroundColor = A.set.s1Color + '12';
+    sparkChart.data.datasets[0].borderWidth      = A.set.s1Width;
+    sparkChart.data.datasets[0].borderDash       = toDash(A.set.s1Style);
+    sparkChart.data.datasets[1].borderColor     = A.set.s2Color;
+    sparkChart.data.datasets[1].borderWidth      = A.set.s2Width;
+    sparkChart.data.datasets[1].borderDash       = toDash(A.set.s2Style);
+    updateChartAnnotations();
+  }
+  // Refresh scale unit labels when pressure/temp units change
+  applyScales();
+  saveSettings();
+  updateLegend();
+  updateSessionInfoDisplays();
+}
+function loadTruck() {
+  $('fi-truck').value = localStorage.getItem('cl_truck') || '';
+  $('fi-job').value   = localStorage.getItem('cl_job')   || '';
+  $('fi-shot').value  = localStorage.getItem('cl_shot')  || '';
+  $('fi-seg').value   = localStorage.getItem('cl_seg')   || '';
+}
+function saveTruck(v) { localStorage.setItem('cl_truck', v); }
+function loadFilters() {
+  const f1 = localStorage.getItem('cl_f1') || '';
+  const f2 = localStorage.getItem('cl_f2') || '';
+  if ($('sf1')) $('sf1').value = f1;
+  if ($('sf2')) $('sf2').value = f2;
+  // Only restore "use as filter" if there is actually a non-empty filter value saved.
+  // If the filter text is blank, always leave the checkbox unchecked so BLE
+  // defaults to acceptAllDevices and the sensor always shows up in the picker.
+  const u1 = localStorage.getItem('cl_fuse1');
+  const u2 = localStorage.getItem('cl_fuse2');
+  if ($('sf1-use')) $('sf1-use').checked = (u1 === '1' && f1.length > 0);
+  if ($('sf2-use')) $('sf2-use').checked = (u2 === '1' && f2.length > 0);
+}
+function saveFilter(n, v) {
+  localStorage.setItem('cl_f' + n, v);
+  const cb = $('sf' + n + '-use');
+  if (cb) localStorage.setItem('cl_fuse' + n, cb.checked ? '1' : '0');
+}
+
+// ── PERSIST ALL SETTINGS ──────────────────────────────────────
+function saveSettings() {
+  const get  = id => { const el = $(id); return el ? el.value       : null; };
+  const getB = id => { const el = $(id); return el ? el.checked     : null; };
+  const cfg = {
+    // Display
+    tUnit:    get('set-tunit'),
+    pUnit:    get('set-punit'),
+    // Control limits
+    uclEn:    getB('set-ucl-en'),
+    ucl:      get('set-ucl'),
+    lclEn:    getB('set-lcl-en'),
+    lcl:      get('set-lcl'),
+    // Chart Y-axis scale
+    yPauto:   getB('yp-auto'),
+    yPmin:    get('yp-min'),
+    yPmax:    get('yp-max'),
+    yPdec:    get('yp-dec'),
+    yTauto:   getB('yt-auto'),
+    yTmin:    get('yt-min'),
+    yTmax:    get('yt-max'),
+    yTdec:    get('yt-dec'),
+    // Chart line styles
+    s1Color:  get('clr-s1'),
+    s2Color:  get('clr-s2'),
+    s1Style:  get('style-s1'),
+    s2Style:  get('style-s2'),
+    s1Width:  get('thick-s1'),
+    s2Width:  get('thick-s2'),
+    // Pressure calibration
+    cal:      get('set-cal'),
+    // Sensor names
+    n1:       get('set-n1'),
+    n2:       get('set-n2'),
+  };
+  // Remove nulls (elements not yet in DOM)
+  Object.keys(cfg).forEach(k => cfg[k] === null && delete cfg[k]);
+  localStorage.setItem('cl_settings', JSON.stringify(cfg));
+}
+
+function loadSettings() {
+  let cfg;
+  try { cfg = JSON.parse(localStorage.getItem('cl_settings') || 'null'); } catch(e) { cfg = null; }
+  if (!cfg) return; // no saved settings yet -- use defaults
+
+  const set  = (id, v) => { const el = $(id); if (el && v !== null && v !== undefined) el.value   = v; };
+  const setB = (id, v) => { const el = $(id); if (el && v !== null && v !== undefined) el.checked = v; };
+
+  // Display
+  set('set-tunit', cfg.tUnit);
+  set('set-punit', cfg.pUnit);
+  // Control limits
+  setB('set-ucl-en', cfg.uclEn);
+  set('set-ucl',     cfg.ucl);
+  setB('set-lcl-en', cfg.lclEn);
+  set('set-lcl',     cfg.lcl);
+  // Chart Y-axis
+  setB('yp-auto', cfg.yPauto);
+  set('yp-min',   cfg.yPmin);
+  set('yp-max',   cfg.yPmax);
+  set('yp-dec',   cfg.yPdec);
+  setB('yt-auto', cfg.yTauto);
+  set('yt-min',   cfg.yTmin);
+  set('yt-max',   cfg.yTmax);
+  set('yt-dec',   cfg.yTdec);
+  // Chart line styles
+  set('clr-s1',   cfg.s1Color);
+  set('clr-s2',   cfg.s2Color);
+  set('style-s1', cfg.s1Style);
+  set('style-s2', cfg.s2Style);
+  set('thick-s1', cfg.s1Width);
+  set('thick-s2', cfg.s2Width);
+  // Pressure calibration
+  set('set-cal', cfg.cal);
+  if (cfg.cal !== undefined) A.s1.calOff = parseFloat(cfg.cal) || 0;
+  // Sensor names
+  set('set-n1', cfg.n1);
+  set('set-n2', cfg.n2);
+
+  // Push into A.set so chart/annotations use restored values immediately
+  if (cfg.tUnit)   A.set.tUnit  = cfg.tUnit;
+  if (cfg.pUnit)   A.set.pUnit  = cfg.pUnit;
+  if (cfg.uclEn   !== undefined) A.set.uclEn  = cfg.uclEn;
+  if (cfg.ucl     !== undefined) A.set.ucl    = parseFloat(cfg.ucl)  || 40;
+  if (cfg.lclEn   !== undefined) A.set.lclEn  = cfg.lclEn;
+  if (cfg.lcl     !== undefined) A.set.lcl    = parseFloat(cfg.lcl)  || 5;
+  if (cfg.s1Color) A.set.s1Color = cfg.s1Color;
+  if (cfg.s2Color) A.set.s2Color = cfg.s2Color;
+  if (cfg.s1Style) A.set.s1Style = cfg.s1Style;
+  if (cfg.s2Style) A.set.s2Style = cfg.s2Style;
+  if (cfg.s1Width) A.set.s1Width = parseFloat(cfg.s1Width) || 2;
+  if (cfg.s2Width) A.set.s2Width = parseFloat(cfg.s2Width) || 1.5;
+  if (cfg.yPauto  !== undefined) A.set.yPauto = cfg.yPauto;
+  if (cfg.yPmin   !== undefined) A.set.yPmin  = parseFloat(cfg.yPmin) || 0;
+  if (cfg.yPmax   !== undefined) A.set.yPmax  = parseFloat(cfg.yPmax) || 60;
+  if (cfg.yPdec   !== undefined) A.set.psiDecimals = parseInt(cfg.yPdec) || 1;
+  if (cfg.yTauto  !== undefined) A.set.yTauto = cfg.yTauto;
+  if (cfg.yTmin   !== undefined) A.set.yTmin  = parseFloat(cfg.yTmin) || 50;
+  if (cfg.yTmax   !== undefined) A.set.yTmax  = parseFloat(cfg.yTmax) || 120;
+  if (cfg.yTdec   !== undefined) A.set.tmpDecimals = parseInt(cfg.yTdec) || 1;
+
+  LOG('Settings restored from last session OK', 'ok');
+}
+
+function resetFilters() {
+  ['sf1','sf2'].forEach(id => $(id).value = '');
+  localStorage.removeItem('cl_f1'); localStorage.removeItem('cl_f2');
+  LOG('Sensor filters cleared', 'info');
+}
+
+// ── START READY CHECK ─────────────────────────────────────────
+function chkReady() {
+  const fieldsOk = ['fi-truck','fi-job','fi-shot','fi-seg'].every(id => $(id) && $(id).value.trim() !== '');
+  const sensOk   = A.s1.con || A.s2.con;
+  const allOk    = fieldsOk && sensOk;
+  const btn = $('btn-start');
+  if (btn) btn.disabled = !allOk;
+  const hint = $('su-hint');
+  if (!hint) return;
+  if (allOk) {
+    hint.textContent = 'OK Ready -- tap Start Session to begin';
+    hint.className = 'su-hint ok';
+  } else if (!sensOk && !fieldsOk) {
+    hint.textContent = 'Connect a sensor and fill in all session fields above';
+    hint.className = 'su-hint';
+  } else if (!sensOk) {
+    hint.textContent = 'Connect at least one sensor to continue';
+    hint.className = 'su-hint';
+  } else {
+    const missing = ['fi-truck','fi-job','fi-shot','fi-seg']
+      .filter(id => !$(id) || !$(id).value.trim())
+      .map(id => ({
+        'fi-truck':'Truck ID','fi-job':'Job #','fi-shot':'Shot #','fi-seg':'Segment #'
+      }[id]));
+    hint.textContent = '! Fill in: ' + missing.join(', ');
+    hint.style.cssText = 'color:#b45309;font-weight:600;font-size:12px;margin-bottom:8px;display:block';
+  }
+}
+
+// ── S1 UI UPDATE ─────────────────────────────────────────────
+function updS1UI() {
+  const con = A.s1.con;
+  // Monitor tab
+  $('ml1').className = 'stile-led' + (con ? ' lg' : '');
+  $('mb1').textContent = con ? 'ON' : 'OFF';
+  $('mb1').className  = 'stile-badge ' + (con ? 'on' : 'off');
+  $('sec-s1').classList.toggle('con-s1', con);
+  if($('sb1'))$('sb1').style.opacity=con?'1':'0.4';
+  const sdb1e=$('sdb1'); if(sdb1e)sdb1e.style.display=con?'block':'none';
+  const scb1e=$('scb1'); if(scb1e)scb1e.style.display=con?'none':'block';
+  const mbt1=$('mbt1'); if(mbt1&&con&&A.s1.batt!==null){mbt1.textContent='🔋 '+A.s1.batt+'%';mbt1.style.display='';}
+  // Startup card
+  $('sd1').className = con ? 'su-dot g' : 'su-dot';
+  $('sc1').className = con ? 'su-sc ok-s1' : 'su-sc';
+  $('ss1').textContent = con ? 'OK ' + (A.s1.name || 'Connected') : 'Not connected';
+  $('ss1').className  = 'su-sc-status ' + (con ? 'ok' : 'idle');
+  $('scb1').textContent = con ? 'Reconnect Reconnect' : 'Connect';
+  $('sdb1').disabled    = !con;
+  // Settings info
+  $('si-n1').textContent = A.s1.name || '--';
+  $('si-b1').textContent = A.s1.batt !== null ? A.s1.batt + '%' : '--';
+  $('si-sc').textContent = A.s1.scale;
+  $('si-tx').textContent = A.s1.tx !== null ? A.s1.tx + ' dBm' : '--';
+  // Kick display loop
+    if (con && !A.dispH) startDisp();
+  if (!con && !A.s2.con && A.collectActive) pauseCollectionTimer();
+  chkReady();
+}
+
+// ── S2 UI UPDATE ─────────────────────────────────────────────
+function updS2UI() {
+  const con = A.s2.con;
+  $('ml2').className = 'stile-led' + (con ? ' lb' : '');
+  $('mb2').textContent = con ? 'ON' : 'OFF';
+  $('mb2').className  = 'stile-badge ' + (con ? 'on' : 'off');
+  $('sec-s2').classList.toggle('con-s2', con);
+  if($('sb2'))$('sb2').style.opacity=con?'1':'0.4';
+  const sdb2e=$('sdb2'); if(sdb2e)sdb2e.style.display=con?'block':'none';
+  const scb2e=$('scb2'); if(scb2e)scb2e.style.display=con?'none':'block';
+  const mbt2=$('mbt2'); if(mbt2&&con&&A.s2.batt!==null){mbt2.textContent='🔋 '+A.s2.batt+'%';mbt2.style.display='';}
+  $('sd2').className = con ? 'su-dot b' : 'su-dot';
+  $('sc2').className = con ? 'su-sc ok-s2' : 'su-sc';
+  $('ss2').textContent = con ? 'OK ' + (A.s2.name || 'Connected') : 'Not connected';
+  $('ss2').className  = 'su-sc-status ' + (con ? 'ok' : 'idle');
+  $('scb2').textContent = con ? 'Reconnect Reconnect' : 'Connect';
+  $('sdb2').disabled    = !con;
+  $('si-n2').textContent = A.s2.name || '--';
+  $('si-b2').textContent = A.s2.batt !== null ? A.s2.batt + '%' : '--';
+    if (con && !A.dispH) startDisp();
+  if (!con && !A.s1.con && A.collectActive) pauseCollectionTimer();
+  chkReady();
+}
+
+// ── BLE CONNECT S1 ────────────────────────────────────────────
+// The button calls blePickS1() directly -- requestDevice is the FIRST await
+async function blePickS1() {
+  // requestDevice MUST be first -- no awaits, no DOM writes before this
+  const fVal = $('sf1') ? $('sf1').value.trim() : '';
+  const fUse = $('sf1-use') && $('sf1-use').checked && fVal.length > 0;
+  let dev;
+  try {
+    dev = await navigator.bluetooth.requestDevice(
+      fUse
+        ? { filters: [{ namePrefix: fVal }], optionalServices: OPT_SVCS_S1 }
+        : { acceptAllDevices: true,           optionalServices: OPT_SVCS_S1 }
+    );
+  } catch(e) {
+    const msg = (e.name === 'NotFoundError' || e.name === 'AbortError') ? 'Cancelled' : e.message;
+    $('ss1').textContent = msg; $('ss1').className = 'su-sc-status err';
+    LOG('S1 picker: ' + msg, 'warn');
+    return;
+  }
+  // Device picked -- safe to update UI now
+  $('ss1').textContent = 'Connecting to ' + (dev.name || 'device') + '...';
+  $('ss1').className   = 'su-sc-status busy';
+  $('scb1').disabled   = true;
+  $('scb1').textContent = 'Connecting...';
+  LOG('S1: device picked -- ' + (dev.name||'(no name)') + (fUse?' [filter: '+fVal+']':' [no filter]'), 'info');
+  await doConnectS1(dev);
+  $('scb1').disabled = false;
+}
+
+async function doConnectS1(dev) {
+  const s = A.s1;
+  if (s.dev) { try { s.dev.removeEventListener('gattserverdisconnected', onS1Disc); } catch(e) {} }
+  s.con = false; s.srv = null; s.chr = null; s.dev = dev;
+  s.dev.addEventListener('gattserverdisconnected', onS1Disc);
+
+  LOG('S1: GATT connecting...', 'info');
+  let gattOk1 = false;
+  for (let attempt = 1; attempt <= 4; attempt++) {
+    try {
+      s.srv = await s.dev.gatt.connect();
+      gattOk1 = true;
+      LOG('S1: GATT connected OK (attempt ' + attempt + ')', 'ok');
+      break;
+    } catch(e) {
+      LOG('S1: GATT attempt ' + attempt + ' failed -- ' + e.message, 'warn');
+      if (attempt < 4) { await sleep(2000); }
+    }
+  }
+  if (!gattOk1) {
+    LOG('S1: GATT connect FAILED after 4 attempts', 'err');
+    $('ss1').textContent = 'X Cannot connect -- see log'; $('ss1').className = 'su-sc-status err';
+    if (!s.manualDisc) scheduleS1Reconnect();
+    return;
+  }
+  await sleep(800);
+
+  // Discover ALL services
+  LOG('S1: discovering services...', 'info');
+  let allSvcs1;
+  try {
+    allSvcs1 = await s.srv.getPrimaryServices();
+    LOG('S1: ' + allSvcs1.length + ' service(s): ' + allSvcs1.map(x=>x.uuid).join(' | '), 'info');
+  } catch(e) { LOG('S1: service discovery failed -- ' + e.message, 'err'); return; }
+
+  const findSvc1 = uuid => allSvcs1.find(sv => sv.uuid.toLowerCase() === uuid.toLowerCase());
+
+  // Pressure service (required)
+  LOG('S1: getting pressure service...', 'info');
+  const svc = findSvc1(SVC1);
+  A.s1.svc = svc; // cache for Gen5 feature reads
+  if (!svc) {
+    LOG('S1: pressure service NOT found -- wrong device?', 'err');
+    LOG('S1: UUIDs seen: ' + allSvcs1.map(x=>x.uuid).join(', '), 'warn');
+    $('ss1').textContent = 'X Wrong device -- check log'; $('ss1').className = 'su-sc-status err';
+    return;
+  }
+  LOG('S1: pressure service OK', 'ok');
+
+  // Pressure characteristic
+  try { s.chr = await svc.getCharacteristic(CHR1); }
+  catch(e) { LOG('S1: pressure char NOT found -- ' + e.message, 'err'); return; }
+  LOG('S1: pressure characteristic OK', 'ok');
+
+  // Scale descriptor (0x2904)
+  try {
+    const descs = await s.chr.getDescriptors();
+    for (const d of descs) {
+      if (d.uuid.toLowerCase().includes('2904')) {
+        const v = await d.readValue();
+        // 0x2904 Characteristic Presentation Format layout:
+        // Byte 0: format (uint8)
+        // Byte 1: exponent (sint8)  ← correct index
+        // Byte 2-3: unit (uint16)
+        // Byte 4: namespace (uint8)
+        // Byte 5-6: description (uint16)
+        LOG('S1: 0x2904 descriptor bytes: ' + hex(v), 'info');
+        const fmt = v.getUint8(0);
+        const exp = v.getInt8(1);  // sint8 at byte 1, NOT byte 2
+        s.scale = Math.pow(10, exp);
+        LOG('S1: format=' + fmt + ' exponent=' + exp + ' scale=' + s.scale + ' OK', 'ok');
+        break;
+      }
+    }
+  } catch(e) { s.scale = 1.0; LOG('S1: scale fallback 1.0 -- ' + e.message, 'warn'); }
+
+  // Try NOTIFY on pressure -- avoids blocking readValue() calls entirely
+  // If NOTIFY is supported the sensor pushes data at its own rate
+  try {
+    const props = s.chr.properties;
+    LOG('S1: pressure char properties -- notify:' + props.notify + ' indicate:' + props.indicate + ' read:' + props.read, 'info');
+    if (props.notify || props.indicate) {
+      s.chr.addEventListener('characteristicvaluechanged', onS1PressNotify);
+      await s.chr.startNotifications();
+      s.useNotify = true;
+      LOG('S1: pressure NOTIFY active OK -- no polling needed', 'ok');
+    } else {
+      s.useNotify = false;
+      LOG('S1: NOTIFY not supported -- will use readValue() polling', 'info');
+    }
+  } catch(e) {
+    s.useNotify = false;
+    LOG('S1: NOTIFY start failed (' + e.message + ') -- falling back to polling', 'warn');
+  }
+
+  // Battery
+  try {
+    const batSvc = findSvc1(BAT1S);
+    if (batSvc) {
+      const bc = await batSvc.getCharacteristic(BAT1C);
+      const bv = await bc.readValue();
+      s.batt = bv.getUint8(0);
+      LOG('S1: battery ' + s.batt + '% OK', 'ok');
+    }
+  } catch(e) { LOG('S1: battery skipped -- ' + e.message, 'warn'); }
+
+  // TX Power
+  try {
+    const txSvc = findSvc1(TX1S);
+    if (txSvc) {
+      const tc = await txSvc.getCharacteristic(TX1C);
+      const tv = await tc.readValue();
+      s.tx = tv.getInt8(0);
+      LOG('S1: TX power ' + s.tx + ' dBm', 'ok');
+    }
+  } catch(e) {}
+
+  // Sample interval -- read first to detect byte width, then write matching size
+  await sleep(300);
+  try {
+    const ic = await svc.getCharacteristic(INT1);
+    // Read current value to determine how many bytes the sensor uses
+    const current = await ic.readValue();
+    LOG('S1: interval char is ' + current.byteLength + ' byte(s), current = ' + current.getUint32(0,true) + 'ms', 'info');
+    // Write 500ms using the same byte width the sensor uses
+    let wbuf;
+    if (current.byteLength === 2) {
+      wbuf = new ArrayBuffer(2); new DataView(wbuf).setUint16(0, 500, true);
+    } else if (current.byteLength === 4) {
+      wbuf = new ArrayBuffer(4); new DataView(wbuf).setUint32(0, 500, true);
+    } else {
+      LOG('S1: unexpected interval byte length ' + current.byteLength + ' -- skipping write', 'warn');
+      wbuf = null;
+    }
+    if (wbuf) {
+      await ic.writeValue(wbuf);
+      await sleep(100);
+      const confirm = await ic.readValue();
+      const actualMs = confirm.byteLength >= 4 ? confirm.getUint32(0,true) : confirm.getUint16(0,true);
+      LOG('S1: sample interval -> ' + actualMs + 'ms (confirmed) OK', 'ok');
+      A.s1.sensorIntervalMs = actualMs;
+    }
+  } catch(e) {
+    // Interval characteristic not supported or wrong format on this firmware
+    // Not needed when using NOTIFY -- suppress noisy error
+    A.s1.sensorIntervalMs = 1000;
+    LOG('S1: interval not configurable on this firmware (OK -- using NOTIFY)', 'info');
+  }
+
+  s.name = dev.name || 'TDWLB5';
+  s.manualDisc = false; s.reConAttempts = 0;
+  if (s.reConHandle) { clearTimeout(s.reConHandle); s.reConHandle = null; }
+  s.con = true;
+  LOG('S1: FULLY CONNECTED -- ' + s.name, 'ok');
+  updS1UI();
+  kickPoll();
+  $('sf1').value = s.name; saveFilter(1, s.name);
+  // Read Gen5 features after connection settles
+  setTimeout(readGen5Features, 800);
+}
+
+// Pressure notification handler -- fires whenever sensor pushes a new value
+function onS1PressNotify(event) {
+  A.s1.lastReadMs = Date.now();
+  const dv = event.target.value;
+  const now = Date.now();
+  if (A.s1._lastNotify) {
+    A.s1._notifyIntervals = A.s1._notifyIntervals||[];
+    A.s1._notifyIntervals.push(now - A.s1._lastNotify);
+    if (A.s1._notifyIntervals.length > 10) A.s1._notifyIntervals.shift();
+  }
+  A.s1._lastNotify = now;
+  $('raw-p').textContent = hex(dv);
+
+  // Try both byte orders and pick the one that gives a plausible PSI value
+  // (between -5 and 1000 PSI). Log first notify to help diagnose encoding.
+  const rawBE = dv.getInt16(0, false); // big-endian (spec says BE)
+  const rawLE = dv.getInt16(0, true);  // little-endian (fallback)
+  const psiBE = rawBE * A.s1.scale + A.s1.calOff;
+  const psiLE = rawLE * A.s1.scale + A.s1.calOff;
+
+  // Pick whichever reading is in a plausible range
+  let raw, psi;
+  if (psiBE >= -5 && psiBE <= 1000) {
+    raw = rawBE; psi = psiBE;
+    if (!A.s1._notifyLogged) { LOG('S1: notify BE raw=' + rawBE + ' psi=' + psiBE.toFixed(1), 'info'); A.s1._notifyLogged = true; }
+  } else if (psiLE >= -5 && psiLE <= 1000) {
+    raw = rawLE; psi = psiLE;
+    if (!A.s1._notifyLogged) { LOG('S1: notify LE raw=' + rawLE + ' psi=' + psiLE.toFixed(1) + ' (using LE)', 'warn'); A.s1._notifyLogged = true; }
+  } else {
+    // Both out of range -- log it so we can see what's coming
+    if (!A.s1._notifyLogged) { LOG('S1: notify both out of range -- BE=' + psiBE.toFixed(1) + ' LE=' + psiLE.toFixed(1) + ' scale=' + A.s1.scale, 'err'); A.s1._notifyLogged = true; }
+    return; // skip this reading
+  }
+
+  A.s1.psi = psi;
+  if (A.s1.minP === null || psi < A.s1.minP) A.s1.minP = psi;
+  if (A.s1.maxP === null || psi > A.s1.maxP) A.s1.maxP = psi;
+  pushReading({ psi, src: 's1', tsMs: Date.now() });
+}
+
+function onS1Disc() {
+  A.s1.con = false;
+  A.s1.srv = null;
+  A.poll.run = false;
+  A.poll.inFlight = false;
+  if (A.poll.h) { clearTimeout(A.poll.h); A.poll.h = null; }
+  // Stop pressure notifications if active
+  if (A.s1.chr && A.s1.useNotify) {
+    try { A.s1.chr.removeEventListener('characteristicvaluechanged', onS1PressNotify); } catch(e) {}
+    try { A.s1.chr.stopNotifications(); } catch(e) {}
+  }
+  A.s1.useNotify = false;
+  LOG('S1: disconnected', 'err');
+  updS1UI();
+  if (!A.s1.manualDisc && A.s1.dev) scheduleS1Reconnect();
+}
+
+function scheduleS1Reconnect() {
+  if (A.s1.reConHandle) clearTimeout(A.s1.reConHandle);
+  const delays = [2000, 4000, 8000, 15000];
+  const delay  = delays[Math.min(A.s1.reConAttempts, delays.length - 1)];
+  A.s1.reConAttempts++;
+  LOG('S1: auto-reconnect in ' + (delay/1000).toFixed(0) + 's (attempt ' + A.s1.reConAttempts + ')...', 'warn');
+  A.s1.reConHandle = setTimeout(async () => {
+    if (A.s1.manualDisc || !A.s1.dev) return;
+    LOG('S1: attempting auto-reconnect...', 'info');
+    await doConnectS1(A.s1.dev);
+  }, delay);
+}
+
+function discS1() {
+  A.s1.manualDisc = true;
+  A.s1.reConAttempts = 0;
+  if (A.s1.reConHandle) { clearTimeout(A.s1.reConHandle); A.s1.reConHandle = null; }
+  A.poll.run = false;
+  if (A.poll.h) { clearTimeout(A.poll.h); A.poll.h = null; }
+  if (A.s1.dev) try { A.s1.dev.gatt.disconnect(); } catch(e) {}
+}
+
+// ── BLE CONNECT S2 ────────────────────────────────────────────
+async function blePickS2() {
+  const fVal = $('sf2') ? $('sf2').value.trim() : '';
+  const fUse = $('sf2-use') && $('sf2-use').checked && fVal.length > 0;
+  let dev;
+  try {
+    dev = await navigator.bluetooth.requestDevice(
+      fUse
+        ? { filters: [{ namePrefix: fVal }], optionalServices: OPT_SVCS_S2 }
+        : { acceptAllDevices: true,           optionalServices: OPT_SVCS_S2 }
+    );
+  } catch(e) {
+    const msg = (e.name === 'NotFoundError' || e.name === 'AbortError') ? 'Cancelled' : e.message;
+    $('ss2').textContent = msg; $('ss2').className = 'su-sc-status err';
+    LOG('S2 picker: ' + msg, 'warn');
+    return;
+  }
+  $('ss2').textContent = 'Connecting to ' + (dev.name || 'device') + '...';
+  $('ss2').className   = 'su-sc-status busy';
+  $('scb2').disabled   = true;
+  $('scb2').textContent = 'Connecting...';
+  LOG('S2: device picked -- ' + (dev.name||'(no name)') + (fUse?' [filter: '+fVal+']':' [no filter]'), 'info');
+  await doConnectS2(dev);
+  $('scb2').disabled = false;
+}
+
+async function doConnectS2(dev) {
+  const s = A.s2;
+  if (s.dev) { try { s.dev.removeEventListener('gattserverdisconnected', onS2Disc); } catch(e) {} }
+  s.con = false; s.srv = null; s.chr = null; s.dev = dev;
+
+  // Don't add the disconnect listener until AFTER we're fully connected
+  // Adding it early means any blip during setup triggers auto-reconnect recursion
+
+  LOG('S2: GATT connecting...', 'info');
+  let gattOk = false;
+  for (let attempt = 1; attempt <= 5; attempt++) {
+    try {
+      s.srv = await s.dev.gatt.connect();
+      gattOk = true;
+      LOG('S2: GATT connected OK (attempt ' + attempt + ')', 'ok');
+      break;
+    } catch(e) {
+      LOG('S2: GATT attempt ' + attempt + ' failed -- ' + e.message, 'warn');
+      if (attempt < 5) await sleep(3000);
+    }
+  }
+  if (!gattOk) {
+    LOG('S2: GATT connect FAILED after 5 attempts', 'err');
+    LOG('S2: ┌─ Troubleshooting ──────────────────────────', 'warn');
+    LOG('S2: │ 1. Close Phoenix Sensors app on ALL phones', 'warn');
+    LOG('S2: │ 2. Remove WETS02 battery for 10 seconds', 'warn');
+    LOG('S2: │ 3. Re-install battery and wait 5s', 'warn');
+    LOG('S2: │ 4. Click Reconnect on this page', 'warn');
+    LOG('S2: └────────────────────────────────────────────', 'warn');
+    $('ss2').textContent = 'X Cannot connect -- see log'; $('ss2').className = 'su-sc-status err';
+    // After 5 hard failures, back off much longer before auto-retry
+    if (!s.manualDisc) {
+      A.s2.reConAttempts = 4; // jump to the long end of the backoff table
+      scheduleS2Reconnect();
+    }
+    return;
+  }
+
+  // Verify connection is still alive before proceeding
+  if (!s.dev.gatt.connected) {
+    LOG('S2: dropped immediately after GATT connect -- sensor unstable', 'err');
+    LOG('S2: -> Power cycle the WETS02 and try again', 'warn');
+    if (!s.manualDisc) scheduleS2Reconnect();
+    return;
+  }
+
+  // Extended settle -- WETS02 needs time after GATT before it accepts service requests
+  LOG('S2: settling 1.5s...', 'info');
+  await sleep(1500);
+
+  // Check still connected after settle
+  if (!s.dev.gatt.connected) {
+    LOG('S2: dropped during settle -- retrying', 'warn');
+    if (!s.manualDisc) scheduleS2Reconnect();
+    return;
+  }
+
+  // Discover ALL services
+  LOG('S2: discovering services...', 'info');
+  let allSvcs;
+  try {
+    allSvcs = await s.srv.getPrimaryServices();
+    LOG('S2: ' + allSvcs.length + ' service(s): ' + allSvcs.map(x=>x.uuid).join(' | '), 'info');
+  } catch(e) {
+    LOG('S2: service discovery failed -- ' + e.message, 'err');
+    if (e.message.includes('disconnected') || e.message.includes('connect first')) {
+      LOG('S2: sensor disconnected during discovery -- will retry', 'warn');
+    }
+    if (!s.manualDisc) scheduleS2Reconnect();
+    return;
+  }
+
+  const findSvc = uuid => allSvcs.find(sv => sv.uuid.toLowerCase() === uuid.toLowerCase());
+
+  // Set sample period 500ms (optional -- skip gracefully if unavailable)
+  const settSvc = findSvc(SET2);
+  if (settSvc) {
+    try {
+      const pc = await settSvc.getCharacteristic(PER2);
+      const buf = new ArrayBuffer(2); new DataView(buf).setUint16(0, 500, true);
+      await pc.writeValue(buf);
+      LOG('S2: sample period -> 500ms OK', 'ok');
+    } catch(e) { LOG('S2: period set skipped -- ' + e.message, 'warn'); }
+  }
+
+  // Diagnostics service (required)
+  LOG('S2: getting diagnostics service...', 'info');
+  const ds = findSvc(SVC2);
+  if (!ds) {
+    LOG('S2: diagnostics service NOT found -- wrong device?', 'err');
+    LOG('S2: UUIDs seen: ' + allSvcs.map(x=>x.uuid).join(', '), 'warn');
+    $('ss2').textContent = 'X Wrong device?'; $('ss2').className = 'su-sc-status err';
+    return;
+  }
+  LOG('S2: diagnostics service OK', 'ok');
+
+  // Temperature NOTIFY
+  try {
+    s.chr = await ds.getCharacteristic(CHR2);
+    s.chr.addEventListener('characteristicvaluechanged', onS2Temp);
+    await s.chr.startNotifications();
+    LOG('S2: temperature NOTIFY active OK', 'ok');
+  } catch(e) {
+    LOG('S2: temp characteristic FAILED -- ' + e.message, 'err');
+    if (!s.manualDisc) scheduleS2Reconnect();
+    return;
+  }
+
+  // Battery (optional)
+  try {
+    const bc = await ds.getCharacteristic(BAT2C);
+    const bv = await bc.readValue();
+    s.batt = bv.getUint16(0, true);
+    LOG('S2: battery ' + s.batt + '% OK', 'ok');
+  } catch(e) { LOG('S2: battery skipped -- ' + e.message, 'warn'); }
+
+  // Device name (optional)
+  try {
+    const ga = findSvc('00001800-0000-1000-8000-00805f9b34fb');
+    if (ga) {
+      const nc = await ga.getCharacteristic('00002a00-0000-1000-8000-00805f9b34fb');
+      const nv = await nc.readValue();
+      s.name = new TextDecoder().decode(nv);
+      LOG('S2: device name "' + s.name + '" OK', 'ok');
+    } else { s.name = dev.name || 'WETS02'; }
+  } catch(e) { s.name = dev.name || 'WETS02'; }
+
+  // NOW add disconnect listener -- after full setup is complete
+  s.dev.addEventListener('gattserverdisconnected', onS2Disc);
+
+  // Reset reconnect state
+  s.manualDisc = false; s.reConAttempts = 0;
+  if (s.reConHandle) { clearTimeout(s.reConHandle); s.reConHandle = null; }
+  s.con = true;
+  LOG('S2: FULLY CONNECTED -- ' + s.name, 'ok');
+  LOG('S2: keep-alive active -- pinging every 10s to prevent auto-sleep', 'info');
+  updS2UI();
+  $('sf2').value = s.name; saveFilter(2, s.name);
+
+  // Keep-alive ping every 10s to prevent WETS02 auto-sleep disconnect.
+  // Uses the already-resolved characteristic reference (s.chr) from setup
+  // rather than re-discovering services each time -- much lighter weight.
+  // Reduced to 10s interval since the sensor dropped at ~4min39s with 20s pings.
+  // Also logs each ping so we can confirm it's actually running.
+  if (s.keepAliveH) clearInterval(s.keepAliveH);
+  let _kaCount = 0;
+  s.keepAliveH = setInterval(async () => {
+    if (!s.con || !s.dev || !s.dev.gatt.connected) return;
+    _kaCount++;
+    try {
+      // Read temperature characteristic directly -- it's already cached in s.chr
+      // Any GATT read resets the WETS02 idle timer
+      if (s.chr) {
+        await s.chr.readValue();
+        // Log every 3rd ping (every 30s) so we know it's working without flooding the log
+        if (_kaCount % 3 === 0) {
+          LOG('S2: keep-alive ping #' + _kaCount + ' OK (idle timer reset)', 'info');
+        }
+      }
+    } catch(e) {
+      LOG('S2: keep-alive ping FAILED -- ' + e.message + ' (sensor may have slept)', 'err');
+      // Don't call onS2Disc here -- the gattserverdisconnected event will fire if truly gone
+    }
+  }, 10000);
+}
+
+function onS2Disc() {
+  A.s2.con = false;
+  A.s2.srv = null;
+  // Stop keep-alive
+  if (A.s2.keepAliveH) { clearInterval(A.s2.keepAliveH); A.s2.keepAliveH = null; }
+  LOG('S2: disconnected', 'err');
+  updS2UI();
+  // Auto-reconnect unless user explicitly disconnected
+  if (!A.s2.manualDisc && A.s2.dev) {
+    scheduleS2Reconnect();
+  }
+}
+
+function scheduleS2Reconnect() {
+  if (A.s2.reConHandle) clearTimeout(A.s2.reConHandle);
+  // Backoff: 2s, 4s, 8s, 15s, 15s, 15s...
+  // Short first retry -- device may just need a moment to re-advertise
+  const delays = [3000, 6000, 12000, 20000, 30000];
+  const delay  = delays[Math.min(A.s2.reConAttempts, delays.length - 1)];
+  A.s2.reConAttempts++;
+  LOG('S2: auto-reconnect in ' + (delay/1000).toFixed(0) + 's (attempt ' + A.s2.reConAttempts + ')...', 'warn');
+  A.s2.reConHandle = setTimeout(async () => {
+    if (A.s2.manualDisc || !A.s2.dev) return;
+    LOG('S2: attempting auto-reconnect...', 'info');
+    await doConnectS2(A.s2.dev);
+  }, delay);
+}
+
+function discS2() {
+  A.s2.manualDisc = true;
+  A.s2.reConAttempts = 0;
+  if (A.s2.reConHandle) { clearTimeout(A.s2.reConHandle); A.s2.reConHandle = null; }
+  if (A.s2.keepAliveH)  { clearInterval(A.s2.keepAliveH); A.s2.keepAliveH = null; }
+  if (A.s2.dev) try { A.s2.dev.gatt.disconnect(); } catch(e) {}
+}
+
+function onS2Temp(event) {
+  A.s2.lastReadMs = Date.now();
+  const dv = event.target.value;
+  const now = Date.now();
+  if (A.s2._lastNotify) {
+    A.s2._notifyIntervals = A.s2._notifyIntervals||[];
+    A.s2._notifyIntervals.push(now - A.s2._lastNotify);
+    if (A.s2._notifyIntervals.length > 10) A.s2._notifyIntervals.shift();
+  }
+  A.s2._lastNotify = now;
+  $('raw-t').textContent = hex(dv);
+  if (dv.byteLength < 2) return;
+  const tempC = dv.getInt16(0, true) * 0.1; // sint16 LE x 0.1 = degC
+  A.s2.tempC = tempC;
+  const disp = A.set.tUnit === 'F' ? cToF(tempC) : tempC;
+  if (A.s2.minT === null || disp < A.s2.minT) A.s2.minT = disp;
+  if (A.s2.maxT === null || disp > A.s2.maxT) A.s2.maxT = disp;
+  pushReading({ tempC, src: 's2', tsMs: Date.now() });
+}
+
+// ── MID-SESSION RECONNECT ─────────────────────────────────────
+async function monReconnect(n) {
+  LOG('S' + n + ': reconnect requested', 'info');
+  if (n === 1) { if (A.s1.dev) await doConnectS1(A.s1.dev); }
+  else          { if (A.s2.dev) await doConnectS2(A.s2.dev); }
+}
+
+// ── PRESSURE POLL LOOP ────────────────────────────────────────
+function kickPoll() {
+  // If sensor supports NOTIFY, no polling needed -- data arrives via onS1PressNotify
+  if (A.s1.useNotify) {
+    LOG('S1: using NOTIFY -- poll loop not needed', 'info');
+    return;
+  }
+  // Fallback: readValue() polling for sensors that don't support NOTIFY
+  if (!A.poll.run) {
+    A.poll.run = true;
+    A.poll.slowCount = 0;
+    LOG('S1: starting readValue() poll loop (fallback)', 'info');
+    runPoll();
+  }
+}
+
+async function runPoll() {
+  if (!A.poll.run) return;
+
+  // CRITICAL: never start a new GATT read while one is in flight
+  // "GATT operation already in progress" happens when two reads overlap
+  if (A.poll.inFlight) {
+    A.poll.h = setTimeout(runPoll, 50);
+    return;
+  }
+
+  const t0 = performance.now();
+
+  if (A.s1.con && A.s1.chr) {
+    A.poll.inFlight = true;
+    try {
+      const dv = await A.s1.chr.readValue();
+      const elapsed = performance.now() - t0;
+
+      // Warn if sensor is slow (interval write wasn't accepted)
+      if (elapsed > 600) {
+        A.poll.slowCount = (A.poll.slowCount || 0) + 1;
+        if (A.poll.slowCount === 3) {
+          LOG('S1: reads taking ~' + Math.round(elapsed) + 'ms -- sensor running at its default interval', 'warn');
+          LOG('S1: data will update every ~' + Math.round(elapsed) + 'ms', 'info');
+          A.poll.slowCount = 0;
+        }
+      } else {
+        A.poll.slowCount = 0;
+      }
+
+      $('raw-p').textContent = hex(dv);
+      const raw = dv.getInt16(0, false); // sint16 BE
+      const psi = raw * A.s1.scale + A.s1.calOff;
+      A.s1.psi = psi;
+      if (A.s1.minP === null || psi < A.s1.minP) A.s1.minP = psi;
+      if (A.s1.maxP === null || psi > A.s1.maxP) A.s1.maxP = psi;
+      pushReading({ psi, src: 's1', tsMs: Date.now() });
+
+    } catch(e) {
+      LOG('S1 poll err: ' + e.message, 'err');
+    } finally {
+      A.poll.inFlight = false;
+    }
+  }
+
+  // Schedule next poll -- target 250ms after start of this cycle
+  // If the read took longer than 250ms this fires immediately (wait=0)
+  const elapsed = performance.now() - t0;
+  const wait = Math.max(0, 250 - elapsed);
+  A.poll.h = setTimeout(runPoll, wait);
+}
+
+// ── READINGS QUEUE ────────────────────────────────────────────
+function pushReading({ psi, tempC, src, tsMs }) {
+  // Start collection timer on first real data
+  if (!A.collectActive && A.sess.active) startCollectionTimer();
+  // ── Readings map: keyed by whole second -- one row per second in the log ──
+  // Multiple readings within the same second update the same row (latest wins)
+  const k = Math.floor(tsMs / 1000) * 1000;
+
+  if (!A.rdMap[k]) {
+    A.rdMap[k] = {
+      ts: new Date(k).toISOString(), tsMs: k,
+      psi: null, tempC: null,
+      s1TsMs: null, s2TsMs: null,  // actual sensor fire times for precise dashboard pairing
+      // Stamp session info at row creation time so the table always shows it
+      job:   A.sess.job   || '--',
+      shot:  A.sess.shot  || '--',
+      seg:   A.sess.seg   || '--',
+      truck: A.sess.truck || '--'
+    };
+  }
+  if (src === 's1' && psi   !== undefined) { A.rdMap[k].psi = psi; A.rdMap[k].s1TsMs = tsMs; }
+  if (src === 's2' && tempC !== undefined) { A.rdMap[k].tempC = tempC; A.rdMap[k].s2TsMs = tsMs; }
+
+  // Chart: update on every reading from either sensor
+  const row = A.rdMap[k];
+  if (!row._ca) {
+    // First reading for this second -- create new chart point
+    row._ca = true;
+    const chartPsi  = row.psi   !== null ? row.psi   : null;
+    const chartTemp = row.tempC !== null ? (A.set.tUnit === 'F' ? cToF(row.tempC) : row.tempC) : null;
+    addChartPt(tsMs, chartPsi, chartTemp);
+  } else {
+    // Update existing chart point for this second with latest values
+    const i = secMap[Math.floor(tsMs / 1000)];
+    if (i !== undefined) {
+      if (src === 's1' && psi   !== null && psi   !== undefined)
+        A.chart.psi[i] = parseFloat(psiConv(psi, A.set.pUnit));
+      if (src === 's2' && tempC !== null && tempC !== undefined) {
+        const td = A.set.tUnit === 'F' ? cToF(tempC) : tempC;
+        A.chart.tmp[i] = parseFloat(td.toFixed(1));
+      }
+      if (!A._craf) { A._craf = true; requestAnimationFrame(() => { if(sparkChart) applyChartRange(); A._craf = false; }); }
+    }
+  }
+
+  // Firebase upload queue -- deduplicated per bucket key
+  if (A.sess.active && !A.rdMap[k]._qu) { A.rdMap[k]._qu = true; A.upQ.push(k); }
+
+  // rdMap holds all readings for the session -- no pruning.
+  const keys = Object.keys(A.rdMap);
+
+  // rdg-cnt = unique 1-second buckets in rdMap (S1+S2 merged, one row per second)
+  const totalRdg = Object.keys(A.rdMap).length;
+  const shownRdg = Math.min(totalRdg, 2000);
+  if ($('rdg-cnt')) $('rdg-cnt').textContent = totalRdg === shownRdg
+    ? totalRdg.toLocaleString()
+    : 'Showing ' + shownRdg.toLocaleString() + ' of ' + totalRdg.toLocaleString();
+}
+
+// ── Firebase REST helper ─────────────────────────────────────────────────
+const FB_REST = 'https://curelog-phase1-default-rtdb.firebaseio.com';
+
+function fbPush(path, data) {
+  const url = FB_REST + '/' + path + '.json';
+  return fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  }).then(r => {
+    if (!r.ok) throw new Error('HTTP ' + r.status + ' ' + r.statusText);
+    return r.json();
+  });
+}
+
+function fbSet(path, data) {
+  const url = FB_REST + '/' + path + '.json';
+  return fetch(url, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  }).then(r => {
+    if (!r.ok) throw new Error('HTTP ' + r.status + ' ' + r.statusText);
+    return r.json();
+  });
+}
+
+// Standalone Firebase connectivity test -- called after session starts
+function testFirebaseWrite() {
+  const testUrl = FB_REST + '/_app_test.json';
+  LOG('Firebase: testing REST write to ' + testUrl, 'ok');
+  
+  fetch(testUrl, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ts: Date.now(), v: typeof VER !== 'undefined' ? VER : '?' })
+  })
+  .then(r => {
+    LOG('Firebase: fetch response received -- HTTP ' + r.status + ' ' + r.statusText, r.ok ? 'ok' : 'err');
+    if (!r.ok) {
+      return r.text().then(t => { throw new Error('HTTP ' + r.status + ': ' + t.slice(0,100)); });
+    }
+    return r.json();
+  })
+  .then(result => {
+    LOG('Firebase: REST write SUCCESS OK -- ' + JSON.stringify(result).slice(0,60), 'ok');
+    setCloud('on', 'Cloud: writing OK');
+    // Clean up test node
+    fetch(testUrl, { method: 'DELETE' }).catch(() => {});
+  })
+  .catch(e => {
+    LOG('Firebase: REST write FAILED -- ' + e.message, 'err');
+    LOG('  URL: ' + testUrl, 'warn');
+    LOG('  Check: Is this HTTPS? Is Firebase database provisioned?', 'warn');
+    setCloud('off', 'Cloud: write failed');
+  });
+}
+
+function drainUpload() {
+  if (A.dev || !A.fbPath) return;
+  if (!A.sess.active) return;
+
+  // Re-queue any rows that have data but were never queued
+  Object.keys(A.rdMap).forEach(k => {
+    const r = A.rdMap[k];
+    if (!r._qu && (r.psi !== null || r.tempC !== null)) {
+      r._qu = true;
+      A.upQ.push(parseInt(k));
+    }
+  });
+
+  const keys = A.upQ.splice(0, 20);
+  if (keys.length === 0) return;
+
+  const ucl   = A.set.uclEn ? A.set.ucl : null;
+  const truck = A.sess.truck, job = A.sess.job, shot = A.sess.shot, seg = A.sess.seg;
+
+  let writeCount = 0;
+  for (const k of keys) {
+    const r = A.rdMap[k]; if (!r) continue;
+    if (r.psi !== null) {
+      fbPush(A.fbPath + '/sensor1/readings', {
+        ts: r.s1TsMs ? new Date(r.s1TsMs).toISOString() : r.ts,
+        tsMs: r.s1TsMs || r.tsMs,
+        pressRaw: r.psi,
+        truckId: truck, sensorId: 'sensor1',
+        job, shot, segment: seg,
+        role: 'InletPressure',
+        uclPSI: ucl,
+        aboveUCL: ucl !== null && r.psi > ucl
+      }).then(() => { A.fbWrites++; A.fbLastWrite = Date.now(); })
+        .catch(e => { A.fbErrors++; LOG('Firebase S1 write error: ' + e.message, 'err'); });
+      writeCount++;
+    }
+    if (r.tempC !== null) {
+      fbPush(A.fbPath + '/sensor2/readings', {
+        ts: r.s2TsMs ? new Date(r.s2TsMs).toISOString() : r.ts,
+        tsMs: r.s2TsMs || r.tsMs,
+        tempC: r.tempC,
+        truckId: truck, sensorId: 'sensor2',
+        job, shot, segment: seg,
+        role: 'InletTemperature'
+      }).then(() => { A.fbWrites++; A.fbLastWrite = Date.now(); })
+        .catch(e => { A.fbErrors++; LOG('Firebase S2 write error: ' + e.message, 'err'); });
+      writeCount++;
+    }
+  }
+  if (writeCount > 0) {
+    if (!A._fbWriteLogged) {
+      LOG('Firebase: first REST batch queued (' + writeCount + ' records) -- waiting for server ack...', 'ok');
+      A._fbWriteLogged = true;
+    }
+  } else if (A.upQ.length === 0 && Object.keys(A.rdMap).length > 0) {
+    // Queue empty but we have data -- all caught up
+  }
+}
+
+// ── DISPLAY LOOP ──────────────────────────────────────────────
+function startCollectionTimer() {
+  if (A.collectActive) return;
+  A.collectActive = true;
+  if (!A.collectStart) {
+    A.collectStart = Date.now();
+    LOG('Data collection timer started >', 'ok');
+  } else if (A.collectPauseStart) {
+    A.collectPaused += Date.now() - A.collectPauseStart;
+    A.collectPauseStart = null;
+    LOG('Data collection timer resumed >', 'info');
+  }
+  const dot = $('collect-dot');
+  if (dot) { dot.style.background='var(--g)'; dot.style.animation='dp 1.4s infinite'; }
+  const bar = $('collection-timer-bar');
+  if (bar) bar.classList.add('active');
+}
+
+function pauseCollectionTimer() {
+  if (!A.collectActive) return;
+  A.collectActive = false;
+  A.collectPauseStart = Date.now();
+  LOG('Data collection timer paused ⏸ (sensors offline)', 'warn');
+  const dot = $('collect-dot');
+  if (dot) { dot.style.background='var(--am)'; dot.style.animation='none'; }
+}
+
+function getCollectionElapsed() {
+  if (!A.collectStart) return 0;
+  const paused = A.collectPaused + (A.collectPauseStart ? Date.now()-A.collectPauseStart : 0);
+  return Date.now() - A.collectStart - paused;
+}
+
+function fmtCollect(ms) {
+  const s=Math.floor(ms/1000), h=Math.floor(s/3600), m=Math.floor((s%3600)/60);
+  return String(h).padStart(2,'0')+':'+String(m%60).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+}
+
+// ── DATA WATCHDOG ────────────────────────────────────────────────────
+let _wdH = null;
+const WD_SILENCE_MS = 20000;
+
+function startWatchdog() {
+  if (_wdH) return;
+  _wdH = setInterval(() => {
+    if (!A.sess || !A.sess.active) return;
+    const now = Date.now();
+    if (A.s1.con && A.s1.lastReadMs > 0 && (now - A.s1.lastReadMs) > WD_SILENCE_MS) {
+      LOG('S1: WATCHDOG -- no data for ' + Math.round((now - A.s1.lastReadMs)/1000) + 's -- forcing reconnect', 'err');
+      onS1Disc();
+    }
+    if (A.s2.con && A.s2.lastReadMs > 0 && (now - A.s2.lastReadMs) > WD_SILENCE_MS) {
+      LOG('S2: WATCHDOG -- no data for ' + Math.round((now - A.s2.lastReadMs)/1000) + 's -- forcing reconnect', 'err');
+      onS2Disc();
+    }
+  }, 15000);
+  LOG('Data watchdog active -- reconnects if sensor silent for 20s', 'info');
+}
+
+function stopWatchdog() {
+  if (_wdH) { clearInterval(_wdH); _wdH = null; }
+}
+
+function startDisp() {
+  if (A.dispH) return;
+  if (!sparkChart) {
+    initChart();
+    // Apply saved line styles once after chart is built
+    applySet();
+    updateLegend();
+  }
+  // Session info updated via updateSessionInfoDisplays() in startSession()
+  A.dispH = setInterval(updateDisp, 200);
+  startWatchdog();
+  if (!A.diagH) A.diagH = setInterval(logDiagnostics, 30000);
+}
+
+function logDiagnostics() {
+  LOG('── Diagnostic heartbeat ────────────────────', 'info');
+  // S1
+  if (A.s1.con) {
+    const iv = A.s1._notifyIntervals||[];
+    const avg = iv.length ? Math.round(iv.reduce((a,b)=>a+b,0)/iv.length) : null;
+    LOG('  S1 (' + (A.s1.name||'TDWLB5') + '): '
+      + (A.s1.psi!==null ? A.s1.psi.toFixed(1)+' PSI' : 'no data')
+      + (avg ? ' | avg interval ' + avg + 'ms' : '')
+      + (A.s1.useNotify ? ' | NOTIFY' : ' | POLL')
+      + (A.s1.batt!==null ? ' | batt '+A.s1.batt+'%' : ''), 'ok');
+  } else {
+    LOG('  S1: OFFLINE (reconnect attempts: ' + A.s1.reConAttempts + ')', 'err');
+  }
+  // S2
+  if (A.s2.con) {
+    const iv2 = A.s2._notifyIntervals||[];
+    const avg2 = iv2.length ? Math.round(iv2.reduce((a,b)=>a+b,0)/iv2.length) : null;
+    const td = A.s2.tempC!==null ? (A.set.tUnit==='F'?cToF(A.s2.tempC):A.s2.tempC).toFixed(1)+'deg'+A.set.tUnit : 'no data';
+    LOG('  S2 (' + (A.s2.name||'WETS02') + '): ' + td
+      + (avg2 ? ' | avg interval ' + avg2 + 'ms' : '')
+      + (A.s2.batt!==null ? ' | batt '+A.s2.batt+'%' : '')
+      + ' | reconnects: '+A.s2.reConAttempts, 'ok');
+  } else {
+    LOG('  S2: OFFLINE (reconnect attempts: ' + A.s2.reConAttempts + ')', 'err');
+  }
+  // Session
+  if (A.sess.active && A.sessStart) {
+    const e = Math.floor((Date.now()-A.sessStart)/1000);
+    const t = String(Math.floor(e/3600)).padStart(2,'0')+':'+String(Math.floor(e%3600/60)).padStart(2,'0')+':'+String(e%60).padStart(2,'0');
+    const cMs = getCollectionElapsed();
+    LOG('  Session: ' + t + ' | Collection: ' + fmtCollect(cMs) + (A.collectActive?' [ACTIVE]':' [PAUSED]') + ' | readings: ' + Object.keys(A.rdMap).length + ' | upload queue: ' + A.upQ.length + (A.dev?' | DEV MODE':''), 'info');
+  }
+  // Firebase heartbeat
+  if (!A.dev) {
+    if (A.fbDb) {
+      const lastWriteStr = A.fbLastWrite
+        ? Math.round((Date.now() - A.fbLastWrite) / 1000) + 's ago'
+        : 'none yet';
+      const status = A.fbErrors > 0 ? '! ' + A.fbErrors + ' error(s)' : 'OK';
+      LOG('  Firebase: ' + A.fbWrites + ' records written | last write: ' + lastWriteStr + ' | status: ' + status + ' | queue: ' + A.upQ.length, A.fbErrors > 0 ? 'warn' : 'ok');
+    } else {
+      LOG('  Firebase: NOT connected', 'err');
+    }
+  }
+}
+let _tblTs = 0;
+function updateDisp() {
+  const s = A.set;
+  if (A.s1.con && A.s1.psi !== null) {
+    const v = psiConv(A.s1.psi, s.pUnit);
+    setText('sv1', v); $('su1').textContent = s.pUnit;
+    $('smn1').textContent = A.s1.minP !== null ? psiConv(A.s1.minP, s.pUnit) : '--';
+    $('smx1').textContent = A.s1.maxP !== null ? psiConv(A.s1.maxP, s.pUnit) : '--';
+    $('sb1').classList.remove('dim');
+    $('sb1').classList.toggle('ucl', s.uclEn && A.s1.psi > s.ucl);
+  }
+  if (A.s2.con && A.s2.tempC !== null) {
+    const disp = s.tUnit === 'F' ? cToF(A.s2.tempC) : A.s2.tempC;
+    const unit = 'deg' + s.tUnit;
+    setText('sv2', disp.toFixed(1)); $('su2').textContent = unit;
+    const _u2 = '°' + s.tUnit; // ° symbol saves space vs 'deg'
+    $('smn2').textContent = A.s2.minT !== null ? A.s2.minT.toFixed(1) + _u2 : '--';
+    $('smx2').textContent = A.s2.maxT !== null ? A.s2.maxT.toFixed(1) + _u2 : '--';
+    $('sb2').classList.remove('dim');
+  }
+  if (Date.now() - _tblTs > 1000) { _tblTs = Date.now(); rebuildTbl(); }
+  // Update collection timer
+  if (A.collectStart) {
+    const elMs  = getCollectionElapsed();
+    const rdgs  = Object.keys(A.rdMap).length;
+    const elSec = elMs / 1000;
+    if ($('collect-elapsed')) $('collect-elapsed').textContent = fmtCollect(elMs);
+    if ($('collect-readings')) $('collect-readings').textContent = rdgs;
+    // S1 BLE notification interval (avg of last 10)
+    const s1iv = A.s1._notifyIntervals||[];
+    const s1avg = s1iv.length >= 2
+      ? Math.round(s1iv.reduce((a,b)=>a+b,0)/s1iv.length)
+      : null;
+    // S2 BLE notification interval (avg of last 10)
+    const s2iv = A.s2._notifyIntervals||[];
+    const s2avg = s2iv.length >= 2
+      ? Math.round(s2iv.reduce((a,b)=>a+b,0)/s2iv.length)
+      : null;
+    const r1 = $('collect-rate-s1');
+    const r2 = $('collect-rate-s2');
+    if (r1) r1.textContent = A.s1.con && s1avg ? s1avg+'ms' : A.s1.con ? 'waiting...' : 'offline';
+    if (r2) r2.textContent = A.s2.con && s2avg ? s2avg+'ms' : A.s2.con ? 'waiting...' : 'offline';
+    if ($('tb-el')) $('tb-el').textContent = fmtCollect(elMs);
+  }
+
+  // Session info set once by updateSessionInfoDisplays() in startSession()
+}
+function setText(id, v) {
+  const el = $(id);
+  if (!el) return;
+  if (el.firstChild && el.firstChild.nodeType === 3) el.firstChild.textContent = v;
+  else { el.insertBefore(document.createTextNode(v), el.firstChild); }
+}
+
+// ── TABLE ─────────────────────────────────────────────────────
+function rebuildTbl() {
+  const s = A.set;
+  // Update session info strip above readings table
+  const strip = $('rdg-session-strip');
+  if (strip && A.sess.active) {
+    const tubeParts = [];
+    if (A.sess.tubeDia)   tubeParts.push('O ' + A.sess.tubeDia + '"');
+    if (A.sess.tubeThick) tubeParts.push('Wall ' + A.sess.tubeThick + ' mm');
+    if (A.sess.tubeLen)   tubeParts.push(A.sess.tubeLen + ' ft');
+    const tubeStr = tubeParts.length > 0
+      ? '<span style="color:var(--t3)"> &nbsp;|&nbsp; 📐 ' + tubeParts.join(' . ') + '</span>'
+      : '';
+    strip.innerHTML =
+      '<span style="font-weight:700;color:var(--t1)">' + (A.sess.truck||'--') + '</span>' +
+      ' &nbsp;.&nbsp; Job <span style="font-weight:600">' + (A.sess.job||'--')  + '</span>' +
+      ' &nbsp;.&nbsp; Shot <span style="font-weight:600">' + (A.sess.shot||'--') + '</span>' +
+      ' &nbsp;.&nbsp; Seg <span style="font-weight:600">'  + (A.sess.seg||'--')  + '</span>' +
+      tubeStr;
+    strip.style.display = '';
+  }
+  const rows = Object.values(A.rdMap).sort((a,b) => b.tsMs - a.tsMs).slice(0, 2000);
+  $('rdg-tbody').innerHTML = rows.map(r => {
+    const p   = r.psi   !== null ? psiConv(r.psi, s.pUnit) + ' ' + s.pUnit : '--';
+    const t   = r.tempC !== null ? (s.tUnit==='F'?cToF(r.tempC):r.tempC).toFixed(1) + 'deg' + s.tUnit : '--';
+    const ucl = s.uclEn && r.psi !== null && r.psi > s.ucl;
+    const lcl = s.lclEn && r.psi !== null && r.psi < s.lcl;
+    const ts  = new Date(r.tsMs).toLocaleTimeString();
+    return `<tr class="${ucl?'ucl-row':lcl?'lcl-row':''}"><td>${ts}</td><td>${p}</td><td>${t}</td><td>${r.job||'--'}</td><td>${r.shot||'--'}</td><td>${r.seg||'--'}</td></tr>`;
+  }).join('');
+}
+
+// ── EXPORT ACTIVITY LOG ──────────────────────────────────────
+function exportLog(e) {
+  if (e) e.stopPropagation(); // don't toggle collapsible
+  const lines = [];
+  const el = $('alog');
+  if (!el || el.children.length === 0) {
+    alert('No log entries to export.');
+    return;
+  }
+  // Header
+  const now  = new Date();
+  lines.push('===============================================');
+  lines.push('  CureLog Android Mobile Truck App -- Activity Log');
+  lines.push('  Version: v' + VER + '  (CureLog Truck App)');
+  lines.push('  Exported: ' + now.toLocaleString());
+  lines.push('');
+  sessionInfoBlock().forEach(l => lines.push(l));
+  lines.push('===============================================');
+  lines.push('');
+  // Log entries
+  Array.from(el.children).forEach(d => lines.push(d.textContent));
+  lines.push('');
+  lines.push('--- END OF LOG ---');
+
+  const NL = String.fromCharCode(10);
+  const blob = new Blob([lines.join(NL)], { type: 'text/plain' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  const ts = now.toISOString().replace(/[:.]/g,'-').slice(0,19);
+  const job = A.sess.job || 'nosession';
+  a.download = sdFilename('Activity Log') + '.txt';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  LOG('Activity log exported to file', 'ok');
+}
+
+// ── CSV ───────────────────────────────────────────────────────
+function doCSV() {
+  const s = A.set;
+  const rows = Object.values(A.rdMap).sort((a,b) => a.tsMs - b.tsMs);
+  const meta = [
+    '# CureLog Android Mobile Truck App -- Readings Log',
+    '# Version: v' + VER + '  (CureLog Truck App)',
+    '# Truck: '     + (A.sess.truck     || '--'),
+    '# Job: '       + (A.sess.job       || '--'),
+    '# Shot: '      + (A.sess.shot      || '--'),
+    '# Segment: '   + (A.sess.seg       || '--'),
+    '# Tube Dia: '  + (A.sess.tubeDia   ? A.sess.tubeDia + '"'   : '--'),
+    '# Tube Thick: '+ (A.sess.tubeThick ? A.sess.tubeThick + ' mm' : '--'),
+    '# Tube Len: '  + (A.sess.tubeLen   ? A.sess.tubeLen + ' ft' : '--'),
+    '#'
+  ];
+  const hdr  = ['Timestamp','Time','Inlet Press ('+s.pUnit+')','Inlet Temp (deg'+s.tUnit+')','Job','Shot','Seg','Truck','Tube Dia','Tube Thick','Tube Len'].join(',');
+  const body = rows.map(r => [ r.ts, new Date(r.tsMs).toLocaleTimeString(), r.psi!==null?psiConv(r.psi,s.pUnit):'', r.tempC!==null?(s.tUnit==='F'?cToF(r.tempC):r.tempC).toFixed(1):'' , r.job,r.shot,r.seg,r.truck, A.sess.tubeDia||'', A.sess.tubeThick||'', A.sess.tubeLen||'' ].join(','));
+  const blob = new Blob([[...meta,hdr,...body].join('\n')], {type:'text/csv'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = sdFilename('Readings Log') + '.csv'; a.click();
+  LOG('CSV exported', 'ok');
+}
+
+// ── CHART ─────────────────────────────────────────────────────
+let sparkChart = null;
+const secMap = {};
+function initChart() {
+  const ctx = $('sparkCanvas').getContext('2d');
+  sparkChart = new Chart(ctx, {
+    type: 'line',
+    data: { labels: A.chart.lbl, datasets: [
+      { label:'Inlet Press', data:A.chart.psi, borderColor:'#1D9E75', backgroundColor:'rgba(29,158,117,.07)', borderWidth:2, pointRadius:0, tension:.3, yAxisID:'yP', fill:true,  spanGaps:true },
+      { label:'Inlet Temp',  data:A.chart.tmp, borderColor:'#378ADD', backgroundColor:'transparent',          borderWidth:1.5,pointRadius:0,tension:.3, yAxisID:'yT', borderDash:[5,3],fill:false, spanGaps:true }
+    ]},
+    options: { responsive:true, maintainAspectRatio:false, animation:false, interaction:{mode:'index',intersect:false},
+      plugins: { legend:{display:false}, annotation:{annotations:{}} },
+      scales: { x:{type:'category',ticks:{maxTicksLimit:8,font:{size:9}},grid:{display:false}}, yP:{position:'left',title:{display:true,text:'PSI',font:{size:9}},ticks:{font:{size:9},callback:(v)=>Number(v).toFixed(A.set.psiDecimals)},grid:{color:'rgba(0,0,0,.04)'}}, yT:{position:'right',title:{display:true,text:'Temp',font:{size:9}},ticks:{font:{size:9},callback:(v)=>Number(v).toFixed(A.set.tmpDecimals)},grid:{display:false}} }
+    }
+  });
+  updateChartAnnotations();
+}
+// Chart stores ALL data -- never discards.
+// A.chart.lbl/psi/tmp are the master arrays.
+// secMap maps epoch-second -> array index for fast lookup.
+// applyChartRange() creates a VIEW (not a copy) into these arrays.
+// Max 18000 points = 5 hours at 1/s -- adjust if needed.
+const MAX_CHART_PTS = 18000;
+
+function addChartPt(tsMs, psi, temp) {
+  const k = Math.floor(tsMs/1000), lbl = new Date(tsMs).toLocaleTimeString();
+  if (secMap[k] !== undefined) {
+    // Update existing second's data point
+    const i = secMap[k];
+    if (psi  !== null && psi  !== undefined) A.chart.psi[i] = parseFloat(psiConv(psi, A.set.pUnit));
+    if (temp !== null && temp !== undefined) A.chart.tmp[i] = parseFloat(temp.toFixed(1));
+  } else {
+    // New second -- append
+    A.chart.lbl.push(lbl);
+    A.chart.psi.push(psi  !== null && psi  !== undefined ? parseFloat(psiConv(psi, A.set.pUnit)) : null);
+    A.chart.tmp.push(temp !== null && temp !== undefined ? parseFloat(temp.toFixed(1)) : null);
+    secMap[k] = A.chart.lbl.length - 1;
+    // Cap at MAX_CHART_PTS -- remove oldest when exceeded
+    if (A.chart.lbl.length > MAX_CHART_PTS) {
+      A.chart.lbl.shift();
+      A.chart.psi.shift();
+      A.chart.tmp.shift();
+      // Rebuild secMap indices after shift
+      Object.keys(secMap).forEach(sk => {
+        if (secMap[sk] === 0) delete secMap[sk];
+        else secMap[sk]--;
+      });
+    }
+  }
+  if (!A._craf) { A._craf = true; requestAnimationFrame(() => { if(sparkChart) applyChartRange(); A._craf = false; }); }
+}
+
+function applyChartRange() {
+  if (!sparkChart) return;
+  const val = A._chartRange !== undefined ? String(A._chartRange) : 'all';
+  let startIdx = 0;
+
+  if (val !== 'all') {
+    const mins       = parseInt(val);
+    const cutoffSec  = Math.floor((Date.now() - mins * 60 * 1000) / 1000);
+    const sortedKeys = Object.keys(secMap).map(Number).sort((a,b) => a-b);
+    startIdx = A.chart.lbl.length; // default: nothing visible (all data older than cutoff)
+    for (let i = 0; i < sortedKeys.length; i++) {
+      if (sortedKeys[i] >= cutoffSec) {
+        startIdx = secMap[sortedKeys[i]];
+        break;
+      }
+    }
+  }
+
+  // ALWAYS use the master arrays -- never reassign them.
+  // Use slice only for the chart view so master data is preserved.
+  const viewLbl = startIdx === 0 ? A.chart.lbl : A.chart.lbl.slice(startIdx);
+  const viewPsi = startIdx === 0 ? A.chart.psi : A.chart.psi.slice(startIdx);
+  const viewTmp = startIdx === 0 ? A.chart.tmp : A.chart.tmp.slice(startIdx);
+
+  sparkChart.data.labels           = viewLbl;
+  sparkChart.data.datasets[0].data = viewPsi;
+  sparkChart.data.datasets[1].data = viewTmp;
+
+  updateChartAnnotations();
+  sparkChart.update('none');
+}
+
+function updateChartAnnotations() {
+  if (!sparkChart) return;
+  const s = A.set, anns = {};
+  if (s.uclEn) anns.ucl = { type:'line',yMin:s.ucl,yMax:s.ucl,yScaleID:'yP',borderColor:'#E24B4A',borderWidth:1.5,borderDash:[6,3],label:{content:'UCL '+s.ucl,display:true,position:'end',font:{size:8},color:'#E24B4A',backgroundColor:'rgba(226,75,74,.08)'}};
+  if (s.lclEn) anns.lcl = { type:'line',yMin:s.lcl,yMax:s.lcl,yScaleID:'yP',borderColor:'#E8A838',borderWidth:1.5,borderDash:[6,3],label:{content:'LCL '+s.lcl,display:true,position:'end',font:{size:8},color:'#E8A838',backgroundColor:'rgba(232,168,56,.08)'}};
+  sparkChart.options.plugins.annotation.annotations = anns;
+  sparkChart.update('none');
+}
+
+// ── DEV SIM ───────────────────────────────────────────────────
+function startDevSim() {
+  let t = 0;
+  const tick = () => {
+    if (!A.dev) return;
+    t += 0.08;
+    const psi   = 15 + Math.sin(t) * 9 + (Math.random() - .5) * 1.5;
+    const tempC = 24 + Math.sin(t * .25) * 6 + (Math.random() - .5) * .8;
+    const now   = Date.now();
+    A.s1.psi = psi; A.s1.con = true;
+    if (A.s1.minP===null||psi<A.s1.minP) A.s1.minP=psi; if (A.s1.maxP===null||psi>A.s1.maxP) A.s1.maxP=psi;
+    A.s2.tempC = tempC; A.s2.con = true;
+    const disp = A.set.tUnit==='F' ? cToF(tempC) : tempC;
+    if (A.s2.minT===null||disp<A.s2.minT) A.s2.minT=disp; if (A.s2.maxT===null||disp>A.s2.maxT) A.s2.maxT=disp;
+    updS1UI(); updS2UI();
+    pushReading({ psi, src:'s1', tsMs:now });
+    pushReading({ tempC, src:'s2', tsMs:now });
+    setTimeout(tick, 250);
+  };
+  tick();
+}
+
+// ── SESSION ───────────────────────────────────────────────────
+function startSession() {
+  // Guard against double-fire (touchend + onclick both fire on mobile)
+  if (A.sess.active) { LOG('startSession: already active, ignoring duplicate call', 'warn'); return; }
+
+  A.sess.truck     = 'BTK-' + $('fi-truck').value.trim();
+  A.sess.job       = $('fi-job').value.trim();
+  A.sess.shot      = $('fi-shot').value.trim();
+  A.sess.seg       = $('fi-seg').value.trim();
+  A.sess.tubeDia   = $('fi-tube-dia')   ? $('fi-tube-dia').value.trim()   : '';
+  A.sess.tubeThick = $('fi-tube-thick') ? $('fi-tube-thick').value.trim() : '';
+  A.sess.tubeLen   = $('fi-tube-len')   ? $('fi-tube-len').value.trim()   : '';
+  A.sess.active = true; A.dev = false;
+  saveTruck($('fi-truck').value.trim());
+  localStorage.setItem('cl_job',  A.sess.job);
+  localStorage.setItem('cl_shot', A.sess.shot);
+  localStorage.setItem('cl_seg',  A.sess.seg);
+  A.fbPath = `shots/${A.sess.job}/${A.sess.shot}/${A.sess.seg}/${A.sess.truck}`;
+  LOG('startSession: fbPath set to ' + A.fbPath, 'ok');
+  // Immediate visual feedback -- disable button and show "Starting..."
+  const _btn = $('btn-start');
+  if (_btn) { _btn.disabled = true; _btn.textContent = '... Starting...'; _btn.style.opacity='0.6'; }
+  const _hint = $('su-hint');
+  if (_hint) { _hint.textContent = 'Starting session...'; _hint.className = 'su-hint ok'; }
+  try { closeStartup(); LOG('startSession: closeStartup OK', 'ok'); }
+  catch(e) { LOG('startSession: closeStartup CRASHED -- ' + e.message + ' (line:' + e.stack.split('\n')[1] + ')', 'err'); }
+  try { initFB(); LOG('startSession: initFB OK', 'ok'); }
+  catch(e) { LOG('startSession: initFB CRASHED -- ' + e.message, 'err'); }
+  try { startDisp(); } catch(e) { LOG('startSession: startDisp CRASHED -- ' + e.message, 'err'); }
+  if (!A.uplH) A.uplH = setInterval(drainUpload, 2000);
+  if (A.s1.con) kickPoll();
+  LOG('Session started -- ' + A.sess.truck + ' Job:' + A.sess.job + ' Shot:' + A.sess.shot + ' Seg:' + A.sess.seg, 'ok');
+  setTimeout(updateSessionInfoDisplays, 100);
+  acquireWakeLock();
+}
+
+function devBypass() {
+  A.dev = true; A.sess.active = true;
+  A.sess.truck = 'BTK-DEV01';
+  A.sess.job   = $('fi-job').value.trim()  || 'DEV JOB';
+  A.sess.shot  = $('fi-shot').value.trim() || 'DEV SHOT';
+  A.sess.seg   = $('fi-seg').value.trim()  || '1';
+  closeStartup();
+  $('tb-dev').style.display = '';
+  startDisp();
+  startDevSim();
+  setCloud('off', 'Dev mode -- no cloud');
+  LOG('Dev Bypass active -- simulated data, no Firebase', 'warn');
+}
+
+function closeStartup() {
+  const _ov = $('su-overlay'); if (_ov) _ov.style.display = 'none';
+  const sf = $('start-footer'); if (sf) sf.style.display = 'none';
+  goPage('monitor'); // Navigate to Monitor tab on mobile
+  const tb_t=$('tb-truck-badge');if(tb_t){tb_t.textContent=A.sess.truck;tb_t.style.display='';}
+  const tb_j=$('tb-job-badge');if(tb_j){tb_j.textContent='Job '+A.sess.job;tb_j.style.display='';}
+  const _tj=$('tb-job');   if(_tj) _tj.textContent   = 'Job: '  + A.sess.job;
+  const _ts=$('tb-shot');  if(_ts) _ts.textContent  = 'Shot: ' + A.sess.shot;
+  const _tg=$('tb-seg');   if(_tg) _tg.textContent  = 'Seg: '  + A.sess.seg;
+  const tbe=$('tb-end-btn');if(tbe)tbe.style.display='block';
+  A.sessStart = Date.now();
+  A.elH = setInterval(() => { const ms=Date.now()-A.sessStart,s=Math.floor(ms/1000),m=Math.floor(s/60),h=Math.floor(m/60); const _te=$('tb-el'); if(_te) _te.textContent=`${String(h).padStart(2,'0')}:${String(m%60).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`; }, 1000);
+  const _su=$('si-truck'); if(_su) _su.textContent = A.sess.truck;
+  const _sj=$('si-job');   if(_sj) _sj.textContent = A.sess.job;
+  const _ss=$('si-shot');  if(_ss) _ss.textContent = A.sess.shot;
+  const _sg=$('si-seg');   if(_sg) _sg.textContent = A.sess.seg;
+  refreshJobInfo(); // sync the "no session" note
+}
+
+// ── FIREBASE ─────────────────────────────────────────────────
+function initFB() {
+  try {
+    // Firebase may already be initialized at boot -- just get the db reference
+    if (!firebase.apps.length) firebase.initializeApp(FB_CFG);
+    if (!A.fbDb) A.fbDb = firebase.database();
+    setCloud('on', 'Cloud: connected');
+    LOG('Firebase connected OK', 'ok');
+    LOG('Firebase path: ' + A.fbPath, 'info');
+    $('sf-fb').textContent = 'curelog-phase1-default-rtdb.firebaseio.com';
+    // Write session start timestamp so dashboard can measure duration correctly
+    A.sessStart = Date.now();
+    // Use REST API for _session write -- works from content:// origin on Android
+    fbSet(A.fbPath + '/_session', {
+      startMs: A.sessStart,
+      truck: A.sess.truck, job: A.sess.job, shot: A.sess.shot, seg: A.sess.seg,
+      startIso: new Date(A.sessStart).toISOString(),
+      tubeDia:   A.sess.tubeDia   || null,
+      tubeThick: A.sess.tubeThick || null,
+      tubeLen:   A.sess.tubeLen   || null
+    }).then(() => LOG('Session metadata written OK', 'ok'))
+      .catch(e => LOG('Session meta write failed: ' + e.message, 'warn'));
+
+    // Run comprehensive write test
+    testFirebaseWrite();
+  } catch(e) {
+    LOG('Firebase error: ' + e.message, 'err');
+    setCloud('off', 'Cloud: error');
+  }
+}
+
+// ── SHUTDOWN ─────────────────────────────────────────────────
+// ── SHUTDOWN MODAL LOGIC ─────────────────────────────────────
+
+function sdFilename(logType) {
+  // Format: Truck App - <Log Type> - BTK-00001 - Job 05062026 - Shot 001 - Seg 003 - 2026-05-06
+  const t = A.sess.truck || 'BTK-???';
+  const j = A.sess.job   || '???';
+  const s = A.sess.shot  || '???';
+  const g = A.sess.seg   || '???';
+  const d = new Date();
+  const date = d.getFullYear() + '-' +
+    String(d.getMonth()+1).padStart(2,'0') + '-' +
+    String(d.getDate()).padStart(2,'0');
+  return `Truck App - ${logType} - ${t} - Job ${j} - Shot ${s} - Seg ${g} - ${date}`;
+}
+
+function shutdownApp() {
+  stopWatchdog();
+  releaseWakeLock();
+  const connEl   = $('su-clog');
+  const actEl    = $('alog');
+  const connCount = connEl ? connEl.children.length : 0;
+  const actCount  = actEl  ? actEl.children.length  : 0;
+  const rdgCount  = Object.keys(A.rdMap).length;
+
+  $('sd-conn-count').textContent = connCount + ' entries';
+  $('sd-act-count').textContent  = actCount  + ' entries';
+  $('sd-rdg-count').textContent  = rdgCount;
+
+  const sess = A.sess.active
+    ? A.sess.truck + '  .  Job ' + A.sess.job + '  .  Shot ' + A.sess.shot
+    : 'No active session';
+  $('sd-session-info').textContent = sess;
+
+  // Pre-fill filenames with default format
+  $('sd-fn-conn').value = sdFilename('Connection Log');
+  $('sd-fn-act').value  = sdFilename('Activity Log');
+  $('sd-fn-rdg').value  = sdFilename('Readings Log');
+
+  // Reset to step 1
+  ['sd-step1','sd-step2','sd-step3'].forEach(id => $(id).style.display = 'none');
+  $('sd-step1').style.display = 'block';
+  $('sd-overlay').classList.add('show');
+}
+
+function sdCancel() {
+  $('sd-overlay').classList.remove('show');
+  LOG('Shutdown cancelled', 'info');
+}
+
+function sdChooseSave() {
+  $('sd-step1').style.display = 'none';
+  $('sd-step2').style.display = 'block';
+}
+
+function sdSkipSave() {
+  // Skip straight to shutdown sequence with no saves
+  $('sd-step1').style.display = 'none';
+  $('sd-step3').style.display = 'block';
+  $('sd-save-result').textContent = 'No logs saved';
+  $('sd-saved-summary').textContent = 'Skipped -- no files saved.';
+  $('sd-shutdown-log').textContent = 'Shutting down services...';
+  doShutdownSequence();
+}
+
+function sdBackToStep1() {
+  $('sd-step2').style.display = 'none';
+  $('sd-step1').style.display = 'block';
+}
+
+function sdUpdateRow(which) {
+  const checked = $('sd-cb-' + which).checked;
+  const row = $('sd-row-' + which);
+  if (row) row.style.opacity = checked ? '1' : '0.4';
+}
+
+async function sdProceed() {
+  const saveConn = $('sd-cb-conn').checked;
+  const saveAct  = $('sd-cb-act').checked;
+  const saveRdg  = $('sd-cb-rdg').checked;
+  const NL  = String.fromCharCode(10);
+  const now = new Date();
+  // Use user-edited filenames (strip illegal chars for safety)
+  const fnConn = ($('sd-fn-conn').value || sdFilename('Connection Log')).replace(/[/\\:*?"<>|]/g,'_');
+  const fnAct  = ($('sd-fn-act').value  || sdFilename('Activity Log')).replace(/[/\\:*?"<>|]/g,'_');
+  const fnRdg  = ($('sd-fn-rdg').value  || sdFilename('Readings Log')).replace(/[/\\:*?"<>|]/g,'_');
+  const saved = [];
+
+  // Save connection log
+  if (saveConn) {
+    const el = $('su-clog');
+    if (el && el.children.length > 0) {
+      const lines = [
+        '===============================================',
+        '  CureLog Android Mobile Truck App -- Connection Log',
+        '  Version: v' + VER + '  (CureLog Truck App)',
+        '  Exported: ' + now.toLocaleString(),
+        ''
+      ];
+      sessionInfoBlock().forEach(l => lines.push(l));
+      lines.push('===============================================');
+      lines.push('');
+      Array.from(el.children).forEach(d => lines.push(d.textContent));
+      lines.push('', '--- END OF CONNECTION LOG ---');
+      const blob = new Blob([lines.join(NL)], {type:'text/plain'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = fnConn + '.txt';
+      a.click(); URL.revokeObjectURL(a.href);
+      saved.push('Connection Log');
+      LOG('Connection log saved OK', 'ok');
+    }
+    await sleep(300);
+  }
+
+  // Save activity log
+  if (saveAct) {
+    const el = $('alog');
+    if (el && el.children.length > 0) {
+      const lines = [
+        '===============================================',
+        '  CureLog Android Mobile Truck App -- Activity Log',
+        '  Version: v' + VER + '  (CureLog Truck App)',
+        '  Exported: ' + now.toLocaleString(),
+        ''
+      ];
+      sessionInfoBlock().forEach(l => lines.push(l));
+      lines.push('===============================================');
+      lines.push('');
+      Array.from(el.children).forEach(d => lines.push(d.textContent));
+      lines.push('', '--- END OF ACTIVITY LOG ---');
+      const blob = new Blob([lines.join(NL)], {type:'text/plain'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = fnAct  + '.txt';
+      a.click(); URL.revokeObjectURL(a.href);
+      saved.push('Activity Log');
+      LOG('Activity log saved OK', 'ok');
+    }
+    await sleep(300);
+  }
+
+  // Save readings log as CSV
+  if (saveRdg) {
+    const s = A.set;
+    const rows = Object.values(A.rdMap).sort((a,b) => a.tsMs - b.tsMs);
+    if (rows.length > 0) {
+      const sdMeta = [
+        '# CureLog Android Mobile Truck App -- Readings Log',
+        '# Version: v' + VER + '  (CureLog Truck App)',
+        '# Truck: '      + (A.sess.truck     || '--'),
+        '# Job: '        + (A.sess.job       || '--'),
+        '# Shot: '       + (A.sess.shot      || '--'),
+        '# Segment: '    + (A.sess.seg       || '--'),
+        '# Tube Dia: '   + (A.sess.tubeDia   ? A.sess.tubeDia   + '"'   : '--'),
+        '# Tube Thick: ' + (A.sess.tubeThick ? A.sess.tubeThick + ' mm'   : '--'),
+        '# Tube Len: '   + (A.sess.tubeLen   ? A.sess.tubeLen   + ' ft' : '--'),
+        '#'
+      ];
+      const hdr = ['Timestamp','Time','Inlet Press ('+s.pUnit+')','Inlet Temp (deg'+s.tUnit+')','Job','Shot','Seg','Truck','Tube Dia','Tube Thick','Tube Len'].join(',');
+      const body = rows.map(r => [
+        r.ts, new Date(r.tsMs).toLocaleTimeString(),
+        r.psi   !== null ? psiConv(r.psi, s.pUnit)                                  : '',
+        r.tempC !== null ? (s.tUnit==='F' ? cToF(r.tempC) : r.tempC).toFixed(1)     : '',
+        r.job, r.shot, r.seg, r.truck,
+        A.sess.tubeDia||'', A.sess.tubeThick||'', A.sess.tubeLen||''
+      ].join(','));
+      const blob = new Blob([[...sdMeta,hdr,...body].join(NL)], {type:'text/csv'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = fnRdg  + '.csv';
+      a.click(); URL.revokeObjectURL(a.href);
+      saved.push('Readings Log (' + rows.length + ' rows)');
+      LOG('Readings log saved OK (' + rows.length + ' rows)', 'ok');
+    }
+    await sleep(300);
+  }
+
+  // Update summary
+  $('sd-saved-summary').textContent = saved.length > 0
+    ? 'Saved: ' + saved.join(', ')
+    : 'Nothing saved -- all deselected';
+
+  // Switch to step 3 and run shutdown sequence
+  $('sd-step2').style.display = 'none';
+  $('sd-step3').style.display = 'block';
+  $('sd-save-result').textContent = saved.length > 0 ? 'Files saved OK' : 'No files saved';
+  $('sd-shutdown-log').textContent = 'Shutting down services...';
+
+  // Run the actual shutdown sequence (sensors, timers) and log to modal
+  await doShutdownSequence();
+}
+
+function sdAppendLog(msg) {
+  const el = $('sd-shutdown-log');
+  if (!el) return;
+  el.innerHTML += (el.innerHTML ? '<br>' : '') + msg;
+}
+
+async function doShutdownSequence() {
+  sdAppendLog('');
+
+  const _sd = (msg, type) => { LOG(msg, type||'info'); sdAppendLog(msg); };
+  _sd('================================', 'info');
+  _sd('SHUTDOWN SEQUENCE STARTED', 'warn');
+  _sd('Session: ' + (A.sess.truck||'--') + ' | Job: ' + (A.sess.job||'--') + ' | Shot: ' + (A.sess.shot||'--') + ' | Seg: ' + (A.sess.seg||'--'), 'info');
+  _sd('Time: ' + new Date().toLocaleString(), 'info');
+
+  // Step 1: Stop pressure poll loop
+  _sd('Step 1: Stopping pressure poll loop...', 'info');
+  A.poll.run = false;
+  A.poll.inFlight = false;
+  if (A.poll.h) { clearTimeout(A.poll.h); A.poll.h = null; }
+  _sd('Step 1: Poll loop stopped OK', 'ok');
+  if (A.collectStart) {
+    const finalMs = getCollectionElapsed();
+    A.collectActive = false;
+    _sd('Active collection time: ' + fmtCollect(finalMs) + ' | Total readings: ' + Object.keys(A.rdMap).length, 'ok');
+  }
+
+  // Step 2: Stop display refresh timer
+  _sd('Step 2: Stopping display timer...', 'info');
+  if (A.dispH) { clearInterval(A.dispH); A.dispH = null; }
+  _sd('Step 2: Display timer stopped OK', 'ok');
+
+  // Step 3: Stop elapsed time counter
+  _sd('Step 3: Stopping session timer...', 'info');
+  if (A.elH)   { clearInterval(A.elH);   A.elH   = null; }
+  if (A.diagH) { clearInterval(A.diagH); A.diagH = null; }
+  _sd('Step 3: Session timer stopped OK', 'ok');
+
+  // Step 4: Flush Firebase upload queue
+  _sd('Step 4: Flushing upload queue (' + A.upQ.length + ' pending)...', 'info');
+  if (!A.dev && A.fbDb && A.upQ.length > 0) {
+    drainUpload();
+    await sleep(1500);
+    _sd('Step 4: Upload queue flushed OK', 'ok');
+  } else {
+    _sd('Step 4: No pending uploads OK', 'ok');
+  }
+
+  // Step 5: Stop upload timer
+  _sd('Step 5: Stopping upload timer...', 'info');
+  if (A.uplH) { clearInterval(A.uplH); A.uplH = null; }
+  _sd('Step 5: Upload timer stopped OK', 'ok');
+
+  // Step 6: Disconnect S2 temperature sensor
+  _sd('Step 6: Disconnecting S2 (' + (A.s2.name||'WETS02') + ')...', 'info');
+  A.s2.manualDisc = true;
+  if (A.s2.keepAliveH)  { clearInterval(A.s2.keepAliveH);  A.s2.keepAliveH  = null; }
+  if (A.s2.reConHandle) { clearTimeout(A.s2.reConHandle);  A.s2.reConHandle = null; }
+  try {
+    if (A.s2.chr) {
+      A.s2.chr.removeEventListener('characteristicvaluechanged', onS2Temp);
+      await A.s2.chr.stopNotifications();
+      _sd('Step 6: S2 notifications stopped OK', 'ok');
+    }
+  } catch(e) { LOG('Step 6: S2 notify stop skipped -- ' + e.message, 'warn'); }
+  try {
+    if (A.s2.dev) { A.s2.dev.gatt.disconnect(); LOG('Step 6: S2 BLE disconnected OK', 'ok'); }
+    else { LOG('Step 6: S2 was not connected', 'info'); }
+  } catch(e) { LOG('Step 6: S2 disconnect error -- ' + e.message, 'warn'); }
+
+  // Step 7: Disconnect S1 pressure sensor
+  _sd('Step 7: Disconnecting S1 (' + (A.s1.name||'TDWLB5') + ')...', 'info');
+  A.s1.manualDisc = true;
+  if (A.s1.reConHandle) { clearTimeout(A.s1.reConHandle); A.s1.reConHandle = null; }
+  try {
+    if (A.s1.chr && A.s1.useNotify) {
+      A.s1.chr.removeEventListener('characteristicvaluechanged', onS1PressNotify);
+      await A.s1.chr.stopNotifications();
+      _sd('Step 7: S1 notifications stopped OK', 'ok');
+    }
+  } catch(e) { LOG('Step 7: S1 notify stop skipped -- ' + e.message, 'warn'); }
+  try {
+    if (A.s1.dev) { A.s1.dev.gatt.disconnect(); LOG('Step 7: S1 BLE disconnected OK', 'ok'); }
+    else { LOG('Step 7: S1 was not connected', 'info'); }
+  } catch(e) { LOG('Step 7: S1 disconnect error -- ' + e.message, 'warn'); }
+
+  _sd('Step 8: All services stopped OK', 'ok');
+  _sd('================================', 'info');
+  _sd('SHUTDOWN COMPLETE', 'ok');
+  _sd('================================', 'info');
+}
+
+function sdKeepOpen() {
+  $('sd-overlay').classList.remove('show');
+  LOG('Session ended -- app left open (no close)', 'info');
+}
+
+async function sdClose() {
+  $('sd-overlay').classList.remove('show');
+  await sleep(200);
+  try { window.close(); } catch(e) {}
+  await sleep(500);
+  if (!window.closed) {
+    document.body.innerHTML = `
+      <div style="display:flex;align-items:center;justify-content:center;height:100vh;background:#0f1620;font-family:Segoe UI,sans-serif">
+        <div style="text-align:center;color:#c8d6e5;padding:40px">
+          <div style="font-size:56px;margin-bottom:16px">OK</div>
+          <div style="font-size:22px;font-weight:700;color:#1D9E75;margin-bottom:8px">Session Ended</div>
+          <div style="font-size:13px;color:#8896a5;margin-bottom:6px">All sensors disconnected. Data saved to Firebase.</div>
+          <div style="font-size:13px;color:#8896a5;margin-bottom:24px">Selected logs saved to your Downloads folder.</div>
+          <div style="font-size:11px;color:#4a6080;background:#1a2332;padding:10px 20px;border-radius:8px;display:inline-block">You may now close this tab.</div>
+        </div>
+      </div>`;
+  }
+}
+
+// ── CONNECTION LOG HELPERS ───────────────────────────────────
+let connLogExpanded = false;
+function toggleConnLog() {
+  connLogExpanded = !connLogExpanded;
+  const clog = $('su-clog');
+  const btn  = $('su-log-expand-btn');
+  if (connLogExpanded) {
+    clog.style.setProperty('--clog-h', '280px');
+    clog.style.height = '280px';
+    btn.textContent = 'Collapse';
+  } else {
+    clog.style.height = '110px';
+    btn.textContent = 'Expand';
+  }
+}
+
+function downloadConnLog() {
+  const el = $('su-clog');
+  if (!el || el.children.length === 0) { alert('No log entries yet.'); return; }
+  const NL = String.fromCharCode(10);
+  const now = new Date();
+  const lines = [
+    '===============================================',
+    '  CureLog Android Mobile Truck App -- Connection Log',
+    '  Version: v' + VER + '  (CureLog Truck App)',
+    '  Downloaded: ' + now.toLocaleString(),
+    '===============================================',
+    ''
+  ];
+  Array.from(el.children).forEach(d => lines.push(d.textContent));
+  lines.push('');
+  lines.push('--- END OF CONNECTION LOG ---');
+  const blob = new Blob([lines.join(NL)], {type:'text/plain'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  const ts = now.toISOString().replace(/[:.]/g,'-').slice(0,19);
+  a.download = sdFilename('Connection Log') + '.txt';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+// ── WIRE BUTTONS ─────────────────────────────────────────────
+// Assign onclick here -- NOT in HTML -- to guarantee functions are in scope
+window.addEventListener('DOMContentLoaded', () => {
+  $('scb1').onclick = blePickS1;  // S1 Connect
+  $('scb2').onclick = blePickS2;  // S2 Connect
+  $('sdb1').onclick = () => { A.s1.manualDisc=true; discS1(); $('ss1').textContent='Disconnected'; $('ss1').className='su-sc-status idle'; chkReady(); };
+  $('sdb2').onclick = () => { A.s2.manualDisc=true; discS2(); $('ss2').textContent='Disconnected'; $('ss2').className='su-sc-status idle'; chkReady(); };
+});
+
+
+// ── S1 GEN5 LONG RANGE + HIGH POWER ───────────────────────────────────────
+async function readGen5Features(manual = false) {
+  if (!A.s1.srv) {
+    LOG('Gen5 read: S1 not connected', 'warn');
+    return;
+  }
+
+  // Show spinner on manual refresh
+  const spin = document.getElementById('gen5-refresh-spin');
+  const btn  = document.getElementById('btn-gen5-refresh');
+  if (spin) spin.style.display = '';
+  if (btn)  btn.disabled = true;
+
+  const setStatus = (msg, color) => {
+    const el = document.getElementById('gen5-status-text');
+    if (el) { el.textContent = msg; el.style.color = color || 'var(--t2)'; el.style.fontStyle = 'normal'; }
+  };
+
+  LOG('Gen5: reading radio features from sensor...', 'info');
+  setStatus('Reading from sensor...', 'var(--t3)');
+
+  let lrOk = false, hpOk = false;
+  let lrResult = '?', hpResult = '?';
+
+  try {
+    const svc = A.s1.svc || await A.s1.srv.getPrimaryService(SVC1);
+    A.s1.svc = svc; // cache it
+
+    // ── Long Range ──────────────────────────────────────────────────
+    try {
+      LOG('Gen5: getting Long Range characteristic ' + LR1, 'info');
+      const lrChar = await svc.getCharacteristic(LR1);
+      const lrVal  = await lrChar.readValue();
+      const rawByte = lrVal.getUint8(0);
+      const lrEn   = rawByte === 1;
+      A.s1.lrEnabled = lrEn;
+      A.s1.lrChar    = lrChar;
+      lrOk = true;
+      lrResult = lrEn ? 'ON' : 'OFF';
+
+      const lrEl = document.getElementById('set-lr');
+      if (lrEl) { lrEl.checked = lrEn; lrEl.disabled = false; }
+      const siLr = document.getElementById('si-lr-confirmed');
+      if (siLr) {
+        siLr.textContent = lrEn ? 'OK ON (confirmed)' : 'X OFF (confirmed)';
+        siLr.style.color = lrEn ? 'var(--g)' : 'var(--t3)';
+      }
+      LOG('Gen5 Long Range: raw byte=0x' + rawByte.toString(16).padStart(2,'0') + ' -> ' + lrResult, 'ok');
+    } catch(e) {
+      lrResult = 'READ FAILED';
+      LOG('Gen5 Long Range read failed: ' + e.message, 'err');
+      const siLr = document.getElementById('si-lr-confirmed');
+      if (siLr) { siLr.textContent = '! Read failed'; siLr.style.color = 'var(--re)'; }
+    }
+
+    // ── High Power ──────────────────────────────────────────────────
+    try {
+      LOG('Gen5: getting High Power characteristic ' + HP1, 'info');
+      const hpChar = await svc.getCharacteristic(HP1);
+      const hpVal  = await hpChar.readValue();
+      const byte   = hpVal.getUint8(0);
+      const xBit   = (byte >> 1) & 1; // supported (TD-set, read-only)
+      const yBit   =  byte       & 1; // enabled   (customer-writable)
+      A.s1.hpSupported = xBit === 1;
+      A.s1.hpEnabled   = yBit === 1;
+      A.s1.hpChar      = hpChar;
+      updateHpBitDisplay(byte);
+      hpOk = true;
+      hpResult = `supported=${xBit === 1 ? 'YES' : 'NO'} enabled=${yBit === 1 ? 'YES' : 'NO'}`;
+
+      const hpEl   = document.getElementById('set-hp');
+      const hpNote = document.getElementById('hp-support-note');
+      if (hpEl) { hpEl.checked = yBit === 1; hpEl.disabled = xBit === 0; }
+      if (hpNote) hpNote.style.display = xBit === 0 ? '' : 'none';
+
+      const siHp = document.getElementById('si-hp-confirmed');
+      if (siHp) {
+        if (xBit === 0) {
+          siHp.textContent = '! Not supported';
+          siHp.style.color = 'var(--am)';
+        } else {
+          siHp.textContent = yBit === 1 ? 'OK ON (confirmed)' : 'X OFF (confirmed)';
+          siHp.style.color = yBit === 1 ? 'var(--g)' : 'var(--t3)';
+        }
+      }
+      LOG('Gen5 High Power: raw byte=0x' + byte.toString(16).padStart(2,'0') +
+          ' -> X(supported)=' + xBit + ' Y(enabled)=' + yBit, 'ok');
+    } catch(e) {
+      hpResult = 'READ FAILED';
+      LOG('Gen5 High Power read failed: ' + e.message, 'err');
+      const siHp = document.getElementById('si-hp-confirmed');
+      if (siHp) { siHp.textContent = '! Read failed'; siHp.style.color = 'var(--re)'; }
+    }
+
+    // ── Update status card ──────────────────────────────────────────
+    if (lrOk && hpOk) {
+      const lrTxt = A.s1.lrEnabled ? 'ON' : 'OFF';
+      const hpTxt = !A.s1.hpSupported ? 'not supported by this hardware'
+                  : A.s1.hpEnabled    ? 'ON (M8 power required)'
+                                      : 'OFF';
+      setStatus(`Long Range: ${lrTxt}  .  High Power: ${hpTxt}`, 'var(--t2)');
+      LOG('Gen5 read complete -- LR:' + lrTxt + '  HP:' + hpTxt, 'ok');
+    } else {
+      setStatus('Partial read -- check Activity Log for details.', 'var(--am)');
+    }
+
+  } catch(e) {
+    setStatus('Failed to access pressure service: ' + e.message, 'var(--re)');
+    LOG('Gen5 service access failed: ' + e.message, 'err');
+  }
+
+  if (spin) spin.style.display = 'none';
+  if (btn)  btn.disabled = false;
+}
+
+async function setLongRange(enable) {
+  if (!A.s1.srv) { LOG('S1 not connected', 'warn'); return; }
+  LOG('Gen5: setting Long Range -> ' + (enable ? 'ON' : 'OFF') + '...', 'info');
+
+  // Disable toggle while working
+  const lrEl = document.getElementById('set-lr');
+  if (lrEl) lrEl.disabled = true;
+  const siLr = document.getElementById('si-lr-confirmed');
+  if (siLr) { siLr.textContent = 'Writing...'; siLr.style.color = 'var(--t3)'; }
+
+  try {
+    const svc    = A.s1.svc || await A.s1.srv.getPrimaryService(SVC1);
+    const lrChar = A.s1.lrChar || await svc.getCharacteristic(LR1);
+    const writeByte = enable ? 1 : 0;
+    await lrChar.writeValue(new Uint8Array([writeByte]));
+    LOG('Gen5 Long Range: wrote 0x' + writeByte.toString(16).padStart(2,'0') + ' (' + (enable ? 'ON' : 'OFF') + ')', 'ok');
+
+    // Re-read to confirm
+    await new Promise(r => setTimeout(r, 300));
+    const verify = await lrChar.readValue();
+    const confirmed = verify.getUint8(0) === 1;
+    A.s1.lrEnabled = confirmed;
+    const confirmTxt = confirmed ? 'ON' : 'OFF';
+
+    if (lrEl) { lrEl.checked = confirmed; lrEl.disabled = false; }
+    if (siLr) {
+      siLr.textContent = confirmed ? 'OK ON (confirmed)' : 'X OFF (confirmed)';
+      siLr.style.color = confirmed ? 'var(--g)' : 'var(--t3)';
+    }
+    LOG('Gen5 Long Range confirmed by re-read: ' + confirmTxt + ' (raw=0x' + verify.getUint8(0).toString(16) + ')', 'ok');
+
+    // Update status card
+    const hpTxt = !A.s1.hpSupported ? 'not supported'
+                : A.s1.hpEnabled    ? 'ON' : 'OFF';
+    const statusEl = document.getElementById('gen5-status-text');
+    if (statusEl) {
+      statusEl.textContent = `Long Range: ${confirmTxt}  .  High Power: ${hpTxt}`;
+      statusEl.style.color = 'var(--t2)';
+    }
+
+    if (enable !== confirmed) {
+      LOG('! Gen5 Long Range: wrote ' + (enable?'ON':'OFF') + ' but sensor confirmed ' + confirmTxt + ' -- check sensor firmware', 'warn');
+    }
+  } catch(e) {
+    LOG('Gen5 Long Range write failed: ' + e.message, 'err');
+    // Revert toggle to previous state
+    if (lrEl) { lrEl.checked = !enable; lrEl.disabled = false; }
+    if (siLr) { siLr.textContent = '! Write failed'; siLr.style.color = 'var(--re)'; }
+  }
+}
+
+async function setHighPower(enable) {
+  if (!A.s1.srv) { LOG('S1 not connected', 'warn'); return; }
+  LOG('Gen5: setting High Power -> ' + (enable ? 'ON' : 'OFF') + '...', 'info');
+
+  const hpEl = document.getElementById('set-hp');
+  if (hpEl) hpEl.disabled = true;
+  const siHp = document.getElementById('si-hp-confirmed');
+  if (siHp) { siHp.textContent = 'Writing...'; siHp.style.color = 'var(--t3)'; }
+
+  try {
+    const svc    = A.s1.svc || await A.s1.srv.getPrimaryService(SVC1);
+    const hpChar = A.s1.hpChar || await svc.getCharacteristic(HP1);
+
+    // Read current byte to preserve X bit
+    const cur   = await hpChar.readValue();
+    const xBit  = (cur.getUint8(0) >> 1) & 1;
+    const newByte = (xBit << 1) | (enable ? 1 : 0);
+    await hpChar.writeValue(new Uint8Array([newByte]));
+    LOG('Gen5 High Power: wrote 0x' + newByte.toString(16).padStart(2,'0') +
+        ' (X=' + xBit + ' Y=' + (enable?1:0) + ')', 'ok');
+
+    if (enable) LOG('! High Power: sensor must be powered via M8 connector for this to take effect', 'warn');
+
+    // Re-read to confirm
+    await new Promise(r => setTimeout(r, 300));
+    const verify  = await hpChar.readValue();
+    const vByte   = verify.getUint8(0);
+    const vX      = (vByte >> 1) & 1;
+    const vY      =  vByte       & 1;
+    A.s1.hpEnabled = vY === 1;
+    updateHpBitDisplay(vByte);
+
+    const confirmTxt = vY === 1 ? 'ON' : 'OFF';
+    if (hpEl) { hpEl.checked = vY === 1; hpEl.disabled = vX === 0; }
+    if (siHp) {
+      if (vX === 0) {
+        siHp.textContent = '! Not supported';
+        siHp.style.color = 'var(--am)';
+      } else {
+        siHp.textContent = vY === 1 ? 'OK ON (confirmed)' : 'X OFF (confirmed)';
+        siHp.style.color = vY === 1 ? 'var(--g)' : 'var(--t3)';
+      }
+    }
+    LOG('Gen5 High Power confirmed by re-read: X(supported)=' + vX + ' Y(enabled)=' + vY +
+        ' raw=0x' + vByte.toString(16).padStart(2,'0'), 'ok');
+
+    // Update status card
+    const lrTxt = A.s1.lrEnabled ? 'ON' : 'OFF';
+    const hpTxt = vX === 0 ? 'not supported' : vY === 1 ? 'ON (M8 power required)' : 'OFF';
+    const statusEl = document.getElementById('gen5-status-text');
+    if (statusEl) {
+      statusEl.textContent = `Long Range: ${lrTxt}  .  High Power: ${hpTxt}`;
+      statusEl.style.color = 'var(--t2)';
+    }
+
+    if (enable !== (vY === 1)) {
+      LOG('! Gen5 High Power: wrote ' + (enable?'ON':'OFF') + ' but sensor confirmed ' + confirmTxt + ' -- check sensor firmware', 'warn');
+    }
+  } catch(e) {
+    LOG('Gen5 High Power write failed: ' + e.message, 'err');
+    if (hpEl) { hpEl.checked = !enable; hpEl.disabled = false; }
+    if (siHp) { siHp.textContent = '! Write failed'; siHp.style.color = 'var(--re)'; }
+  }
+}
+
+
+// ── CHART LEGEND SYNC ────────────────────────────────────────
+function updateLegend() {
+  const s = A.set;
+  const dash = style => {
+    if (style === 'dashed')  return '6,3';
+    if (style === 'dotdash') return '2,3,8,3';
+    return '';
+  };
+  const drawSwatch = (id, color, style, width) => {
+    const svg = document.getElementById(id);
+    if (!svg) return;
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', '0');   line.setAttribute('y1', '7');
+    line.setAttribute('x2', '28');  line.setAttribute('y2', '7');
+    line.setAttribute('stroke', color);
+    line.setAttribute('stroke-width', Math.max(Number(width), 1.5));
+    const d = dash(style);
+    if (d) line.setAttribute('stroke-dasharray', d);
+    svg.appendChild(line);
+  };
+  drawSwatch('leg-sw-s1', s.s1Color, s.s1Style, s.s1Width);
+  drawSwatch('leg-sw-s2', s.s2Color, s.s2Style, s.s2Width);
+  // Update labels from sensor name fields if populated
+  const n1 = $('set-n1'); if (n1 && n1.value.trim()) { const el = $('leg-lbl-s1'); if (el) el.textContent = n1.value.trim(); }
+  const n2 = $('set-n2'); if (n2 && n2.value.trim()) { const el = $('leg-lbl-s2'); if (el) el.textContent = n2.value.trim(); }
+}
+
+// ── UPDATE HP BIT DISPLAY ─────────────────────────────────────
+function updateHpBitDisplay(byte) {
+  const bit = n => (byte >> n) & 1;
+  const b3 = bit(3), b2 = bit(2), x = bit(1), y = bit(0);
+  const setBox = (id, val, isFixed, isActive) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = val;
+    if (isFixed) {
+      // always-0 bits -- grey
+      el.style.background = '#e2e6ea';
+      el.style.borderColor = '#c8d0d8';
+      el.style.color = '#8896a5';
+    } else if (val === 1) {
+      // active/ON -- green
+      el.style.background = '#d4f0e4';
+      el.style.borderColor = 'var(--g)';
+      el.style.color = 'var(--gd)';
+    } else {
+      // inactive/OFF -- light grey
+      el.style.background = '#f0f3f7';
+      el.style.borderColor = '#c8d0d8';
+      el.style.color = 'var(--t2)';
+    }
+  };
+  setBox('hp-bit3', b3, true);
+  setBox('hp-bit2', b2, true);
+  setBox('hp-bit1', x,  false); // X -- TD set, show but not editable
+  setBox('hp-bit0', y,  false); // Y -- customer set
+  const rawEl = document.getElementById('hp-raw-hex');
+  if (rawEl) rawEl.textContent = '0x' + byte.toString(16).padStart(2,'0').toUpperCase();
+}
+
+
+function sessionInfoBlock() {
+  const s = A.sess;
+  const ti = s.tubeDia    ? s.tubeDia    + '"'  : '--';
+  const tt = s.tubeThick  ? s.tubeThick  + ' mm'  : '--';
+  const tl = s.tubeLen    ? s.tubeLen    + ' ft' : '--';
+  return [
+    '  Truck:          ' + (s.truck   || '--'),
+    '  Job:            ' + (s.job     || '--'),
+    '  Shot:           ' + (s.shot    || '--'),
+    '  Segment:        ' + (s.seg     || '--'),
+    '  Tube Diameter:  ' + ti,
+    '  Tube Thickness: ' + tt,
+    '  Tube Length:    ' + tl,
+  ];
+}
+
+
+// ── SESSION INFO DISPLAYS ─────────────────────────────────────────────────
+function updateSessionInfoDisplays() {
+  if (!A.sess.active) return;
+  const tp = [];
+  if (A.sess.tubeDia)   tp.push('O '    + A.sess.tubeDia   + '"');
+  if (A.sess.tubeThick) tp.push('Wall ' + A.sess.tubeThick + ' mm');
+  if (A.sess.tubeLen)   tp.push(A.sess.tubeLen + ' ft');
+  const tubeHtml = tp.length > 0 ? '&nbsp; | &nbsp;📐 ' + tp.join(' . ') : '';
+  const html =
+    '<b>' + A.sess.truck + '</b>' +
+    '&nbsp; . &nbsp;Job <b>'  + A.sess.job  + '</b>' +
+    '&nbsp; . &nbsp;Shot <b>' + A.sess.shot + '</b>' +
+    '&nbsp; . &nbsp;Seg <b>'  + A.sess.seg  + '</b>' +
+    tubeHtml;
+  const pathEl = $('coll-session-path');
+  if (pathEl) pathEl.innerHTML = html;
+  const csi = $('chart-session-info');
+  if (csi) { csi.innerHTML = html; csi.style.display = ''; }
+}
+
+
+const CHANGELOG = [
+  ['2.1.58-m','Shortened End Session button to End to fit topbar on narrow phone screens'],
+  ['2.1.57-m','Restored Azuria Water Solutions subtitle as stacked second line under CureLog in topbar'],
+  ['2.1.56-m','Removed Azuria subtitle and About button from topbar to make room for End Session button on narrow phone screens'],
+  ['2.1.55-m','Removed Truck App pill from topbar (too crowded on phone screen); fixed duplicate Android Android in app name'],
+  ['2.1.54-m','Restored Truck App pill to original sibling position (after logo block)'],
+  ['2.1.53-m','Moved Truck App pill inline next to CureLog title (same line, right of text)'],
+  ['2.1.52-m','Added Truck App pill tag next to topbar logo'],
+  ['2.1.51-m','Standardized logo across all apps: 44px icon + bold CureLog + Azuria Water Solutions subtitle, matching brand reference image'],
+  ['2.1.50-m','Reverted icon to pipe+waveform full circle — quarter-arc Azuria mark was too detailed at small topbar sizes'],
+  ['2.1.49-m','Fixed topbar logo: CureLog text now visible (missing CSS rule); icon container changed from solid green to dark navy so arc details show correctly'],
+  ['2.1.48-m','Fixed icon detail size: arcs and pipe ring now fill icon space and are clearly visible at all sizes'],
+  ['2.1.47-m','Updated startup overlay header: CureLog icon with Azuria Water Solutions subtitle'],
+  ['2.1.46-m','New icon: CureLog by Azuria Water Solutions — quarter-arc Azuria motif concentric with CureLog pipe+waveform; embedded as favicon, apple-touch-icon, and PWA manifest'],
+  ['2.1.45-m','Removed keep-app-in-foreground warning from setup screen'],
+  ['2.1.44-m','Restored missing About modal HTML (about-overlay/about-card) which was dropped during rebuild -- About button now works again'],
+  ['2.1.43-m','Moved foreground warning to below Start Session button (no longer blocks S2 sensor status); shortened min/max temp unit from degF to degF symbol to save tile space'],
+  ['2.1.42-m','Fixed log headers: CureLog Phase 1 -> CureLog Android Mobile Truck App (6x); Removed contradictory cap-5000 comment; Removed sessStartMs field; uses A.sessStart (3x); Removed _toggleSettingsOld (dead function)'],
+  ['2.1.41-m','Renamed to CureLog Android Mobile Truck App'],
+  ['2.1.40-m','BLE resilience improvements: (1) data watchdog detects 20s silence and forces reconnect; (2) visibility change triggers immediate reconnect + backoff reset when app foregrounded; (3) lastReadMs tracked per sensor; (4) field warning in startup overlay'],
+  ['2.1.39-m','Replaced clock emoji in overlay header and topbar with inline SVG pipe+waveform icon matching the app favicon'],
+  ['2.1.38-m','Added app icon: pipe cross-section with waveform on dark navy; embedded as SVG favicon, Apple touch icon, and PWA manifest for home screen install on iOS/Android/desktop'],
+  ['2.1.37-m','Changed truck ID prefix from TVK to BTK (Boiler Truck) across all labels, placeholders, and log messages'],
+  ['2.1.36-m','Removed FIFO limits on connection log (was 120) and activity log (was 500) -- text entries are lightweight; readings table display cap of 2000 rows kept as that limits DOM size not data'],
+  ['2.1.35-m','Fixed Wake Lock not working: non-ASCII chars (checkmark, em-dash) in Wake Lock LOG strings caused silent JS parse failure on some Android Chrome versions; all JS string literals now ASCII-only'],
+  ['2.1.34-m','REAL root cause of truncated changelog: HTML tags in descriptions (v2.1.24 had &lt;style&gt;, v2.1.2 had &lt;/body&gt;) were parsed as actual HTML when set via innerHTML, consuming all remaining rows. Fixed by HTML-escaping all descriptions.'],
+  ['2.1.33-m','About modal final fix: all header sections use fixed pixel heights (48/72/52px) so scroll area top:172px is exact -- no JS positioning, no sticky, no flex'],
+  ['2.1.32-m','About modal rebuilt with sticky header inside single scroll container -- no JS positioning -- scroll guaranteed on all mobile browsers'],
+  ['2.1.31-m','Fixed About modal showing only 7 entries -- non-ASCII characters (em-dash, info symbol, ellipsis) in CHANGELOG strings caused Android Chrome JS parser to stop reading the array; replaced all with ASCII equivalents'],
+  ['2.1.30-m','FINAL About modal fix: removed overflow:hidden from about-card which was clipping the scroll container; border-radius moved to about-fixed and about-scroll instead'],
+  ['2.1.29-m','About modal completely rebuilt with single scroll container -- #about-fixed holds header/version/search, #about-scroll is the ONLY scrollable element with top set dynamically via JS after render'],
+  ['2.1.28-m','Fixed About modal showing only 4 entries: search-wrap and body now dynamically positioned via JS requestAnimationFrame after render instead of hardcoded top values; current version desc capped at 120 chars'],
+  ['2.1.27-m','About modal rebuilt with position:absolute layout -- eliminates all flex scroll ambiguity on mobile; hdr/current/search are fixed; body uses explicit top:200px bottom:0 bounds for reliable scroll on all Android Chrome versions'],
+  ['2.1.26-m','Fixed About modal scrolling on mobile: overflow-y:scroll with -webkit-overflow-scrolling:touch, min-height:0 on flex child, card uses full overlay height'],
+  ['2.1.25-m','Fixed About modal only showing one entry -- about-body scroll wrapper was missing so table clipped; all 52 changelog entries now visible and scrollable'],
+  ['2.1.24-m','CRITICAL FIX: About modal CSS was missing from &lt;style&gt; block -- overlay rendered visible blocking ALL taps on the entire app; added complete About modal CSS including display:none initial state'],
+  ['2.1.23-m','Fixed About button not tappable -- was pushed off screen by tb-badges margin-left:auto; moved button inside tb-badges container'],
+  ['2.1.22-m','Added (i) About button to topbar and Settings page -- shows app version and full changelog with search; version number shown in Settings header'],
+  ['2.1.21-m','Wake Lock API: keeps phone screen on during active session -- prevents Android killing BLE or freezing timers; auto re-acquires if tab briefly switched'],
+  ['2.1.20-m','Fixed last closeStartup crash: su-overlay null guard (element does not exist on mobile); Firebase now writing successfully'],
+  ['2.1.19-m','CRITICAL FIX: double-fire guard was placed AFTER sess.active=true causing immediate return every time -- moved guard to top of function before any state changes'],
+  ['2.1.18-m','Start Session button UX overhaul: immediate touchstart visual feedback, scale animation on press, proper tap highlight removal, double-fire guard, shows Starting... immediately on tap, larger touch target (56px min height)'],
+  ['2.1.17-m','Added try/catch around closeStartup/initFB/startDisp in startSession to catch and log any crash with exact error message'],
+  ['2.1.16-m','CRITICAL FIX: closeStartup() was crashing on null DOM elements (tb-job, tb-shot, tb-seg do not exist on mobile) -- crash prevented initFB() from running, causing silent Firebase failure; all closeStartup DOM writes now null-guarded'],
+  ['2.1.15-m','Enhanced Firebase diagnostics: detailed per-request logging, explicit HTTP status in every response, standalone testFirebaseWrite() with full error reporting'],
+  ['2.1.14-m','Fixed Start Session staying disabled: chkReady now runs on Setup tab open, browser tab focus, and at 300ms/1s/2.5s after boot; hint shows exactly which fields are missing'],
+  ['2.1.13-m','iOS support via Bluefy browser: detects Bluefy user agent, shows App Store link on iPhone/iPad, warns when local file URL blocks Bluetooth and Firebase; improved Firebase error messages'],
+  ['2.1.12-m','Improved BLE compatibility messages: iPhone correctly identified as unsupported for sensors, iPad Safari directed to Chrome, generic Chrome guidance for other browsers'],
+  ['2.1.11-m','Fixed End Session button not appearing after session start -- was setting display to empty string (falling back to CSS display:none) instead of display:block; goPage now re-applies button visibility on every tab switch'],
+  ['2.1.10-m','Fixed Start Session button not responding to taps -- z-index raised above nav bar (was 50, nav is 200); chkReady called on boot to sync button state; End Session button tap highlight improved'],
+  ['2.1.9-m','Fixed Firebase writes not working from Android content:// origin -- replaced Firebase SDK push/set with REST API fetch calls which work from any origin including SD card file URLs'],
+  ['2.1.8-m','Fixed Start Session button showing on all tabs -- footer now position:fixed, only visible on Setup tab before session starts; hidden automatically when session begins'],
+  ['2.1.7-m','Connection log moved into sensor card section (always visible after sensors); page auto-scrolls to log on new BLE entries; no longer buried at bottom of setup page'],
+  ['2.1.6-m','Connection log now starts expanded and auto-expands on any new entry; height increased to 180px; expand/collapse arrow added to header; scrolls to latest entry on open'],
+  ['2.1.5-m','Start Session button moved to sticky footer -- always visible at bottom of Setup page regardless of scroll position; fixes button being hidden off-screen on small phones'],
+  ['2.1.4-m','Job Information section now shows "No active session" note before session starts; refreshes automatically when navigating to Settings tab'],
+  ['2.1.3-m','End Session button made larger and labeled End Session for clarity; modal bottom-sheet safe area fix for notched phones'],
+  ['2.1.2-m','Bug fixes for mobile: (1) Fixed Firebase not connecting -- pre-initialize Firebase at page load instead of waiting for session start; (2) Fixed duplicate &lt;/body&gt;&lt;/html&gt; tags that broke mobile browser parsing; (3) Fixed DOMContentLoaded early return on non-BLE browsers that prevented settings and Firebase from loading; (4) Fixed Start Session not navigating to Monitor tab -- closeStartup() now calls goPage(monitor)'],
+  ['2.1.1-m','Full sync to desktop v2.1.1: BLE Use-as-filter checkboxes, tube specs fields, session info in chart and readings log, rdMap pruning removed (no more lost data on long shots), About modal with full changelog, BLE availability warning'],
+  ['2.0.0','Code cleanup: updateSessionInfoDisplays() helper consolidates 4 duplicate session info blocks; dead loadCal() removed; no-op stub references cleaned up'],
+  ['2.0.9','rdMap memory pruning removed -- all rows kept for full session. Table display cap raised 500 -&gt; 2000 rows. Fix for early session data missing from CSV on long shots.'],
+  ['2.0.8','Startup overlay max-height tightened to 88vh -- prevents S2 Connect button being pushed off screen on small laptops'],
+  ['2.0.7','BLE filter checkbox fix: only restores as checked if saved filter text is also non-empty; auto-unchecks when text is cleared'],
+  ['2.0.6','Removed S1/S2 sensor assignment dropdown row from monitor panel'],
+  ['2.0.5','Tube parameters moved inline next to Seg number in timer bar header (removed flex:1 gap that pushed tube info to right edge)'],
+  ['2.0.4','Fixed chart session info not displaying -- moved population to startSession() with 100ms delay to ensure DOM is ready'],
+  ['2.0.3','Session data (BTK . Job . Shot . Seg . tube specs) added above chart legend -- visible in screenshots'],
+  ['2.0.2','Min/Max stat values increased from 15px to 20px; stat labels 9px -&gt; 10px'],
+  ['2.0.1','Tube parameters font matched to same size/color as session path text in timer bar'],
+  ['2.0.0','Session info header row added to Active Collection timer bar showing BTK . Job . Shot . Seg . tube specs'],
+  ['1.9.9','Structured file naming: App - LogType - BTK# - Job - Shot - Seg - Date.ext for all exports'],
+  ['1.9.8','Version string in all log headers now includes app name: (CureLog Truck App)'],
+  ['1.9.7','Session info strip in readings log upgraded to full session header with tube specs'],
+  ['1.9.6','Tube spec strip added above readings table in Readings Log'],
+  ['1.9.5','Removed (optional) text from Tube Specs section header'],
+  ['1.9.4','Tube thickness unit changed from inches to mm throughout'],
+  ['1.9.3','Tube Diameter, Thickness, Length fields added to startup overlay; written to Firebase _session; session header block added to all log exports'],
+  ['1.9.2','BLE name filter "Use as filter" checkbox added for S1 and S2; checkbox state persisted to localStorage'],
+  ['1.9.1','Session start timestamp (_session.startMs) written to Firebase at session start for accurate dashboard duration matching'],
+  ['1.9.0','Min/Max stat font increased from 13px to 15px; added monospace font to stat values'],
+  ['1.8.9','Sensor tile main value font increased from 36px to 52px to match dashboard'],
+  ['1.8.8','Active Collection timer bar moved above S1/S2 sensor tiles'],
+  ['1.8.7','Chart canvas height increased from 200px to 240px to match dashboard'],
+  ['1.8.6','Added spanGaps:true to chart datasets -- pressure/temp lines bridge BLE dropout gaps'],
+  ['1.8.5','Fixed chart gap bug -- removed applySet() call from applyChartRange() which was causing double-render'],
+  ['1.8.4','Y-axis decimal precision controls added to Chart Scale settings (0/1/2 decimal places per axis)'],
+  ['1.8.3','Initial release -- BLE filter, tube specs, log headers, session management'],
+];
+
+// ── ABOUT MODAL ───────────────────────────────────────────────────────────
+function openAbout() {
+  const overlay = document.getElementById('about-overlay');
+  if (!overlay) return;
+  const curVer   = typeof VER !== 'undefined' ? VER : '--';
+  const curEntry = CHANGELOG.find(c => c[0] === curVer) || CHANGELOG[0];
+  const verEl  = document.getElementById('about-cur-ver');
+  const descEl = document.getElementById('about-cur-desc');
+  const inpEl  = document.getElementById('about-search-inp');
+  const scroll = document.getElementById('about-scroll');
+  if (verEl)  verEl.textContent = 'v' + curVer;
+  if (descEl) { const d = curEntry ? curEntry[1] : ''; descEl.textContent = d.length > 80 ? d.slice(0,77)+'...' : d; }
+  if (inpEl)  inpEl.value = '';
+  if (scroll) scroll.scrollTop = 0;
+  renderAboutTable('');
+  overlay.classList.add('show');
+}
+
+function closeAbout() {
+  const overlay = document.getElementById('about-overlay');
+  if (overlay) overlay.classList.remove('show');
+}
+
+function renderAboutTable(filter) {
+  const tbody = document.getElementById('about-tbody');
+  if (!tbody) return;
+  const curVer = typeof VER !== 'undefined' ? VER : (typeof DB_VER !== 'undefined' ? DB_VER : '');
+  const f = filter.toLowerCase();
+  const rows = CHANGELOG.filter(([ver, desc]) =>
+    !f || ver.includes(f) || desc.toLowerCase().includes(f)
+  );
+  const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  tbody.innerHTML = rows.map(([ver, desc]) => {
+    const isCur = ver === curVer;
+    return '<tr class="' + (isCur ? 'cur' : '') + '">' +
+      '<td><span class="abv ' + (isCur ? 'cur' : '') + '">v' + esc(ver) + '</span></td>' +
+      '<td><span class="abt">' + esc(desc) + '</span></td>' +
+      '</tr>';
+  }).join('');
+}
+
+function filterAbout(val) {
+  renderAboutTable(val);
+}
+
+
+function checkBleAvailability() {
+  if (typeof navigator.bluetooth !== 'undefined') return; // BLE available -- all good
+
+  const ua        = navigator.userAgent;
+  const isIphone  = /iPhone/.test(ua);
+  const isIpad    = /iPad/.test(ua) || (/Mac/.test(ua) && 'ontouchend' in document);
+  const isIOS     = isIphone || isIpad;
+  const isSafari  = /Safari/.test(ua) && !/Chrome/.test(ua) && !/CriOS/.test(ua) && !/Bluefy/.test(ua);
+  const isBluefy  = /Bluefy/.test(ua);
+  const isChrome  = /CriOS/.test(ua) || (/Chrome/.test(ua) && !/Bluefy/.test(ua));
+
+  let msg, detail;
+
+  if (isIOS && isBluefy) {
+    // Bluefy is installed but BLE still not available -- likely needs HTTPS
+    msg    = '! CureLog must be hosted on HTTPS to use Bluetooth in Bluefy';
+    detail = 'You are running Bluefy (great choice!) but Web Bluetooth requires a secure ' +
+             'HTTPS connection. Open CureLog from its hosted URL instead of a local file. ' +
+             'Visit: https://[your-hosted-url] in Bluefy.';
+  } else if (isIOS) {
+    // iOS but not Bluefy -- direct them to install it
+    msg    = '! Bluetooth requires the Bluefy browser on iPhone/iPad';
+    detail = 'Safari and Chrome on iOS cannot access Bluetooth. ' +
+             'Install the free "Bluefy -- Web BLE Browser" app from the App Store, ' +
+             'then open CureLog hosted URL in Bluefy. ' +
+             'Bluefy supports the same Web Bluetooth API used by CureLog.';
+  } else {
+    msg    = '! Web Bluetooth is not available';
+    detail = 'Please open CureLog in Google Chrome (version 70 or later) on Windows, Mac, or Android.';
+  }
+
+  const fullMsg = msg + ' -- ' + detail;
+  LOG(fullMsg, 'err');
+  [$('scb1'),$('scb2')].forEach(b => {
+    if (b) { b.disabled = true; b.textContent = isIOS ? 'Need Bluefy' : 'Need Chrome'; b.style.opacity = '0.4'; }
+  });
+  const hint = $('su-hint');
+  if (hint) {
+    const storeLink = isIOS
+      ? ' <a href="https://apps.apple.com/app/bluefy-web-ble-browser/id1492822055" style="color:#b91c1c;font-weight:700">-> Get Bluefy on App Store</a>'
+      : '';
+    hint.innerHTML = '<b>' + msg + '</b><br><span style="font-weight:400">' + detail + '</span>' + storeLink;
+    hint.style.cssText = 'color:#b91c1c;background:#fef2f2;border:1.5px solid #fca5a5;border-radius:10px;padding:12px 14px;font-size:12px;line-height:1.6;margin:0 0 10px;display:block';
+  }
+}
+
+// -- WAKE LOCK -------------------------------------------------------------
+let _wakeLock = null;
+async function acquireWakeLock() {
+  if (!('wakeLock' in navigator)) { LOG('Wake Lock: not supported on this browser', 'warn'); return; }
+  try {
+    _wakeLock = await navigator.wakeLock.request('screen');
+    LOG('Wake Lock: screen will stay ON during session OK', 'ok');
+    _wakeLock.addEventListener('release', () => {
+      LOG('Wake Lock released -- Android may dim screen', 'warn');
+      if (A.sess && A.sess.active) setTimeout(acquireWakeLock, 2000);
+    });
+  } catch(e) { LOG('Wake Lock failed: ' + e.message + ' -- keep screen on manually', 'warn'); }
+}
+function releaseWakeLock() {
+  if (_wakeLock) { _wakeLock.release().catch(()=>{}); _wakeLock = null; }
+}
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) {
+    if (A.sess && A.sess.active && !_wakeLock) acquireWakeLock();
+    if (A.sess && A.sess.active) {
+      setTimeout(() => {
+        if (!A.s1.con && !A.s1.manualDisc && A.s1.dev) {
+          LOG('S1: foregrounded -- scheduling reconnect', 'warn');
+          A.s1.reConAttempts = 0;
+          scheduleS1Reconnect();
+        }
+        if (!A.s2.con && !A.s2.manualDisc && A.s2.dev) {
+          LOG('S2: foregrounded -- scheduling reconnect', 'warn');
+          A.s2.reConAttempts = 0;
+          scheduleS2Reconnect();
+        }
+      }, 800);
+    }
+  }
+});
+
+// ── BOOT ─────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  // Always run settings/init -- never bail out early
+  loadSettings(); loadTruck(); loadFilters();
+  updateLegend();
+  ['sf-ver','su-ver','tb-ver'].forEach(id => { const e = $(id); if(e) e.textContent = 'v' + VER; });
+  LOG('CureLog Android Android Mobile Truck App -- v' + VER, 'ok');
+  // Sync Start Session button state on load
+  setTimeout(chkReady, 300);
+  setTimeout(chkReady, 1000);
+  setTimeout(chkReady, 2500);
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) { setTimeout(chkReady, 200); }
+  });
+  // Warn if on iOS running from local file
+  const _ua = navigator.userAgent;
+  const _isIOS = /iPhone|iPad/.test(_ua) || (/Mac/.test(_ua) && 'ontouchend' in document);
+  const _isLocal = location.protocol !== 'https:';
+  if (_isIOS && _isLocal) {
+    LOG('! iOS detected with local file URL -- Bluetooth and Firebase writes require HTTPS hosting', 'warn');
+    LOG('-> Host CureLog on GitHub Pages or any HTTPS server for full iOS support', 'warn');
+  }
+
+  // BLE check -- warn but DO NOT return early (settings must always load)
+  if (!navigator.bluetooth) {
+    LOG('! Web Bluetooth NOT available -- use Chrome', 'err');
+    checkBleAvailability(); // show inline warning
+  } else {
+    LOG('Web Bluetooth: present OK', 'ok');
+    navigator.bluetooth.getAvailability().then(ok => {
+      LOG('Bluetooth adapter: ' + (ok ? 'ready OK' : '! unavailable -- enable Bluetooth in settings'), ok ? 'ok' : 'err');
+      if (!ok) {
+        const hint = $('su-hint');
+        if (hint) { hint.textContent = '! Bluetooth is off -- enable in system settings'; hint.style.color='var(--re)'; }
+      }
+    }).catch(e => LOG('BLE availability check: ' + e.message, 'warn'));
+  }
+
+  // Pre-initialize Firebase at page load for early connectivity feedback
+  try {
+    if (!firebase.apps.length) firebase.initializeApp(FB_CFG);
+    A.fbDb = firebase.database();
+    setCloud('on', 'Cloud: connected');
+    LOG('Firebase: pre-connected OK', 'ok');
+  } catch(e) {
+    LOG('Firebase pre-init: ' + e.message, 'err');
+    setCloud('off', 'Cloud: offline');
+  }
+});
+
+
+
+
+
+
+
+
+
+
+</script>
+</body>
+</html>
