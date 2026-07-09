@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0e1e2e">
+<title>CureLog Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --g:#1D9E75;--gd:#0F6E56;--gl:rgba(29,158,117,.12);
+  --b:#378ADD;--bd:#185FA5;--bl:rgba(55,138,221,.12);
+  --am:#E8A838;--re:#E24B4A;
+  --bg:#f0f4f8;--card:#fff;--bor:#e2e8f0;
+  --t1:#0e1e2e;--t2:#3a4f6a;--t3:#7a8fa8;--t4:#b0c0d0;
+  --sh:0 1px 4px rgba(14,30,46,.07);
+  --r:10px;--rl:14px;
+  --nav:60px;
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+  --safe-top:env(safe-area-inset-top,0px);
+  --font:'DM Sans',system-ui,sans-serif;
+  --mono:'DM Mono','Courier New',monospace;
+}
+html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--font)}
+#app{display:flex;flex-direction:column;height:100%;padding-top:var(--safe-top)}
+
+/* ── TOP BAR ── */
+#topbar{
+  background:#0e1a28;padding:10px 14px;
+  display:flex;align-items:center;gap:8px;
+  flex-shrink:0;z-index:100;
+  box-shadow:0 2px 12px rgba(0,0,0,.3);
+}
+.tb-logo{display:flex;align-items:center;gap:7px}
+.tb-logo-icon{width:28px;height:28px;background:var(--g);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px}
+.tb-logo-text{font-size:17px;font-weight:700;color:#fff;letter-spacing:-.3px}
+.tb-logo-text span{color:var(--g)}
+.tb-tag{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--t3);background:rgba(255,255,255,.08);padding:2px 7px;border-radius:10px}
+.tb-sp{flex:1}
+.tb-live{display:flex;align-items:center;gap:5px}
+.tb-live-dot{width:7px;height:7px;border-radius:50%;background:var(--t4);flex-shrink:0}
+.tb-live-dot.on{background:var(--g);box-shadow:0 0 6px var(--g)}
+.tb-live-dot.err{background:var(--re)}
+.tb-live-txt{font-size:11px;color:var(--t3)}
+.tb-live-txt.on{color:var(--g);font-weight:600}
+.tb-ver{font-size:9px;font-weight:700;color:var(--g);font-family:var(--mono);background:rgba(29,158,117,.15);padding:2px 6px;border-radius:4px}
+
+/* ── LIVE BAR ── */
+#live-bar{background:#1a2d3e;padding:8px 14px;display:none;align-items:flex-start;gap:6px;flex-wrap:wrap;flex-shrink:0;border-bottom:1px solid rgba(255,255,255,.06)}
+#live-bar.on{display:flex}
+#lb-path{font-size:11px;color:rgba(255,255,255,.7);flex:1;min-width:0;white-space:normal;line-height:1.5}
+#lb-path span{color:#fff;font-weight:600}
+.live-rdg{font-size:11px;color:rgba(255,255,255,.5);white-space:nowrap}
+.live-rdg b{color:var(--g);font-weight:700}
+#lb-elapsed{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--g);display:none}
+
+/* ── PAGES ── */
+#pages{flex:1;overflow:hidden;position:relative}
+.page{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding:12px 12px calc(var(--nav) + 12px + var(--safe-bottom));display:none}
+.page.active{display:block}
+
+/* ── BOTTOM NAV ── */
+#nav{
+  position:fixed;bottom:0;left:0;right:0;
+  height:calc(var(--nav) + var(--safe-bottom));
+  padding-bottom:var(--safe-bottom);
+  background:#fff;border-top:1px solid var(--bor);
+  display:flex;z-index:200;box-shadow:0 -2px 12px rgba(0,0,0,.08);
+}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:none;background:none;cursor:pointer;padding:8px 4px;color:var(--t4);transition:color .15s}
+.nav-btn.active{color:var(--g)}
+.nav-btn svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.nav-btn span{font-size:10px;font-weight:600}
+
+/* ── SHOT SELECTOR PAGE ── */
+.sel-card{background:var(--card);border-radius:var(--rl);padding:14px;margin-bottom:12px;box-shadow:var(--sh)}
+.sel-card-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--t3);margin-bottom:12px}
+.sel-field{margin-bottom:10px}
+.sel-field label{display:block;font-size:11px;font-weight:600;color:var(--t3);margin-bottom:5px;text-transform:uppercase;letter-spacing:.4px}
+.sel-dd{width:100%;padding:11px 12px;border:1.5px solid var(--bor);border-radius:10px;font-size:15px;color:var(--t1);background:#fff;outline:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a8fa8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+.sel-dd:disabled{opacity:.4;background-color:#f8f9fa}
+.sel-status{font-size:12px;color:var(--t3);min-height:18px;margin-bottom:8px}
+.sel-status.err{color:var(--re);font-weight:600}
+.btn-load{width:100%;padding:14px;background:var(--g);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-load:disabled{opacity:.4}
+.btn-clear{width:100%;padding:10px;background:transparent;border:1.5px solid var(--bor);border-radius:10px;font-size:13px;color:var(--t3);cursor:pointer;display:none}
+
+/* ── LIVE PAGE ── */
+.stat-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.stat-card{background:var(--card);border-radius:var(--rl);padding:14px;box-shadow:var(--sh);text-align:center}
+.stat-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--t3);margin-bottom:6px}
+.stat-val{font-size:26px;font-weight:700;color:var(--t1);font-family:var(--mono);letter-spacing:-1px;line-height:1}
+.stat-val.psi{color:var(--gd)}
+.stat-val.temp{color:var(--bd)}
+.stat-sub{font-size:10px;color:var(--t4);margin-top:3px}
+
+/* Reading tiles */
+#reading-tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.rtile{border-radius:var(--rl);border:1px solid var(--bor);box-shadow:var(--sh);background:var(--card);display:flex;flex-direction:column;overflow:hidden}
+.rtile.s1{border-top:3px solid var(--g)}
+.rtile.s2{border-top:3px solid var(--b)}
+.rtile.ucl-alarm{border-color:var(--re)!important}
+.rtile-top{padding:14px 12px 12px;text-align:center;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.rtile-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--t3);margin-bottom:5px}
+.rtile-val{font-size:36px;font-weight:700;line-height:1;letter-spacing:-1.5px;font-family:var(--mono)}
+.rtile-val.psi{color:var(--gd)}
+.rtile-val.temp{color:var(--bd)}
+.rtile-val span{font-size:13px;font-weight:600;color:var(--t3);margin-left:1px}
+.rtile-age{font-size:10px;color:var(--t4);margin-top:4px}
+.rtile-stats{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--bor)}
+.rtile-stat{padding:8px 6px;text-align:center;border-right:1px solid var(--bor)}
+.rtile-stat:last-child{border-right:none}
+.rtile-stat-lbl{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--t4);margin-bottom:2px}
+.rtile-stat-val{font-size:13px;font-weight:700;color:var(--t2);font-family:var(--mono)}
+
+/* Chart */
+#chart-card{background:var(--card);border-radius:var(--rl);margin-bottom:12px;box-shadow:var(--sh);overflow:hidden}
+.chart-hdr{padding:10px 12px 6px;border-bottom:1px solid var(--bor)}
+.chart-leg{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.leg-item{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--t2);white-space:nowrap}
+.chart-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.cl-ctrl{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--t2)}
+.cl-cb{width:14px;height:14px;cursor:pointer;accent-color:var(--g)}
+.cl-inp{width:48px;padding:4px 6px;border:1px solid var(--bor);border-radius:6px;font-size:12px;color:var(--t1);text-align:center}
+.zoom-row{display:flex;gap:4px;padding:8px 12px;border-bottom:1px solid var(--bor)}
+.zoom-btn{flex:1;padding:6px 2px;border:1px solid var(--bor);border-radius:6px;background:var(--card);color:var(--t3);font-size:10px;font-weight:600;cursor:pointer;text-align:center}
+.zoom-btn.active{background:var(--g);color:#fff;border-color:var(--g)}
+#dashCanvas{width:100%!important;height:220px!important;display:block}
+
+/* Readings table */
+#table-card{background:var(--card);border-radius:var(--rl);box-shadow:var(--sh);overflow:hidden}
+.tbl-hdr{padding:10px 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--bor)}
+.tbl-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--t2);flex:1}
+.tbl-cnt{font-size:13px;font-weight:700;color:var(--g);font-family:var(--mono)}
+#btn-csv{padding:5px 12px;border:1px solid var(--bor);border-radius:6px;background:var(--card);color:var(--t2);font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap}
+#approx-legend{display:none;font-size:10px;color:#7a5c00;background:#fffbe6;border:1px solid #e8d87a;border-radius:4px;padding:3px 7px;font-style:italic;white-space:nowrap}
+#tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+#rdg-tbl{width:100%;border-collapse:collapse;font-size:11px;min-width:280px}
+#rdg-tbl thead th{background:#f5f6f8;padding:7px 8px;text-align:left;font-size:9px;font-weight:700;color:var(--t3);border-bottom:1px solid var(--bor);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap}
+#rdg-tbl tbody td{padding:7px 8px;border-bottom:1px solid #f5f6f8;color:var(--t1);font-size:11px;white-space:nowrap}
+.ucl-row td{background:var(--rl,#fdf0f0)!important;color:var(--re)!important}
+.lcl-row td{background:#fef6e4!important;color:#8a5e0a!important}
+.approx-cell{background:#fffbe6!important;color:#7a5c00!important;font-style:italic;position:relative}
+.approx-cell .approx-tip{display:none}
+
+/* ── SETTINGS PAGE ── */
+.ssec{background:var(--card);border:1px solid var(--bor);border-radius:var(--rl);margin-bottom:10px;overflow:hidden;box-shadow:var(--sh)}
+.ssec-hdr{padding:10px 14px;background:#fafbfc;border-bottom:1px solid var(--bor);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--t3);display:flex;align-items:center}
+.ssec-bdy{padding:12px 14px}
+.srow{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.srow:last-child{margin-bottom:0}
+.srow>label:first-child{flex:1;font-size:13px;color:var(--t2)}
+.ssel{padding:8px 10px;border:1.5px solid var(--bor);border-radius:8px;font-size:13px;color:var(--t1);background:var(--card);min-width:100px}
+.snum{width:72px;padding:8px 8px;border:1.5px solid var(--bor);border-radius:8px;font-size:13px;color:var(--t1);text-align:right}
+.tgl-wrap{position:relative;width:44px;min-width:44px;height:24px;flex-shrink:0}
+.tgl-wrap input{opacity:0;width:0;height:0;position:absolute}
+.tgl{position:absolute;inset:0;background:#d0d5dd;border-radius:12px;cursor:pointer;transition:.2s}
+.tgl-wrap input:checked+.tgl{background:var(--g)}
+.tgl:before{content:'';position:absolute;width:20px;height:20px;left:2px;top:2px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.tgl-wrap input:checked+.tgl:before{transform:translateX(20px)}
+.sfooter{padding:10px 14px 16px;font-size:10px;color:var(--t3);font-family:var(--mono);text-align:center;border-top:1px solid var(--bor);margin-top:4px}
+.sfooter .ver{font-size:11px;font-weight:700;color:var(--g)}
+#empty-state{text-align:center;padding:48px 20px}
+.es-icon{font-size:40px;margin-bottom:10px}
+.es-title{font-size:16px;font-weight:700;color:var(--t1);margin-bottom:6px}
+.es-sub{font-size:13px;color:var(--t3);line-height:1.5}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:3px;height:3px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--bor);border-radius:2px}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- TOP BAR -->
+  <div id="topbar">
+    <div class="tb-logo">
+      <div class="tb-logo-icon">📊</div>
+      <div class="tb-logo-text">Cure<span>Log</span></div>
+      <span class="tb-tag">DASHBOARD</span>
+    </div>
+    <div class="tb-sp"></div>
+    <div class="tb-live" id="tb-live">
+      <div class="tb-live-dot" id="live-dot"></div>
+      <span class="tb-live-txt" id="live-txt">Offline</span>
+    </div>
+    <span class="tb-ver" id="dash-ver">v1.0.0</span>
+  </div>
+
+  <!-- LIVE BAR -->
+  <div id="live-bar">
+    <div class="tb-live-dot on" style="width:8px;height:8px;flex-shrink:0"></div>
+    <span id="lb-path">—</span>
+    <div class="tb-sp"></div>
+    <div class="live-rdg">Rows: <b id="lb-rdg">0</b></div>
+    <div id="lb-elapsed"></div>
+  </div>
+
+  <!-- PAGES -->
+  <div id="pages">
+
+    <!-- SHOT SELECTOR PAGE -->
+    <div class="page active" id="page-shot">
+      <div class="sel-card">
+        <div class="sel-card-title">📂 Select Shot</div>
+        <div class="sel-field">
+          <label>Job #</label>
+          <select class="sel-dd" id="sel-job" onchange="onJobChange()">
+            <option value="">Loading jobs…</option>
+          </select>
+        </div>
+        <div class="sel-field">
+          <label>Shot #</label>
+          <select class="sel-dd" id="sel-shot" onchange="onShotChange()" disabled>
+            <option value="">— Select Shot —</option>
+          </select>
+        </div>
+        <div class="sel-field">
+          <label>Segment #</label>
+          <select class="sel-dd" id="sel-seg" onchange="onSegChange()" disabled>
+            <option value="">— Select Segment —</option>
+          </select>
+        </div>
+        <div class="sel-field">
+          <label>Truck ID</label>
+          <select class="sel-dd" id="sel-truck" onchange="$('btn-load').disabled=!$('sel-truck').value" disabled>
+            <option value="">— Select Truck —</option>
+          </select>
+        </div>
+        <div class="sel-status" id="sel-status"></div>
+        <button class="btn-load" id="btn-load" disabled onclick="loadShot()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Load Shot
+        </button>
+        <button class="btn-clear" id="btn-clear" onclick="clearShot()">✕ Clear</button>
+      </div>
+    </div>
+
+    <!-- LIVE PAGE (chart + tiles + table) -->
+    <div class="page" id="page-live">
+      <!-- Stats row -->
+      <div class="stat-row" id="stats-grid" style="display:none">
+        <div class="stat-card">
+          <div class="stat-lbl">Merged Rows</div>
+          <div class="stat-val" id="st-rdg">—</div>
+          <div class="stat-sub" id="st-rdg-sub"></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-lbl">Duration</div>
+          <div class="stat-val" id="st-dur">—</div>
+          <div class="stat-sub" id="st-truck"></div>
+          <div id="st-tube" style="font-size:9px;color:var(--t4);margin-top:2px"></div>
+        </div>
+      </div>
+
+      <!-- Reading tiles -->
+      <div id="reading-tiles" style="display:none">
+        <div class="rtile s1" id="tile-press">
+          <div class="rtile-top">
+            <div class="rtile-label">Inlet Pressure</div>
+            <div class="rtile-val psi" id="tile-press-val">—<span>PSI</span></div>
+            <div class="rtile-age" id="tile-press-age"></div>
+          </div>
+          <div class="rtile-stats">
+            <div class="rtile-stat"><div class="rtile-stat-lbl">Min PSI</div><div class="rtile-stat-val" id="tile-pmin">—</div></div>
+            <div class="rtile-stat"><div class="rtile-stat-lbl">Max PSI</div><div class="rtile-stat-val" id="tile-pmax">—</div></div>
+          </div>
+        </div>
+        <div class="rtile s2" id="tile-temp">
+          <div class="rtile-top">
+            <div class="rtile-label">Inlet Temperature</div>
+            <div class="rtile-val temp" id="tile-temp-val">—<span>°F</span></div>
+            <div class="rtile-age" id="tile-temp-age"></div>
+          </div>
+          <div class="rtile-stats">
+            <div class="rtile-stat"><div class="rtile-stat-lbl">Min °</div><div class="rtile-stat-val" id="tile-tmin">—</div></div>
+            <div class="rtile-stat"><div class="rtile-stat-lbl">Max °</div><div class="rtile-stat-val" id="tile-tmax">—</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chart -->
+      <div id="chart-card" style="display:none">
+        <div class="chart-hdr">
+          <div id="chart-session-info" style="width:100%;font-size:10px;font-weight:500;color:var(--t3);padding-bottom:7px;margin-bottom:7px;border-bottom:1px solid var(--bor);display:none"></div>
+          <div class="chart-leg">
+            <div class="leg-item"><svg id="d-leg-sw-s1" width="24" height="12" viewBox="0 0 24 12" style="display:block;flex-shrink:0"></svg><span id="d-leg-lbl-s1">Inlet Press</span></div>
+            <div class="leg-item"><svg id="d-leg-sw-s2" width="24" height="12" viewBox="0 0 24 12" style="display:block;flex-shrink:0"></svg><span id="d-leg-lbl-s2">Inlet Temp</span></div>
+            <div class="leg-item"><svg width="24" height="12" viewBox="0 0 24 12" style="display:block;flex-shrink:0"><line x1="0" y1="6" x2="24" y2="6" stroke="#E24B4A" stroke-width="1.5" stroke-dasharray="5,3"/></svg>UCL</div>
+            <div class="leg-item"><svg width="24" height="12" viewBox="0 0 24 12" style="display:block;flex-shrink:0"><line x1="0" y1="6" x2="24" y2="6" stroke="#E8A838" stroke-width="1.5" stroke-dasharray="5,3"/></svg>LCL</div>
+          </div>
+          <div class="chart-controls">
+            <div class="cl-ctrl">
+              <input type="checkbox" class="cl-cb" id="d-ucl-en" checked onchange="applyLimits()">
+              <label style="font-size:12px;color:var(--re)">UCL</label>
+              <input type="number" class="cl-inp" id="d-ucl" value="40" onchange="applyLimits()">
+            </div>
+            <div class="cl-ctrl">
+              <input type="checkbox" class="cl-cb" id="d-lcl-en" checked onchange="applyLimits()">
+              <label style="font-size:12px;color:var(--am)">LCL</label>
+              <input type="number" class="cl-inp" id="d-lcl" value="5" onchange="applyLimits()">
+            </div>
+          </div>
+        </div>
+        <div class="zoom-row">
+          <button class="zoom-btn active" onclick="setZoom('all')">All</button>
+          <button class="zoom-btn" onclick="setZoom(30)">30m</button>
+          <button class="zoom-btn" onclick="setZoom(15)">15m</button>
+          <button class="zoom-btn" onclick="setZoom(5)">5m</button>
+          <button class="zoom-btn" onclick="setZoom(1)">1m</button>
+        </div>
+        <canvas id="dashCanvas"></canvas>
+      </div>
+
+      <!-- Readings table -->
+      <div id="table-card" style="display:none">
+        <div class="tbl-hdr">
+          <span class="tbl-title">Readings Log</span>
+          <span class="tbl-cnt" id="tbl-cnt">0</span>
+          <div style="flex:1"></div>
+          <button id="btn-csv" onclick="exportCSV()">⬇ CSV</button>
+          <span id="approx-legend">~ = paired</span>
+        </div>
+        <div id="tbl-wrap">
+          <div id="rdg-session-strip" style="display:none;padding:8px 12px;background:#f5f6f8;border-bottom:1px solid var(--bor);font-size:10px;color:var(--t2);line-height:1.7"></div>
+        <table id="rdg-tbl">
+            <thead><tr>
+              <th>Time</th><th>Inlet Press</th><th>Inlet Temp</th><th>Truck</th>
+            </tr></thead>
+            <tbody id="rdg-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Empty state (shown before shot loads) -->
+      <div id="empty-state">
+        <div class="es-icon">📊</div>
+        <div class="es-title">No shot loaded</div>
+        <div class="es-sub">Go to the Shot tab, select a Job, Shot, Segment and Truck, then tap Load Shot</div>
+      </div>
+    </div>
+
+    <!-- SETTINGS PAGE -->
+    <div class="page" id="page-settings">
+
+      <!-- Display -->
+      <div class="ssec">
+        <div class="ssec-hdr">🖥 Display</div>
+        <div class="ssec-bdy">
+          <div class="srow"><label>Temperature unit</label><select class="ssel" id="ds-tunit" onchange="applyDashSettings()"><option value="F">°F Fahrenheit</option><option value="C">°C Celsius</option></select></div>
+          <div class="srow"><label>Pressure unit</label><select class="ssel" id="ds-punit" onchange="applyDashSettings()"><option value="PSI">PSI</option><option value="Bar">Bar</option><option value="kPa">kPa</option></select></div>
+        </div>
+      </div>
+
+      <!-- Control Limits -->
+      <div class="ssec">
+        <div class="ssec-hdr">📏 Control Limits</div>
+        <div class="ssec-bdy">
+          <div class="srow"><label>UCL</label><label class="tgl-wrap"><input type="checkbox" id="ds-ucl-en" checked onchange="applyDashSettings()"><span class="tgl"></span></label><input type="number" class="snum" id="ds-ucl" value="40" onchange="applyDashSettings()"><span style="font-size:11px;color:var(--t3)">PSI</span></div>
+          <div class="srow"><label>LCL</label><label class="tgl-wrap"><input type="checkbox" id="ds-lcl-en" checked onchange="applyDashSettings()"><span class="tgl"></span></label><input type="number" class="snum" id="ds-lcl" value="5" onchange="applyDashSettings()"><span style="font-size:11px;color:var(--t3)">PSI</span></div>
+        </div>
+      </div>
+
+      <!-- Chart Scale -->
+      <div class="ssec">
+        <div class="ssec-hdr">📐 Chart Scale (Y-Axis)</div>
+        <div class="ssec-bdy">
+          <div style="font-size:11px;font-weight:700;color:var(--gd);margin-bottom:8px">● Pressure — Left Axis</div>
+          <div class="srow"><label style="font-size:12px">Auto scale</label><label class="tgl-wrap"><input type="checkbox" id="ds-yp-auto" checked onchange="applyDashSettings()"><span class="tgl"></span></label></div>
+          <div id="ds-yp-range-wrap" style="display:none">
+            <div class="srow"><label style="font-size:12px;width:32px;flex-shrink:0">Min</label><input type="number" class="snum" id="ds-yp-min" value="0" step="1" onchange="applyDashSettings()"><span style="font-size:11px;color:var(--t3)" id="ds-yp-unit-lbl">PSI</span></div>
+            <div class="srow"><label style="font-size:12px;width:32px;flex-shrink:0">Max</label><input type="number" class="snum" id="ds-yp-max" value="60" step="1" onchange="applyDashSettings()"><span style="font-size:11px;color:var(--t3)" id="ds-yp-unit-lbl2">PSI</span></div>
+          </div>
+          <div class="srow"><label style="font-size:12px">Y-axis decimals</label><select class="ssel" id="ds-psi-dec" onchange="applyDashSettings()"><option value="0">None (22)</option><option value="1" selected>1 place (22.1)</option><option value="2">2 places</option></select></div>
+          <div style="font-size:11px;font-weight:700;color:var(--bd);margin:10px 0 8px">● Temperature — Right Axis</div>
+          <div class="srow"><label style="font-size:12px">Auto scale</label><label class="tgl-wrap"><input type="checkbox" id="ds-yt-auto" checked onchange="applyDashSettings()"><span class="tgl"></span></label></div>
+          <div id="ds-yt-range-wrap" style="display:none">
+            <div class="srow"><label style="font-size:12px;width:32px;flex-shrink:0">Min</label><input type="number" class="snum" id="ds-yt-min" value="50" step="1" onchange="applyDashSettings()"><span style="font-size:11px;color:var(--t3)" id="ds-yt-unit-lbl">°F</span></div>
+            <div class="srow"><label style="font-size:12px;width:32px;flex-shrink:0">Max</label><input type="number" class="snum" id="ds-yt-max" value="120" step="1" onchange="applyDashSettings()"><span style="font-size:11px;color:var(--t3)" id="ds-yt-unit-lbl2">°F</span></div>
+          </div>
+          <div class="srow"><label style="font-size:12px">Y-axis decimals</label><select class="ssel" id="ds-tmp-dec" onchange="applyDashSettings()"><option value="0">None (80)</option><option value="1" selected>1 place (80.4)</option><option value="2">2 places</option></select></div>
+        </div>
+      </div>
+
+      <!-- Chart Line Styles -->
+      <div class="ssec">
+        <div class="ssec-hdr">✏ Chart Line Styles</div>
+        <div class="ssec-bdy">
+          <div style="font-size:11px;font-weight:700;color:var(--gd);margin-bottom:8px">● Inlet Press (S1)</div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+            <input type="color" id="ds-clr-s1" value="#1D9E75" onchange="applyDashSettings()" style="width:36px;height:32px;border:1.5px solid var(--bor);border-radius:8px;padding:1px;cursor:pointer;flex-shrink:0">
+            <select class="ssel" id="ds-sty-s1" onchange="applyDashSettings()" style="flex:1"><option value="solid" selected>Solid</option><option value="dashed">Dashed</option><option value="dotdash">Dot-Dash</option></select>
+            <select class="ssel" id="ds-wid-s1" onchange="applyDashSettings()"><option value="1.5">Thin</option><option value="2" selected>Med</option><option value="3">Thick</option></select>
+          </div>
+          <div style="font-size:11px;font-weight:700;color:var(--bd);margin-bottom:8px">● Inlet Temp (S2)</div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <input type="color" id="ds-clr-s2" value="#378ADD" onchange="applyDashSettings()" style="width:36px;height:32px;border:1.5px solid var(--bor);border-radius:8px;padding:1px;cursor:pointer;flex-shrink:0">
+            <select class="ssel" id="ds-sty-s2" onchange="applyDashSettings()" style="flex:1"><option value="solid">Solid</option><option value="dashed" selected>Dashed</option><option value="dotdash">Dot-Dash</option></select>
+            <select class="ssel" id="ds-wid-s2" onchange="applyDashSettings()"><option value="1.5" selected>Thin</option><option value="2">Med</option><option value="3">Thick</option></select>
+          </div>
+        </div>
+      </div>
+
+      <div class="sfooter">
+        <div>CureLog Dashboard Mobile</div>
+        <div class="ver" id="sf-ver">v1.0.0</div>
+      </div>
+    </div>
+
+  </div><!-- /pages -->
+
+  <!-- BOTTOM NAV -->
+  <nav id="nav">
+    <button class="nav-btn active" id="nav-shot" onclick="goPage('shot')">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Shot</span>
+    </button>
+    <button class="nav-btn" id="nav-live" onclick="goPage('live')">
+      <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      <span>Live</span>
+    </button>
+    <button class="nav-btn" id="nav-settings" onclick="goPage('settings')">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      <span>Settings</span>
+    </button>
+  </nav>
+
+</div><!-- /app -->
+
+<script>
+'use strict';
+
+const DB_VER = '1.7.19-m';
+
+// ── FIREBASE ─────────────────────────────────────
+const FB_CFG = {
+  apiKey:            'AIzaSyD3FSkjfxfGPnVQ1i7IIHTcGdToBo93ORk',
+  authDomain:        'curelog-phase1.firebaseapp.com',
+  databaseURL:       'https://curelog-phase1-default-rtdb.firebaseio.com',
+  projectId:         'curelog-phase1',
+  storageBucket:     'curelog-phase1.firebasestorage.app',
+  messagingSenderId: '306221200717',
+  appId:             '1:306221200717:web:934242d11d9a653e23b304'
+};
+
+// ── STATE ─────────────────────────────────────────
+let db = null;
+let liveListener = null;   // active Firebase listener ref
+let dashChart = null;
+
+const D = {
+  // raw data from Firebase — keyed by truck|second
+  rows: {},
+  // sorted merged array for display
+  sorted: [],
+  // metadata
+  path: null,
+  truckId: null,
+  uclEn: true, ucl: 40,
+  lclEn: true, lcl: 5,
+  tUnit: 'F',
+  s1Color:'#1D9E75', s1Style:'solid',  s1Width:2,
+  s2Color:'#378ADD', s2Style:'dashed', s2Width:1.5,
+  pUnit:'PSI', psiDecimals:1, tmpDecimals:1,
+  yPauto:true, yPmin:0, yPmax:60, yTauto:true, yTmin:50, yTmax:120,
+  zoomMins: 'all',
+  // stats
+  maxPsi: null, minPsi: null,
+  maxTemp: null, minTemp: null,
+  firstTs: null, lastTs: null, liveStart: null, sessStartMs: null,
+  tubeDia: null, tubeThick: null, tubeLen: null,
+};
+
+const $ = id => document.getElementById(id);
+const cToF = c => c * 9/5 + 32;
+const pConv = (v,u) => u==='Bar'?(v*0.0689476):u==='kPa'?(v*6.89476):v;
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+
+// ── MOBILE NAV ────────────────────────────────────────────────
+function goPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  const pg = document.getElementById('page-' + name);
+  if (pg) pg.classList.add('active');
+  const nb = document.getElementById('nav-' + name);
+  if (nb) nb.classList.add('active');
+}
+
+// ── INIT ──────────────────────────────────────────
+window.addEventListener('load', async () => {
+  // Set version badge
+  ['dash-ver','sf-ver'].forEach(id => { const e=$(id); if(e) e.textContent='v'+DB_VER; });
+  loadDashSettings();
+
+  try {
+    firebase.initializeApp(FB_CFG);
+    db = firebase.database();
+    setLive('on', 'Connected');
+    await loadJobList();
+  } catch(e) {
+    setLive('err', 'Firebase error');
+    setSel('Firebase connection failed: ' + e.message, 'err');
+  }
+});
+
+function setLive(state, txt) {
+  const dot = $('live-dot'), t = $('live-txt');
+  dot.className = 'tb-live-dot' + (state === 'on' ? ' on' : state === 'err' ? ' err' : '');
+  t.className   = 'tb-live-txt' + (state === 'on' ? ' on' : '');
+  t.textContent = txt;
+}
+function setSel(msg, cls) {
+  const el = $('sel-status');
+  el.textContent = msg;
+  el.className = cls || '';
+}
+
+// ── CASCADING DROPDOWNS ───────────────────────────
+async function loadJobList() {
+  setSel('Loading jobs…');
+  try {
+    const snap = await db.ref('shots').once('value');
+    const data = snap.val();
+    const sel = $('sel-job');
+    sel.innerHTML = '<option value="">— Select Job —</option>';
+    if (!data) { setSel('No shots found in database', 'err'); return; }
+    Object.keys(data).sort().forEach(job => {
+      const o = document.createElement('option');
+      o.value = job; o.textContent = job;
+      sel.appendChild(o);
+    });
+    sel.disabled = false;
+    setSel('');
+  } catch(e) { setSel('Failed to load jobs: ' + e.message, 'err'); }
+}
+
+async function onJobChange() {
+  const job = $('sel-job').value;
+  resetDropdown('sel-shot', '— Select Shot —');
+  resetDropdown('sel-seg',  '— Select Shot —');
+  resetDropdown('sel-truck','— Select Seg —');
+  $('sel-shot').disabled = true;
+  $('sel-seg').disabled  = true;
+  $('sel-truck').disabled= true;
+  $('btn-load').disabled = true;
+  if (!job) { setSel(''); return; }
+  setSel('Loading shots…');
+  try {
+    const snap = await db.ref('shots/' + job).once('value');
+    const data = snap.val();
+    const sel = $('sel-shot');
+    sel.innerHTML = '<option value="">— Select Shot —</option>';
+    Object.keys(data || {}).sort().forEach(s => {
+      const o = document.createElement('option'); o.value = s; o.textContent = s; sel.appendChild(o);
+    });
+    sel.disabled = false;
+    setSel('');
+  } catch(e) { setSel('Failed to load shots: ' + e.message, 'err'); }
+}
+
+async function onShotChange() {
+  const job = $('sel-job').value, shot = $('sel-shot').value;
+  resetDropdown('sel-seg',  '— Select Segment —');
+  resetDropdown('sel-truck','— Select Seg —');
+  $('sel-seg').disabled   = true;
+  $('sel-truck').disabled = true;
+  $('btn-load').disabled  = true;
+  if (!shot) return;
+  setSel('Loading segments…');
+  try {
+    const snap = await db.ref('shots/' + job + '/' + shot).once('value');
+    const data = snap.val();
+    const sel = $('sel-seg');
+    sel.innerHTML = '<option value="">— Select Segment —</option>';
+    Object.keys(data || {}).sort().forEach(s => {
+      const o = document.createElement('option'); o.value = s; o.textContent = s; sel.appendChild(o);
+    });
+    sel.disabled = false;
+    setSel('');
+  } catch(e) { setSel('Failed to load segments: ' + e.message, 'err'); }
+}
+
+async function onSegChange() {
+  const job = $('sel-job').value, shot = $('sel-shot').value, seg = $('sel-seg').value;
+  resetDropdown('sel-truck','— Select Truck —');
+  $('sel-truck').disabled = true;
+  $('btn-load').disabled  = true;
+  if (!seg) return;
+  setSel('Loading trucks…');
+  try {
+    const snap = await db.ref('shots/' + job + '/' + shot + '/' + seg).once('value');
+    const data = snap.val();
+    const sel = $('sel-truck');
+    sel.innerHTML = '<option value="">— Select Truck —</option>';
+    Object.keys(data || {}).sort().forEach(t => {
+      const o = document.createElement('option'); o.value = t; o.textContent = t; sel.appendChild(o);
+    });
+    sel.disabled = false;
+    $('btn-load').disabled = false;
+    setSel('');
+  } catch(e) { setSel('Failed to load trucks: ' + e.message, 'err'); }
+}
+
+function resetDropdown(id, placeholder) {
+  const el = $(id);
+  el.innerHTML = '<option value="">' + placeholder + '</option>';
+  el.disabled = true;
+}
+
+// ── LOAD SHOT ─────────────────────────────────────
+async function loadShot() {
+  const job   = $('sel-job').value;
+  const shot  = $('sel-shot').value;
+  const seg   = $('sel-seg').value;
+  const truck = $('sel-truck').value;
+  if (!job || !shot || !seg || !truck) { setSel('Please select all fields', 'err'); return; }
+
+  // Detach any existing listener
+  if (liveListener) { liveListener.off(); liveListener = null; }
+
+  // Reset data
+  D.rows = {}; D.sorted = [];
+  D.maxPsi = D.minPsi = D.maxTemp = D.minTemp = null;
+  D.firstTs = D.lastTs = null;
+  D.liveStart = Date.now();
+  D.zoomMins = 'all'; // always show full dataset when loading a shot
+  D.path = 'shots/' + job + '/' + shot + '/' + seg + '/' + truck;
+  D.truckId = truck;
+
+  setSel('Loading shot data…', '');
+  $('btn-load').disabled = true;
+  $('btn-load').textContent = 'Loading…';
+
+  // Build content area
+  buildContent();
+  D.zoomMins = 'all'; // ensure zoom starts at All for new shot
+
+  // Attach real-time listener to the entire shot path
+  liveListener = db.ref(D.path);
+  liveListener.on('value', snap => {
+    processSnapshot(snap.val());
+  }, err => {
+    setSel('Firebase listener error: ' + err.message, 'err');
+    setLive('err', 'Error');
+  });
+
+  // Update UI state
+  $('btn-load').textContent = '▶ Load Shot';
+  $('btn-load').disabled = false;
+  $('btn-clear').style.display = '';
+  setSel('');
+
+  // Live bar
+  const tubeParts = [];
+  if (D.tubeDia)   tubeParts.push('Ø '    + D.tubeDia   + '"');
+  if (D.tubeThick) tubeParts.push('Wall ' + D.tubeThick + ' mm');
+  if (D.tubeLen)   tubeParts.push(D.tubeLen + ' ft');
+  const tubeStr = tubeParts.length > 0 ? '<br><span style="color:rgba(255,255,255,.65);font-size:10px">📐 ' + tubeParts.join(' · ') + '</span>' : '';
+  $('lb-path').innerHTML = '<b>' + truck + '</b>&nbsp; · &nbsp;Job <b>' + job + '</b>&nbsp; · &nbsp;Shot <b>' + shot + '</b>&nbsp; · &nbsp;Seg <b>' + seg + '</b>' + tubeStr;
+  $('live-bar').classList.add('on');
+  goPage('live');
+}
+
+function clearShot() {
+  if (liveListener) { liveListener.off(); liveListener = null; }
+  D.rows = {}; D.sorted = [];
+  $('live-bar').classList.remove('on');
+  $('btn-clear').style.display = 'none';
+  // Hide content, show empty state
+  ['stats-grid','reading-tiles','chart-card','table-card'].forEach(id=>{
+    const e=$(id); if(e) e.style.display='none';
+  });
+  const es=$('empty-state'); if(es) es.style.display='';
+  dashChart = null;
+  setSel('');
+  setLive('on','Connected');
+}
+
+// ── PROCESS FIREBASE SNAPSHOT ─────────────────────
+function processSnapshot(data) {
+  if (!data) {
+    setSel('No data found for this shot', 'err');
+    setLive('err', 'No data');
+    return;
+  }
+
+  // Reset and re-parse everything from the snapshot
+  D.rows = {};
+  // Use official session start time if written by truck app
+  if (data._session) {
+    if (data._session.startMs)   D.sessStartMs = data._session.startMs;
+    if (data._session.tubeDia)   D.tubeDia     = data._session.tubeDia;
+    if (data._session.tubeThick) D.tubeThick   = data._session.tubeThick;
+    if (data._session.tubeLen)   D.tubeLen     = data._session.tubeLen;
+  }
+
+  // ── Pass 1: bucket each sensor into 1-second bins ────────────────────────
+  // Match truck app exactly: one row per second, created for any data
+  const s1rows = {}; // bucket-key → {tsMs, ts, psi, truck}
+  const s2rows = {}; // bucket-key → {tsMs, ts, tempC}
+
+  const s1 = data.sensor1?.readings || {};
+  Object.values(s1).forEach(r => {
+    if (!r || r.pressRaw == null) return;
+    const k = Math.floor(r.tsMs / 1000) * 1000;
+    // Keep the latest reading per bucket
+    if (!s1rows[k] || r.tsMs > s1rows[k].tsMs) {
+      s1rows[k] = { tsMs: r.tsMs, ts: r.ts, psi: r.pressRaw, truck: r.truckId || D.truckId };
+    }
+  });
+
+  const s2 = data.sensor2?.readings || {};
+  Object.values(s2).forEach(r => {
+    if (!r || r.tempC == null) return;
+    const k = Math.floor(r.tsMs / 1000) * 1000;
+    if (!s2rows[k] || r.tsMs > s2rows[k].tsMs) {
+      s2rows[k] = { tsMs: r.tsMs, ts: r.ts, tempC: r.tempC };
+    }
+  });
+
+  const s2Keys = Object.keys(s2rows).map(Number).sort((a,b) => a - b);
+  const s1Keys = Object.keys(s1rows).map(Number).sort((a,b) => a - b);
+
+  const findNearest = (keys, rows, targetMs, maxGapMs) => {
+    if (!keys.length) return null;
+    let lo = 0, hi = keys.length - 1, best = null, bestDist = maxGapMs + 1;
+    while (lo <= hi) {
+      const mid = (lo + hi) >> 1;
+      const dist = Math.abs(keys[mid] - targetMs);
+      if (dist < bestDist) { bestDist = dist; best = keys[mid]; }
+      if (keys[mid] < targetMs) lo = mid + 1; else hi = mid - 1;
+    }
+    return best !== null && bestDist <= maxGapMs ? { key: best, row: rows[best] } : null;
+  };
+
+  // ── Pass 2: build merged rows ─────────────────────────────────────────────
+  // Strategy:
+  //   • Every S1 bucket → one row (pair with same-bucket S2 if available,
+  //     else nearest S2 within ±1500ms)
+  //   • S2-only buckets → only add if NOT already consumed by an S1 row
+  //     (prevents double-counting S2's extra 500ms firing)
+  //
+  // approx flag: true ONLY when S2 came from a DIFFERENT bucket than S1
+  // (natural same-bucket gap of 0–999ms is NEVER marked approx)
+
+  const merged = {};
+  const consumedS2 = new Set(); // track which S2 bucket keys were used by S1 rows
+
+  // First pass: create one row per S1 bucket
+  s1Keys.forEach(k => {
+    const r1 = s1rows[k];
+    const r2same = s2rows[k]; // same-second S2 reading
+
+    if (r2same) {
+      // Perfect: both sensors in same second bucket
+      merged[k] = {
+        tsMs: r1.tsMs, ts: r1.ts,
+        psi: r1.psi, tempC: r2same.tempC,
+        truck: r1.truck,
+        pairedGap: Math.abs(r1.tsMs - r2same.tsMs),
+        approx: false   // same bucket = exact, regardless of ms gap
+      };
+      consumedS2.add(k);
+    } else {
+      // No S2 in this bucket — find nearest within ±1500ms
+      const found = findNearest(s2Keys, s2rows, r1.tsMs, 1500);
+      if (found) {
+        merged[k] = {
+          tsMs: r1.tsMs, ts: r1.ts,
+          psi: r1.psi, tempC: found.row.tempC,
+          truck: r1.truck,
+          pairedGap: Math.abs(r1.tsMs - found.row.tsMs),
+          approx: true    // cross-bucket = genuinely approximate
+        };
+        consumedS2.add(found.key);
+      } else {
+        // No S2 anywhere near — pressure-only row
+        merged[k] = {
+          tsMs: r1.tsMs, ts: r1.ts,
+          psi: r1.psi, tempC: null,
+          truck: r1.truck,
+          pairedGap: null, approx: false
+        };
+      }
+    }
+  });
+
+  // Second pass: add S2-only rows that were NOT consumed by any S1 row
+  s2Keys.forEach(k => {
+    if (consumedS2.has(k)) return; // already used
+    if (merged[k]) return;         // S1 row already in this bucket
+    // Truly orphaned S2 — no S1 paired to it
+    merged[k] = {
+      tsMs: s2rows[k].tsMs, ts: s2rows[k].ts,
+      psi: null, tempC: s2rows[k].tempC,
+      truck: D.truckId,
+      pairedGap: null, approx: false
+    };
+  });
+
+  D.rows = merged;
+
+  // Sort
+  D.sorted = Object.values(D.rows).sort((a,b) => a.tsMs - b.tsMs);
+
+  // Compute stats
+  D.maxPsi = D.minPsi = D.maxTemp = D.minTemp = null;
+  D.sorted.forEach(r => {
+    if (r.psi !== null) {
+      if (D.maxPsi === null || r.psi > D.maxPsi) D.maxPsi = r.psi;
+      if (D.minPsi === null || r.psi < D.minPsi) D.minPsi = r.psi;
+    }
+    if (r.tempC !== null) {
+      const td = D.tUnit === 'F' ? cToF(r.tempC) : r.tempC;
+      if (D.maxTemp === null || td > D.maxTemp) D.maxTemp = td;
+      if (D.minTemp === null || td < D.minTemp) D.minTemp = td;
+    }
+  });
+  if (D.sorted.length) {
+    D.firstTs = D.sorted[0].tsMs;
+    D.lastTs  = D.sorted[D.sorted.length-1].tsMs;
+  }
+
+  setLive('on', 'Live');
+  setSel('');
+  renderAll();
+}
+
+// ── BUILD CONTENT SKELETON ────────────────────────
+function buildContent() {
+  // Mobile: elements are static in HTML; just show them and init chart
+  const ids = ['stats-grid','reading-tiles','chart-card','table-card'];
+  ids.forEach(id => { const e = $(id); if(e) e.style.display=''; });
+  const es = $('empty-state'); if(es) es.style.display='none';
+  // Reset chart
+  dashChart = null;
+  setSel('');
+  setLive('on','Connected');
+  // Init chart after brief delay
+  setTimeout(() => initChart(), 50);
+}
+
+
+// ── RENDER ALL ────────────────────────────────────
+function renderAll() {
+  renderStats();
+  renderTiles();
+  renderChart();
+  renderTable();
+  updateLiveBar();
+  // Refresh live bar path with tube specs if they arrived after initial load
+  if (D.tubeDia || D.tubeThick || D.tubeLen) {
+    const lp = $('lb-path');
+    if (lp && !lp.innerHTML.includes('📐')) {
+      const tp = [];
+      if (D.tubeDia)   tp.push('Ø '    + D.tubeDia   + '"');
+      if (D.tubeThick) tp.push('Wall ' + D.tubeThick + ' mm');
+      if (D.tubeLen)   tp.push(D.tubeLen + ' ft');
+      lp.innerHTML += '<br><span style="color:rgba(255,255,255,.65);font-size:10px">📐 ' + tp.join(' · ') + '</span>';
+    }
+  }
+}
+
+function renderStats() {
+  const n = D.sorted.length;
+  if (!$('st-rdg')) return;
+  // Count raw S1 and S2 Firebase records
+  const s1Count = D.sorted.filter(r => r.psi   !== null).length;
+  const s2Count = D.sorted.filter(r => r.tempC !== null).length;
+  $('st-rdg').textContent = n.toLocaleString();
+  const exactCount  = D.sorted.filter(r => r.psi !== null && r.tempC !== null && !r.approx).length;
+  const approxCount = D.sorted.filter(r => r.approx).length;
+  const pressOnly   = D.sorted.filter(r => r.psi !== null && r.tempC === null).length;
+  const tempOnly    = D.sorted.filter(r => r.psi === null && r.tempC !== null).length;
+  const rdgSub = $('st-rdg-sub');
+  if (rdgSub) {
+    const parts = [];
+    if (exactCount  > 0) parts.push(exactCount  + ' exact');
+    if (approxCount > 0) parts.push(approxCount + ' paired (~)');
+    if (pressOnly   > 0) parts.push(pressOnly   + ' press-only');
+    if (tempOnly    > 0) parts.push(tempOnly    + ' temp-only');
+    rdgSub.innerHTML = parts.join('&nbsp; · &nbsp;');
+  }
+  // Max/Min PSI and Temp shown in tiles — not repeated in stats bar
+  const durStart = D.sessStartMs || D.firstTs;
+  if (durStart && D.lastTs) {
+    const ms = D.lastTs - durStart;
+    const s = Math.floor(ms/1000), m = Math.floor(s/60), h = Math.floor(m/60);
+    $('st-dur').textContent = h > 0 ? h+'h '+String(m%60).padStart(2,'0')+'m' : m+'m '+String(s%60).padStart(2,'0')+'s';
+  }
+  $('st-truck').textContent = D.truckId || '';
+  const tubeEl = $('st-tube');
+  if (tubeEl) {
+    const tp = [];
+    if (D.tubeDia)   tp.push('Ø ' + D.tubeDia + '"');
+    if (D.tubeThick) tp.push('Wall ' + D.tubeThick + ' mm');
+    if (D.tubeLen)   tp.push(D.tubeLen + ' ft');
+    tubeEl.textContent = tp.join('  ·  ');
+  }
+  $('lb-rdg').textContent = n.toLocaleString();
+
+
+}
+
+function renderTiles() {
+  if (!$('tile-press-val')) return;
+  if (!D.sorted.length) return;
+
+  // Latest pressure
+  const lastPress = [...D.sorted].reverse().find(r => r.psi !== null);
+  if (lastPress) {
+    const pu2=D.pUnit||'PSI',pd2=pu2==='Bar'?3:pu2==='kPa'?1:D.psiDecimals;
+    $('tile-press-val').innerHTML = pConv(lastPress.psi,pu2).toFixed(pd2)+'<span>'+pu2+'</span>';
+    const age = Math.round((Date.now() - lastPress.tsMs) / 1000);
+    $('tile-press-age').textContent = age < 5 ? 'Live' : age + 's ago';
+    $('tile-pmin').textContent = D.minPsi !== null ? pConv(D.minPsi,pu2).toFixed(pd2) : '—';
+    $('tile-pmax').textContent = D.maxPsi !== null ? pConv(D.maxPsi,pu2).toFixed(pd2) : '—';
+    const ucl = D.uclEn ? D.ucl : null;
+    $('tile-press').classList.toggle('ucl-alarm', ucl !== null && lastPress.psi > ucl);
+  }
+
+  // Latest temp
+  const lastTemp = [...D.sorted].reverse().find(r => r.tempC !== null);
+  if (lastTemp) {
+    const disp = D.tUnit === 'F' ? cToF(lastTemp.tempC) : lastTemp.tempC;
+    const unit = '°' + D.tUnit;
+    $('tile-temp-val').innerHTML = disp.toFixed(1) + '<span>' + unit + '</span>';
+    const age = Math.round((Date.now() - lastTemp.tsMs) / 1000);
+    $('tile-temp-age').textContent = age < 5 ? 'Live' : age + 's ago';
+    $('tile-tmin').textContent = D.minTemp !== null ? D.minTemp.toFixed(1) + unit : '—';
+    $('tile-tmax').textContent = D.maxTemp !== null ? D.maxTemp.toFixed(1) + unit : '—';
+  }
+}
+
+function initChart() {
+  const canvas = $('dashCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  dashChart = new Chart(ctx, {
+    type: 'line',
+    data: { labels:[], datasets:[
+      { label:'Inlet Press', data:[], borderColor:'#1D9E75', backgroundColor:'rgba(29,158,117,.07)', borderWidth:2, pointRadius:0, tension:.3, yAxisID:'yP', fill:true,  spanGaps:true },
+      { label:'Inlet Temp',  data:[], borderColor:'#378ADD', backgroundColor:'transparent',          borderWidth:1.5, pointRadius:0, tension:.3, yAxisID:'yT', borderDash:[5,3], fill:false, spanGaps:true }
+    ]},
+    options:{
+      responsive:true, maintainAspectRatio:false, animation:false,
+      interaction:{mode:'index',intersect:false},
+      plugins:{ legend:{display:false}, annotation:{annotations:{}} },
+      scales:{
+        x:{type:'category', ticks:{maxTicksLimit:8,font:{size:9}}, grid:{display:false}},
+        yP:{position:'left',  title:{display:true,text:'PSI',font:{size:9}}, ticks:{font:{size:9},callback:(v)=>Number(v).toFixed(D.psiDecimals)}, grid:{color:'rgba(0,0,0,.04)'}},
+        yT:{position:'right', title:{display:true,text:'Temp',font:{size:9}}, ticks:{font:{size:9},callback:(v)=>Number(v).toFixed(D.tmpDecimals)}, grid:{display:false}}
+      }
+    }
+  });
+  applyDashSettings(); updateDashLegend();
+  if (D.sorted.length) renderChart();
+}
+
+function renderChart() {
+  if (!dashChart) return;
+  const csi = document.getElementById('chart-session-info');
+  if (csi && D.path) {
+    const pts = D.path.split('/');
+    const trk=pts[4]||'—', job=pts[1]||'—', shot=pts[2]||'—', seg=pts[3]||'—';
+    const tp = [];
+    if (D.tubeDia)   tp.push('Ø ' + D.tubeDia + '"');
+    if (D.tubeThick) tp.push('Wall ' + D.tubeThick + ' mm');
+    if (D.tubeLen)   tp.push(D.tubeLen + ' ft');
+    const tubeStr = tp.length > 0 ? ' | 📐 ' + tp.join(' · ') : '';
+    csi.innerHTML = '<b>' + trk + '</b> · Job <b>' + job + '</b> · Shot <b>' + shot + '</b> · Seg <b>' + seg + '</b>' + tubeStr;
+    csi.style.display = '';
+  }
+  const ucl = D.uclEn ? D.ucl : null;
+  const lcl = D.lclEn ? D.lcl : null;
+
+  // Apply zoom filter
+  let rows = D.sorted;
+  if (D.zoomMins !== 'all' && D.lastTs) {
+    const cutoff = D.lastTs - D.zoomMins * 60 * 1000;
+    rows = D.sorted.filter(r => r.tsMs >= cutoff);
+  }
+
+  const labels = rows.map(r => new Date(r.tsMs).toLocaleTimeString());
+  const pUnit = D.pUnit||'PSI';
+  const pDec  = pUnit==='Bar'?3:pUnit==='kPa'?1:D.psiDecimals;
+  const psi   = rows.map(r => r.psi !== null ? parseFloat(pConv(r.psi,pUnit).toFixed(pDec)) : null);
+  const temp   = rows.map(r => r.tempC !== null ? parseFloat((D.tUnit==='F'?cToF(r.tempC):r.tempC).toFixed(1)) : null);
+
+  dashChart.data.labels           = labels;
+  dashChart.data.datasets[0].data = psi;
+  dashChart.data.datasets[1].data = temp;
+
+  // Annotations
+  const anns = {};
+  if (ucl !== null) anns.ucl = { type:'line',yMin:ucl,yMax:ucl,yScaleID:'yP',borderColor:'#E24B4A',borderWidth:1.5,borderDash:[6,3],label:{content:'UCL '+ucl,display:true,position:'end',font:{size:8},color:'#E24B4A',backgroundColor:'rgba(226,75,74,.08)'}};
+  if (lcl !== null) anns.lcl = { type:'line',yMin:lcl,yMax:lcl,yScaleID:'yP',borderColor:'#E8A838',borderWidth:1.5,borderDash:[6,3],label:{content:'LCL '+lcl,display:true,position:'end',font:{size:8},color:'#E8A838',backgroundColor:'rgba(232,168,56,.08)'}};
+  dashChart.options.plugins.annotation.annotations = anns;
+  dashChart.update('none');
+}
+
+function renderTable() {
+  const tbody = $('rdg-tbody');
+  if (!tbody) return;
+  // Session info strip
+  const strip = $('rdg-session-strip');
+  if (strip && D.path) {
+    const tp = [];
+    if (D.tubeDia)   tp.push('Ø ' + D.tubeDia + '"');
+    if (D.tubeThick) tp.push('Wall ' + D.tubeThick + ' mm');
+    if (D.tubeLen)   tp.push(D.tubeLen + ' ft');
+    const tubeStr = tp.length > 0 ? ' &nbsp;|&nbsp; 📐 ' + tp.join(' · ') : '';
+    const pts = D.path.split('/');
+    const trk = pts[4]||'—', job = pts[1]||'—', shot = pts[2]||'—', seg = pts[3]||'—';
+    strip.innerHTML =
+      '<b>' + trk + '</b> &nbsp;·&nbsp; Job <b>' + job + '</b>' +
+      ' &nbsp;·&nbsp; Shot <b>' + shot + '</b>' +
+      ' &nbsp;·&nbsp; Seg <b>'  + seg  + '</b>' +
+      '<span style="color:var(--t3)">' + tubeStr + '</span>';
+    strip.style.display = '';
+  }
+  const ucl = D.uclEn ? D.ucl : null;
+  const lcl = D.lclEn ? D.lcl : null;
+  const tu  = '°' + D.tUnit;
+  // Newest first, max 300 rows shown
+  const rows = [...D.sorted].reverse();
+  tbody.innerHTML = rows.map(r => {
+    const pu3=D.pUnit||'PSI',pd3=pu3==='Bar'?3:pu3==='kPa'?1:D.psiDecimals;
+    const p  = r.psi !== null ? pConv(r.psi,pu3).toFixed(pd3)+' '+pu3 : '—';
+    const tv = r.tempC !== null ? (D.tUnit==='F'?cToF(r.tempC):r.tempC).toFixed(1) + tu : '—';
+    const ts = new Date(r.tsMs).toLocaleTimeString();
+    const ov = ucl !== null && r.psi !== null && r.psi > ucl;
+    const un = lcl !== null && r.psi !== null && r.psi < lcl;
+    const isApprox = r.approx && r.tempC !== null;
+    const gapStr   = isApprox && r.pairedGap != null
+      ? (r.pairedGap >= 1000 ? (r.pairedGap/1000).toFixed(1)+'s' : r.pairedGap+'ms') + ' apart'
+      : '';
+    const tCell = isApprox
+      ? `<td class="approx-cell${ov?' ucl-approx':''}">~${tv}<span class="approx-tip">⚠ Nearest-neighbor — ${gapStr}</span></td>`
+      : `<td>${tv}</td>`;
+    return `<tr class="${ov?'ucl-row':un?'lcl-row':''}">
+      <td>${ts}</td><td>${p}</td>${tCell}<td>${r.truck||'—'}</td>
+    </tr>`;
+  }).join('');
+  if ($('tbl-cnt')) $('tbl-cnt').textContent = D.sorted.length.toLocaleString();
+  const hasApprox = D.sorted.some(r => r.approx);
+  const legEl = $('approx-legend');
+  if (legEl) legEl.style.display = hasApprox ? '' : 'none';
+}
+
+function updateLiveBar() {
+  const el = $('lb-elapsed');
+  if (!el || !D.lastTs) return;
+  // Use official session start if available (written by truck app),
+  // otherwise fall back to first reading timestamp
+  const startMs = D.sessStartMs || D.firstTs;
+  if (!startMs) return;
+  const ms = D.lastTs - startMs;
+  const s = Math.floor(ms/1000), m = Math.floor(s/60), h = Math.floor(m/60);
+  el.textContent = String(h).padStart(2,'0')+':'+String(m%60).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+  el.style.display = '';
+}
+
+// ── CONTROLS ──────────────────────────────────────
+function applyLimits() {
+  D.uclEn = $('d-ucl-en') && $('d-ucl-en').checked;
+  D.lcl   = $('d-lcl')   ? (parseFloat($('d-lcl').value) || 5)  : 5;
+  D.lclEn = $('d-lcl-en') && $('d-lcl-en').checked;
+  D.ucl   = $('d-ucl')   ? (parseFloat($('d-ucl').value) || 40) : 40;
+  // Sync back to settings panel
+  const s  = (id,v) => { const e=$(id); if(e)e.value=v; };
+  const sb = (id,v) => { const e=$(id); if(e)e.checked=v; };
+  sb('ds-ucl-en',D.uclEn); s('ds-ucl',String(D.ucl));
+  sb('ds-lcl-en',D.lclEn); s('ds-lcl',String(D.lcl));
+  renderChart();
+  renderTable();
+  renderTiles();
+  saveDashSettings();
+}
+
+function setZoom(val) {
+  D.zoomMins = val;
+  document.querySelectorAll('.zoom-btn').forEach(b => {
+    const bv = b.onclick.toString().includes("'all'") ? 'all' : parseInt(b.textContent);
+    b.classList.toggle('active', bv == val || (val==='all' && b.textContent==='All'));
+  });
+  renderChart();
+}
+
+// ── CSV EXPORT ────────────────────────────────────
+function exportCSV() {
+  const tu  = '°' + D.tUnit;
+  const pu  = D.pUnit || 'PSI';
+  const pts = (D.path || '').split('/');
+  const trk = pts[4]||'—', job=pts[1]||'—', shot=pts[2]||'—', seg=pts[3]||'—';
+  const now = new Date();
+  const exported = now.toLocaleString();
+
+  // Session header block — same format as truck app
+  const meta = [
+    '# ═══════════════════════════════════════════════',
+    '#   CureLog Dashboard — Readings Log',
+    '#   Version: v' + DB_VER + '  (CureLog Dashboard)',
+    '#   Exported: ' + exported,
+    '#',
+    '#   Truck:          ' + trk,
+    '#   Job:            ' + job,
+    '#   Shot:           ' + shot,
+    '#   Segment:        ' + seg,
+    '#   Tube Diameter:  ' + (D.tubeDia   ? D.tubeDia   + '"'   : '—'),
+    '#   Tube Thickness: ' + (D.tubeThick ? D.tubeThick + ' mm' : '—'),
+    '#   Tube Length:    ' + (D.tubeLen   ? D.tubeLen   + ' ft' : '—'),
+    '# ═══════════════════════════════════════════════',
+    '#'
+  ];
+
+  const hdr = ['Timestamp','Time','Inlet Press (' + pu + ')','Inlet Temp (' + tu + ')','Truck'].join(',');
+  const body = D.sorted.map(r => [
+    r.ts || new Date(r.tsMs).toISOString(),
+    new Date(r.tsMs).toLocaleTimeString(),
+    r.psi   !== null ? pConv(r.psi,pu).toFixed(pu==='Bar'?3:pu==='kPa'?1:D.psiDecimals) : '',
+    r.tempC !== null ? (D.tUnit==='F'?cToF(r.tempC):r.tempC).toFixed(1) : '',
+    r.truck || ''
+  ].join(','));
+  const NL   = String.fromCharCode(10);
+  const blob = new Blob([[...meta, hdr, ...body].join(NL)], {type:'text/csv'});
+  const a    = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = (() => {
+    const pts = (D.path || '').split('/');
+    const trk = pts[4]||'???', job=pts[1]||'???', shot=pts[2]||'???', seg=pts[3]||'???';
+    const d = new Date();
+    const date = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+    return `Dashboard - Readings Log - ${trk} - Job ${job} - Shot ${shot} - Seg ${seg} - ${date}.csv`;
+  })()
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+// ── PERIODIC TILE REFRESH (updates "Ns ago" labels) ──
+setInterval(() => { if (D.sorted.length) renderTiles(); }, 5000);
+
+
+// ── SETTINGS PANEL ───────────────────────────────
+function togDashSettings() { goPage('settings'); }
+
+function dashDA(s){return s==='dashed'?[5,3]:s==='dotdash'?[2,3,8,3]:[];}
+
+function updateDashLegend(){
+  const draw=(id,c,s,w)=>{
+    const svg=document.getElementById(id); if(!svg)return;
+    while(svg.firstChild)svg.removeChild(svg.firstChild);
+    const l=document.createElementNS('http://www.w3.org/2000/svg','line');
+    l.setAttribute('x1','0');l.setAttribute('y1','7');
+    l.setAttribute('x2','28');l.setAttribute('y2','7');
+    l.setAttribute('stroke',c);
+    l.setAttribute('stroke-width',Math.max(Number(w),1.5));
+    const d=dashDA(s); if(d.length)l.setAttribute('stroke-dasharray',d.join(','));
+    svg.appendChild(l);
+  };
+  draw('d-leg-sw-s1',D.s1Color,D.s1Style,D.s1Width);
+  draw('d-leg-sw-s2',D.s2Color,D.s2Style,D.s2Width);
+}
+
+function applyDashSettings() {
+  const g  = id => { const e=document.getElementById(id); return e?e.value:null; };
+  const gb = id => { const e=document.getElementById(id); return e?e.checked:null; };
+
+  // Read from new settings panel controls
+  if(g('ds-clr-s1')!=null) D.s1Color = g('ds-clr-s1');
+  if(g('ds-sty-s1')!=null) D.s1Style = g('ds-sty-s1');
+  if(g('ds-wid-s1')!=null) D.s1Width = parseFloat(g('ds-wid-s1'))||2;
+  if(g('ds-clr-s2')!=null) D.s2Color = g('ds-clr-s2');
+  if(g('ds-sty-s2')!=null) D.s2Style = g('ds-sty-s2');
+  if(g('ds-wid-s2')!=null) D.s2Width = parseFloat(g('ds-wid-s2'))||1.5;
+  if(gb('ds-ucl-en')!=null) D.uclEn  = gb('ds-ucl-en');
+  if(g('ds-ucl')!=null)     D.ucl    = parseFloat(g('ds-ucl'))||40;
+  if(gb('ds-lcl-en')!=null) D.lclEn  = gb('ds-lcl-en');
+  if(g('ds-lcl')!=null)     D.lcl    = parseFloat(g('ds-lcl'))||5;
+  if(g('ds-tunit')!=null)   D.tUnit  = g('ds-tunit');
+
+  // Also sync the in-chart UCL/LCL controls if they exist
+  const syncEl = (id,v) => { const e=document.getElementById(id); if(e)e.value=v; };
+  const syncCh = (id,v) => { const e=document.getElementById(id); if(e)e.checked=v; };
+  syncCh('d-ucl-en', D.uclEn); syncEl('d-ucl', D.ucl);
+  syncCh('d-lcl-en', D.lclEn); syncEl('d-lcl', D.lcl);
+
+  // Read precision
+  const pDecEl = document.getElementById('ds-psi-dec');
+  const tDecEl = document.getElementById('ds-tmp-dec');
+  if(pDecEl) D.psiDecimals = parseInt(pDecEl.value)||0;
+  if(tDecEl) D.tmpDecimals = parseInt(tDecEl.value)||0;
+  // Read pressure unit
+  const pUnitEl = document.getElementById('ds-punit');
+  if(pUnitEl) D.pUnit = pUnitEl.value;
+  // Read Y-axis scale
+  const ypAutoEl = document.getElementById('ds-yp-auto');
+  const ytAutoEl = document.getElementById('ds-yt-auto');
+  if(ypAutoEl) D.yPauto = ypAutoEl.checked;
+  if(ytAutoEl) D.yTauto = ytAutoEl.checked;
+  if(!D.yPauto){ const mn=$('ds-yp-min'),mx=$('ds-yp-max'); if(mn)D.yPmin=parseFloat(mn.value)||0; if(mx)D.yPmax=parseFloat(mx.value)||60; }
+  if(!D.yTauto){ const mn=$('ds-yt-min'),mx=$('ds-yt-max'); if(mn)D.yTmin=parseFloat(mn.value)||50; if(mx)D.yTmax=parseFloat(mx.value)||120; }
+  const ypWrap=document.getElementById('ds-yp-range-wrap'), ytWrap=document.getElementById('ds-yt-range-wrap');
+  if(ypWrap) ypWrap.style.display = D.yPauto?'none':'block';
+  if(ytWrap) ytWrap.style.display = D.yTauto?'none':'block';
+  const pu=D.pUnit||'PSI', tu='°'+D.tUnit;
+  ['ds-yp-unit-lbl','ds-yp-unit-lbl2'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=pu;});
+  ['ds-yt-unit-lbl','ds-yt-unit-lbl2'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=tu;});
+
+  // Apply to chart
+  if(dashChart){
+    dashChart.data.datasets[0].borderColor     = D.s1Color;
+    dashChart.data.datasets[0].backgroundColor = D.s1Color+'12';
+    dashChart.data.datasets[0].borderWidth      = D.s1Width;
+    dashChart.data.datasets[0].borderDash       = dashDA(D.s1Style);
+    dashChart.data.datasets[1].borderColor     = D.s2Color;
+    dashChart.data.datasets[1].borderWidth      = D.s2Width;
+    dashChart.data.datasets[1].borderDash       = dashDA(D.s2Style);
+    const scYP=dashChart.options.scales.yP, scYT=dashChart.options.scales.yT;
+    if(D.yPauto){scYP.min=undefined;scYP.max=undefined;}else{scYP.min=D.yPmin;scYP.max=D.yPmax;}
+    if(D.yTauto){scYT.min=undefined;scYT.max=undefined;}else{scYT.min=D.yTmin;scYT.max=D.yTmax;}
+    const pd4=(D.pUnit||'PSI')==='Bar'?3:(D.pUnit||'PSI')==='kPa'?1:D.psiDecimals;
+    scYP.ticks.callback = v => Number(v).toFixed(pd4);
+    scYT.ticks.callback = v => Number(v).toFixed(D.tmpDecimals);
+    dashChart.update('none');
+  }
+  updateDashLegend();
+  saveDashSettings();
+  // Re-render so temp units and limits take effect immediately
+  if(D.sorted.length) renderAll();
+}
+
+// Keep applyChartStyle as alias so initChart hook still works
+function applyChartStyle() { applyDashSettings(); }
+
+function saveDashSettings(){
+  try{
+    localStorage.setItem('cl_dash_settings', JSON.stringify({
+      s1Color:D.s1Color, s1Style:D.s1Style, s1Width:D.s1Width,
+      s2Color:D.s2Color, s2Style:D.s2Style, s2Width:D.s2Width,
+      uclEn:D.uclEn, ucl:D.ucl, lclEn:D.lclEn, lcl:D.lcl, tUnit:D.tUnit, pUnit:D.pUnit,
+      psiDecimals:D.psiDecimals, tmpDecimals:D.tmpDecimals,
+      yPauto:D.yPauto, yPmin:D.yPmin, yPmax:D.yPmax,
+      yTauto:D.yTauto, yTmin:D.yTmin, yTmax:D.yTmax
+    }));
+  } catch(e){}
+}
+
+function loadDashSettings(){
+  let c; try{c=JSON.parse(localStorage.getItem('cl_dash_settings')||'null');}catch(e){c=null;}
+  if(!c) return;
+  const s  = (id,v) => { const e=document.getElementById(id); if(e&&v!=null)e.value=v; };
+  const sb = (id,v) => { const e=document.getElementById(id); if(e&&v!=null)e.checked=v; };
+
+  if(c.s1Color){ D.s1Color=c.s1Color; s('ds-clr-s1',c.s1Color); }
+  if(c.s1Style){ D.s1Style=c.s1Style; s('ds-sty-s1',c.s1Style); }
+  if(c.s1Width!=null){ D.s1Width=c.s1Width; s('ds-wid-s1',String(c.s1Width)); }
+  if(c.s2Color){ D.s2Color=c.s2Color; s('ds-clr-s2',c.s2Color); }
+  if(c.s2Style){ D.s2Style=c.s2Style; s('ds-sty-s2',c.s2Style); }
+  if(c.s2Width!=null){ D.s2Width=c.s2Width; s('ds-wid-s2',String(c.s2Width)); }
+  if(c.uclEn!=null){ D.uclEn=c.uclEn; sb('ds-ucl-en',c.uclEn); sb('d-ucl-en',c.uclEn); }
+  if(c.ucl!=null)  { D.ucl=c.ucl;     s('ds-ucl',String(c.ucl)); s('d-ucl',String(c.ucl)); }
+  if(c.lclEn!=null){ D.lclEn=c.lclEn; sb('ds-lcl-en',c.lclEn); sb('d-lcl-en',c.lclEn); }
+  if(c.lcl!=null)  { D.lcl=c.lcl;     s('ds-lcl',String(c.lcl)); s('d-lcl',String(c.lcl)); }
+  if(c.tUnit)           { D.tUnit=c.tUnit; s('ds-tunit',c.tUnit); }
+  if(c.psiDecimals!=null){ D.psiDecimals=c.psiDecimals; s('ds-psi-dec',String(c.psiDecimals)); }
+  if(c.tmpDecimals!=null){ D.tmpDecimals=c.tmpDecimals; s('ds-tmp-dec',String(c.tmpDecimals)); }
+  if(c.pUnit)    { D.pUnit=c.pUnit;   s('ds-punit',c.pUnit); }
+  if(c.yPauto!=null){ D.yPauto=c.yPauto; sb('ds-yp-auto',c.yPauto); }
+  if(c.yPmin!=null) { D.yPmin=c.yPmin;   s('ds-yp-min',String(c.yPmin)); }
+  if(c.yPmax!=null) { D.yPmax=c.yPmax;   s('ds-yp-max',String(c.yPmax)); }
+  if(c.yTauto!=null){ D.yTauto=c.yTauto; sb('ds-yt-auto',c.yTauto); }
+  if(c.yTmin!=null) { D.yTmin=c.yTmin;   s('ds-yt-min',String(c.yTmin)); }
+  if(c.yTmax!=null) { D.yTmax=c.yTmax;   s('ds-yt-max',String(c.yTmax)); }
+}
+
+
+
+</script>
+</body>
+</html>

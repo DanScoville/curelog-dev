@@ -1,0 +1,1886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0e1e2e">
+<title>CureLog Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --g:#1D9E75;--gd:#0F6E56;--gl:rgba(29,158,117,.12);
+  --b:#378ADD;--bd:#185FA5;--bl:rgba(55,138,221,.12);
+  --am:#E8A838;--re:#E24B4A;
+  --bg:#f0f4f8;
+  --card:#ffffff;
+  --bor:#e2e8f0;
+  --t1:#0e1e2e;--t2:#3a4f6a;--t3:#7a8fa8;--t4:#b0c0d0;
+  --sh:0 1px 4px rgba(14,30,46,.07);
+  --sh-md:0 4px 16px rgba(14,30,46,.10);
+  --r:10px;--rl:14px;
+  --font:'DM Sans',system-ui,sans-serif;
+  --mono:'DM Mono','Courier New',monospace;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--t1);min-height:100vh;font-size:14px}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-thumb{background:#d0d8e0;border-radius:2px}
+
+/* ── TOP BAR ─────────────────────────────────── */
+#topbar{
+  position:sticky;top:0;z-index:100;
+  background:#0e1e2e;
+  display:flex;align-items:center;gap:10px;
+  padding:0 16px;height:52px;
+  box-shadow:0 2px 12px rgba(0,0,0,.2);
+}
+.tb-logo{display:flex;align-items:center;gap:8px}
+.tb-logo-icon{
+  width:32px;height:32px;border-radius:8px;
+  background:var(--g);display:flex;align-items:center;justify-content:center;
+  font-size:15px;flex-shrink:0;
+}
+.tb-logo-text{font-size:15px;font-weight:700;color:#fff;letter-spacing:.2px}
+.tb-logo-text span{color:var(--g)}
+.tb-tag{
+  font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;
+  background:rgba(255,255,255,.08);color:#7a9ab5;letter-spacing:.3px;
+  margin-left:2px;
+}
+.tb-sp{flex:1}
+.tb-live{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;letter-spacing:.3px}
+.tb-live-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:#3a4f6a;flex-shrink:0;
+}
+.tb-live-dot.on{background:var(--g);animation:pulse-live 1.8s infinite}
+.tb-live-dot.err{background:var(--re)}
+.tb-live-txt{color:#7a9ab5}
+.tb-live-txt.on{color:var(--g)}
+@keyframes pulse-live{0%,100%{box-shadow:0 0 0 0 rgba(29,158,117,.6)}50%{box-shadow:0 0 0 5px rgba(29,158,117,0)}}
+.tb-ver{font-size:11px;font-weight:700;color:var(--g);font-family:var(--mono);
+  background:rgba(29,158,117,.12);padding:2px 9px;border-radius:4px;
+  border:1px solid rgba(29,158,117,.25);margin-left:6px}
+
+/* ── MAIN LAYOUT ─────────────────────────────── */
+#main{max-width:1200px;margin:0 auto;padding:16px}
+
+/* ── SHOT SELECTOR ───────────────────────────── */
+#selector-card{
+  background:var(--card);border-radius:var(--rl);
+  border:1px solid var(--bor);box-shadow:var(--sh);
+  padding:18px 20px;margin-bottom:14px;
+}
+.sel-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--t3);margin-bottom:12px}
+.sel-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;gap:10px;align-items:end}
+@media(max-width:640px){.sel-grid{grid-template-columns:1fr 1fr;}}
+.sel-field label{font-size:11px;font-weight:600;color:var(--t2);display:block;margin-bottom:4px}
+.sel-field select,.sel-field input{
+  width:100%;padding:9px 12px;border:1.5px solid var(--bor);border-radius:var(--r);
+  font-size:13px;font-family:var(--font);color:var(--t1);background:var(--card);
+  transition:border-color .15s;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%237a8fa8'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 10px center;padding-right:28px;
+}
+.sel-field select:focus,.sel-field input:focus{outline:none;border-color:var(--g)}
+.sel-field select:disabled{color:var(--t4);cursor:not-allowed}
+#btn-load{
+  min-width:110px;height:40px;padding:0 18px;
+  background:var(--g);color:#fff;border:none;border-radius:var(--r);
+  font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font);
+  transition:all .15s;white-space:nowrap;
+}
+#btn-load:hover{background:var(--gd)}
+#btn-load:disabled{opacity:.4;cursor:not-allowed}
+#btn-clear{
+  min-width:80px;height:40px;padding:0 14px;
+  background:transparent;color:var(--t3);
+  border:1.5px solid var(--bor);border-radius:var(--r);
+  font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font);
+  transition:all .15s;white-space:nowrap;display:none;
+}
+#btn-clear:hover{border-color:var(--re);color:var(--re)}
+#sel-status{font-size:11px;color:var(--t3);margin-top:8px;min-height:14px}
+#sel-status.ok{color:var(--g);font-weight:600}
+#sel-status.err{color:var(--re);font-weight:600}
+
+/* ── LIVE INDICATOR BAR ──────────────────────── */
+#live-bar{
+  background:var(--card);border-radius:var(--r);border:1px solid var(--bor);
+  padding:10px 16px;margin-bottom:14px;
+  display:none;align-items:center;gap:10px;box-shadow:var(--sh);
+}
+#live-bar.on{display:flex}
+.live-session{font-size:12px;font-weight:700;color:var(--t1)}
+.live-session b{color:var(--t2);font-weight:700}
+.live-sp{flex:1}
+.live-elapsed{font-family:var(--mono);font-size:12px;font-weight:500;color:var(--g);background:var(--gl);padding:3px 10px;border-radius:5px}
+.live-rdg{font-size:11px;color:var(--t2);font-weight:500}
+.live-rdg b{color:var(--t1);font-weight:600}
+
+/* ── STATS GRID ──────────────────────────────── */
+#stats-grid{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:10px;margin-bottom:14px;
+}
+@media(max-width:900px){#stats-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:480px){#stats-grid{grid-template-columns:repeat(2,1fr)}}
+.stat-card{
+  background:var(--card);border-radius:var(--r);border:1px solid var(--bor);
+  padding:12px 14px;box-shadow:var(--sh);
+}
+.stat-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--t4);margin-bottom:4px}
+.stat-val{font-size:22px;font-weight:700;color:var(--t1);line-height:1;font-family:var(--mono)}
+.stat-val.psi{color:var(--gd)}
+.stat-val.temp{color:var(--bd)}
+.stat-val.warn{color:var(--am)}
+.stat-sub{font-size:10px;color:var(--t4);margin-top:3px}
+
+/* ── LIVE READING TILES ──────────────────────── */
+#reading-tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+@media(max-width:480px){#reading-tiles{grid-template-columns:1fr}}
+.rtile{
+  border-radius:var(--rl);border:1px solid var(--bor);
+  box-shadow:var(--sh);transition:all .3s;
+  display:flex;flex-direction:column;overflow:hidden;
+}
+.rtile.s1{background:#fff;border-color:var(--bor)}
+.rtile.s2{background:#fff;border-color:var(--bor)}
+.rtile.ucl-alarm{animation:ucl-fl .9s infinite}
+@keyframes ucl-fl{0%,100%{background:#fff5f5}50%{background:#ffe8e8}}
+/* Top section — label + reading, centered */
+.rtile-top{
+  padding:18px 20px 16px;
+  text-align:center;flex:1;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+.rtile-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--t3);margin-bottom:10px}
+.rtile-sensor{font-size:9px;color:var(--t4);font-family:var(--mono);margin-bottom:6px}
+.rtile-val{font-size:52px;font-weight:700;line-height:1;letter-spacing:-2px}
+.rtile-val.psi{color:var(--gd)}
+.rtile-val.temp{color:var(--bd)}
+.rtile-val span{font-size:16px;font-weight:600;color:var(--t3);vertical-align:super;margin-left:3px;letter-spacing:0}
+.rtile-age{font-size:10px;color:var(--t4);margin-top:8px}
+/* Bottom section — min/max, split in two cells */
+.rtile-stats{
+  display:grid;grid-template-columns:1fr 1fr;
+  border-top:1px solid var(--bor);
+}
+.rtile-stat{
+  padding:10px 14px;text-align:center;
+  border-right:1px solid var(--bor);
+}
+.rtile-stat:last-child{border-right:none}
+.rtile-stat-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--t3);margin-bottom:4px}
+.rtile-stat-val{font-size:20px;font-weight:700;color:var(--t1);font-family:var(--mono)}
+
+/* ── CHART ───────────────────────────────────── */
+#chart-card{
+  background:var(--card);border-radius:var(--rl);border:1px solid var(--bor);
+  box-shadow:var(--sh);margin-bottom:14px;overflow:hidden;
+}
+.chart-hdr{
+  display:flex;align-items:center;gap:8px;padding:12px 16px;
+  border-bottom:1px solid var(--bor);background:#fafbfc;flex-wrap:wrap;
+}
+.chart-title{font-size:12px;font-weight:700;color:var(--t2);flex:1}
+.chart-leg{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.leg-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--t2);white-space:nowrap}
+/* UCL / LCL controls */
+.cl-ctrl{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--t2)}
+.cl-cb{width:13px;height:13px;cursor:pointer;accent-color:var(--g)}
+.cl-inp{width:52px;padding:3px 6px;border:1px solid var(--bor);border-radius:5px;font-size:11px;font-family:var(--font);color:var(--t1);text-align:center}
+.cl-inp:focus{outline:none;border-color:var(--g)}
+.zoom-btns{display:flex;gap:4px}
+.zoom-btn{
+  padding:4px 9px;border:1px solid var(--bor);border-radius:5px;
+  font-size:10px;font-weight:600;cursor:pointer;
+  background:var(--card);color:var(--t3);transition:all .15s;font-family:var(--font);
+}
+.zoom-btn:hover{border-color:var(--g);color:var(--g)}
+.zoom-btn.active{background:var(--g);color:#fff;border-color:var(--g)}
+#dashCanvas{width:100%!important;height:240px!important;display:block}
+
+/* ── TABLE ───────────────────────────────────── */
+#table-card{
+  background:var(--card);border-radius:var(--rl);border:1px solid var(--bor);
+  box-shadow:var(--sh);overflow:hidden;margin-bottom:14px;
+}
+.tbl-hdr{
+  display:flex;align-items:center;gap:8px;padding:11px 16px;
+  border-bottom:1px solid var(--bor);background:#fafbfc;
+}
+.tbl-title{font-size:12px;font-weight:700;color:var(--t2);flex:1}
+.tbl-cnt{font-size:10px;font-weight:700;background:var(--gl);color:var(--gd);padding:2px 8px;border-radius:10px}
+#btn-csv{
+  font-size:11px;padding:4px 10px;border:1px solid var(--bor);
+  border-radius:5px;background:var(--card);color:var(--t2);cursor:pointer;
+  transition:all .15s;font-family:var(--font);
+}
+#btn-csv:hover{border-color:var(--g);color:var(--g)}
+#tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;max-height:320px;overflow-y:auto}
+#rdg-tbl{width:100%;border-collapse:collapse;font-size:11px;min-width:480px}
+#rdg-tbl thead th{
+  position:sticky;top:0;z-index:2;
+  background:#f5f7fa;padding:7px 12px;text-align:left;
+  font-size:10px;font-weight:700;color:var(--t3);letter-spacing:.3px;
+  border-bottom:1px solid var(--bor);white-space:nowrap;
+}
+#rdg-tbl tbody td{padding:6px 12px;border-bottom:1px solid #f5f7fa;color:var(--t1);white-space:nowrap;font-family:var(--mono);font-size:11px}
+#rdg-tbl tbody tr:last-child td{border-bottom:none}
+#rdg-tbl tbody tr:hover td{background:#f8fafc}
+.ucl-row td{background:#fdf0f0!important;color:var(--re)!important}
+.lcl-row td{background:#fef6e4!important;color:#8a5e0a!important}
+.approx-cell{background:#fffbe6!important;color:#7a5c00!important;font-style:italic;position:relative;cursor:default}
+.approx-cell .approx-tip{display:none;position:absolute;bottom:calc(100% + 4px);left:50%;
+  transform:translateX(-50%);background:#333;color:#fff;font-size:10px;padding:4px 8px;
+  border-radius:4px;white-space:nowrap;z-index:99;pointer-events:none}
+.approx-cell:hover .approx-tip{display:block}
+.ucl-row .approx-cell{background:#fce8e8!important;color:#7a2020!important}
+
+/* ── EMPTY STATE ─────────────────────────────── */
+#empty-state{
+  text-align:center;padding:60px 20px;
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+}
+#empty-state .es-icon{font-size:48px;opacity:.3}
+#empty-state .es-title{font-size:16px;font-weight:700;color:var(--t2)}
+#empty-state .es-sub{font-size:12px;color:var(--t3);max-width:280px;line-height:1.5}
+
+/* ── LOADING ─────────────────────────────────── */
+.spinner{
+  width:28px;height:28px;border:3px solid var(--bor);
+  border-top-color:var(--g);border-radius:50%;
+  animation:spin .8s linear infinite;margin:0 auto;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── NO DATA PLACEHOLDER ─────────────────────── */
+.no-data{text-align:center;padding:40px;color:var(--t4);font-size:12px}
+
+/* ── SETTINGS PANEL (matches truck app) ───────────────────────── */
+.ssec{background:var(--card);border:1px solid var(--bor);border-radius:8px;margin-bottom:10px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.ssec-hdr{padding:9px 14px;background:#fafbfc;border-bottom:1px solid var(--bor);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--t3);display:flex;align-items:center}
+.ssec-bdy{padding:12px 14px}
+.srow{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.srow:last-child{margin-bottom:0}
+.ssel{padding:5px 8px;border:1px solid var(--bor);border-radius:5px;font-size:12px;color:var(--t1);background:var(--card)}
+.snum{width:80px;padding:5px 8px;border:1px solid var(--bor);border-radius:5px;font-size:12px;color:var(--t1);text-align:right}
+.sbtn{font-size:11px;padding:4px 9px;border:1px solid var(--bor);border-radius:5px;background:#f5f6f8;color:var(--t2);cursor:pointer}
+.sbtn:hover{background:var(--bor)}
+.tgl-wrap{position:relative;width:36px;min-width:36px;max-width:36px;height:20px;flex-shrink:0;flex-grow:0}
+.tgl-wrap input{opacity:0;width:0;height:0;position:absolute}
+.tgl{position:absolute;inset:0;background:#d0d5dd;border-radius:10px;cursor:pointer;transition:.2s}
+.tgl-wrap input:checked+.tgl{background:var(--g,#1D9E75)}
+.tgl:before{content:'';position:absolute;width:16px;height:16px;left:2px;top:2px;background:#fff;border-radius:50%;transition:.2s}
+.tgl-wrap input:checked+.tgl:before{transform:translateX(16px)}
+#dash-settings-coll{background:var(--card);border:1px solid var(--bor);border-radius:8px;margin-bottom:10px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.dcoll-hdr{display:flex;align-items:center;gap:8px;padding:10px 14px;cursor:pointer;background:#fafbfc;user-select:none;border-bottom:1px solid transparent}
+.dcoll-hdr.open{border-bottom-color:var(--bor)}
+.dcoll-bdy{display:none;padding:12px 14px}
+.dcoll-bdy.open{display:block}
+
+/* ── THROTTLE SLIDERS ──────────────────────────────────────────────── */
+.throttle-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.throttle-row:last-child{margin-bottom:0}
+.throttle-label{font-size:12px;color:var(--t2);width:140px;flex-shrink:0}
+.throttle-wrap{flex:1;position:relative}
+.throttle-slider{width:100%;height:6px;border-radius:3px;outline:none;cursor:pointer;-webkit-appearance:none;appearance:none}
+.throttle-slider::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:#fff;border:2.5px solid var(--g);box-shadow:0 1px 4px rgba(0,0,0,.2);cursor:pointer}
+.throttle-slider.red::-webkit-slider-thumb{border-color:var(--re)}
+.throttle-slider.green::-webkit-slider-thumb{border-color:var(--g)}
+.throttle-val{font-size:12px;font-weight:700;font-family:var(--mono);color:var(--t2);min-width:44px;text-align:right;flex-shrink:0}
+.throttle-default{font-size:10px;color:var(--t4);margin-left:4px}
+.throttle-warn{display:none;background:#fdf0f0;border:1px solid var(--re);border-radius:8px;padding:8px 12px;font-size:11px;color:var(--re);margin-top:10px;line-height:1.5}
+.throttle-warn.show{display:block}
+
+/* ── ABOUT MODAL ─────────────────────────────────────────────────── */
+#about-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9998;align-items:center;justify-content:center;padding:20px}
+#about-overlay.show{display:flex}
+#about-card{background:#fff;border-radius:16px;width:100%;max-width:720px;max-height:88vh;display:flex;flex-direction:column;box-shadow:0 24px 64px rgba(0,0,0,.4);overflow:hidden}
+.about-hdr{background:#0e1a28;padding:18px 24px;display:flex;align-items:center;gap:14px;flex-shrink:0}
+.about-logo{width:36px;height:36px;background:#1D9E75;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.about-hdr-text h2{font-size:20px;font-weight:700;color:#fff;margin:0 0 2px}
+.about-hdr-text p{font-size:12px;color:#7a8fa8;margin:0}
+.about-close-btn{margin-left:auto;background:rgba(255,255,255,.12);border:none;color:#fff;width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s}
+.about-close-btn:hover{background:rgba(255,255,255,.22)}
+.about-body{flex:1;overflow-y:auto;padding:0}
+.about-current{background:linear-gradient(135deg,#e8f7f2,#f0faf6);border-bottom:2px solid #1D9E75;padding:16px 24px}
+.about-current-ver{font-size:28px;font-weight:700;font-family:monospace;color:#0F6E56;line-height:1}
+.about-current-lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:#1D9E75;margin-bottom:4px}
+.about-current-desc{font-size:12px;color:#4a5568;margin-top:6px;line-height:1.5}
+.about-search-wrap{padding:12px 24px 8px;border-bottom:1px solid #e2e8f0;flex-shrink:0;background:#fafbfc}
+.about-search{width:100%;padding:8px 12px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:13px;outline:none;transition:border-color .2s}
+.about-search:focus{border-color:#1D9E75}
+.about-table-wrap{padding:0 24px 20px;overflow-x:auto}
+.about-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:12px}
+.about-table thead th{background:#f5f6f8;padding:8px 10px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#7a8fa8;border-bottom:2px solid #e2e8f0;white-space:nowrap}
+.about-table tbody tr{border-bottom:1px solid #f0f4f8;transition:background .1s}
+.about-table tbody tr:hover{background:#f8fbf9}
+.about-table tbody tr.current-ver{background:#e8f7f2}
+.about-table td{padding:8px 10px;vertical-align:top}
+.about-ver-badge{display:inline-block;font-family:monospace;font-size:11px;font-weight:700;padding:2px 7px;border-radius:5px;background:#f0f4f8;color:#3a4f6a;white-space:nowrap}
+.about-ver-badge.current{background:#1D9E75;color:#fff}
+.about-change-text{color:#1a2332;line-height:1.5;font-size:12px}
+
+</style>
+</head>
+<body>
+
+<!-- ══ TOP BAR ══════════════════════════════════ -->
+<div id="topbar">
+  <div class="tb-logo">
+    <div class="tb-logo-icon">🕐</div>
+    <div class="tb-logo-text">Cure<span>Log</span></div>
+    <div class="tb-tag">DASHBOARD</div>
+  </div>
+  <div class="tb-sp"></div>
+  <div class="tb-live" id="tb-live">
+    <div class="tb-live-dot" id="live-dot"></div>
+    <span class="tb-live-txt" id="live-txt">Offline</span>
+  </div>
+  <button onclick="togDashSettings()" id="dash-gear-btn" title="Settings"
+    style="background:#fff;border:1px solid var(--bor);cursor:pointer;padding:5px;border-radius:8px;color:var(--t3);line-height:1;transition:all .2s;box-shadow:0 1px 3px rgba(0,0,0,.06);display:flex;align-items:center;justify-content:center;width:32px;height:32px"
+    onmouseover="this.style.color='var(--t1)';this.style.transform='rotate(30deg)'" onmouseout="this.style.color='var(--t3)';this.style.transform='rotate(0deg)'">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+  </button>
+  <button onclick="openAbout()" style="padding:4px 10px;border:1px solid rgba(255,255,255,.2);border-radius:7px;background:rgba(255,255,255,.07);color:rgba(255,255,255,.85);font-size:11px;font-weight:600;cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(255,255,255,.16)'" onmouseout="this.style.background='rgba(255,255,255,.07)'">ℹ About</button>
+  <div class="tb-ver" id="dash-ver">v1.0.0</div>
+</div>
+
+<!-- ══ MAIN ═════════════════════════════════════ -->
+<div id="main">
+
+  <!-- ⚙ Settings collapsible -->
+  <div id="dash-settings-coll">
+    <div class="dcoll-hdr" id="dcoll-hdr" onclick="togDashSettings()">
+      <span style="font-size:13px">⚙</span>
+      <span style="font-size:13px;font-weight:700;color:var(--t1);flex:1">Settings</span>
+      <span style="font-size:10px;color:var(--t3);font-weight:400">Display · Control Limits · Chart Lines</span>
+      <button onclick="togDashSettings();event.stopPropagation()"
+        style="margin-left:12px;background:none;border:none;cursor:pointer;color:var(--t3);font-size:16px;line-height:1;padding:0 2px">✕</button>
+    </div>
+    <div class="dcoll-bdy" id="dcoll-bdy">
+      <div style="padding:4px 2px 8px">
+
+        <!-- Row 1: Display + Control Limits -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+          <div class="ssec" style="margin-bottom:0">
+            <div class="ssec-hdr">🖥 Display</div>
+            <div class="ssec-bdy">
+              <div class="srow">
+                <label style="flex:1;font-size:12px">Temperature unit</label>
+                <select class="ssel" id="ds-tunit" onchange="applyDashSettings()">
+                  <option value="F">°F Fahrenheit</option>
+                  <option value="C">°C Celsius</option>
+                </select>
+              </div>
+              <div class="srow">
+                <label style="flex:1;font-size:12px">Pressure unit</label>
+                <select class="ssel" id="ds-punit" onchange="applyDashSettings()">
+                  <option value="PSI">PSI</option>
+                  <option value="Bar">Bar</option>
+                  <option value="kPa">kPa</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="ssec" style="margin-bottom:0">
+            <div class="ssec-hdr">📏 Control Limits</div>
+            <div class="ssec-bdy">
+              <div class="srow">
+                <label style="flex:1;font-size:12px">UCL</label>
+                <label class="tgl-wrap"><input type="checkbox" id="ds-ucl-en" checked onchange="applyDashSettings()"><span class="tgl"></span></label>
+                <input type="number" class="snum" id="ds-ucl" value="40" onchange="applyDashSettings()" style="width:64px">
+                <span style="font-size:11px;color:var(--t3)">PSI</span>
+              </div>
+              <div class="srow">
+                <label style="flex:1;font-size:12px">LCL</label>
+                <label class="tgl-wrap"><input type="checkbox" id="ds-lcl-en" checked onchange="applyDashSettings()"><span class="tgl"></span></label>
+                <input type="number" class="snum" id="ds-lcl" value="5" onchange="applyDashSettings()" style="width:64px">
+                <span style="font-size:11px;color:var(--t3)">PSI</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chart Scale (Y-Axis) -->
+        <div class="ssec" style="margin-bottom:10px">
+          <div class="ssec-hdr">📐 Chart Scale (Y-Axis) <span style="font-size:10px;font-weight:400;text-transform:none;letter-spacing:0;margin-left:4px;color:var(--t3)">Set min/max or use Auto</span></div>
+          <div class="ssec-bdy">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+              <div>
+                <div style="font-size:11px;font-weight:700;color:#1D9E75;margin-bottom:7px">● Pressure (PSI) — Left Axis</div>
+                <div class="srow" style="margin-bottom:6px">
+                  <label style="font-size:11px;flex:1">Auto scale</label>
+                  <label class="tgl-wrap"><input type="checkbox" id="ds-yp-auto" checked onchange="applyDashSettings()"><span class="tgl"></span></label>
+                </div>
+                <div id="ds-yp-range-wrap" style="display:none">
+                  <div class="srow" style="margin-bottom:5px">
+                    <label style="font-size:11px;width:36px;flex-shrink:0">Min</label>
+                    <input type="number" class="snum" id="ds-yp-min" value="0" step="1" onchange="applyDashSettings()" style="width:70px">
+                    <span style="font-size:11px;color:var(--t3)" id="ds-yp-unit-lbl">PSI</span>
+                  </div>
+                  <div class="srow">
+                    <label style="font-size:11px;width:36px;flex-shrink:0">Max</label>
+                    <input type="number" class="snum" id="ds-yp-max" value="60" step="1" onchange="applyDashSettings()" style="width:70px">
+                    <span style="font-size:11px;color:var(--t3)" id="ds-yp-unit-lbl2">PSI</span>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div style="font-size:11px;font-weight:700;color:#378ADD;margin-bottom:7px">● Temperature — Right Axis</div>
+                <div class="srow" style="margin-bottom:6px">
+                  <label style="font-size:11px;flex:1">Auto scale</label>
+                  <label class="tgl-wrap"><input type="checkbox" id="ds-yt-auto" checked onchange="applyDashSettings()"><span class="tgl"></span></label>
+                </div>
+                <div id="ds-yt-range-wrap" style="display:none">
+                  <div class="srow" style="margin-bottom:5px">
+                    <label style="font-size:11px;width:36px;flex-shrink:0">Min</label>
+                    <input type="number" class="snum" id="ds-yt-min" value="50" step="1" onchange="applyDashSettings()" style="width:70px">
+                    <span style="font-size:11px;color:var(--t3)" id="ds-yt-unit-lbl">°F</span>
+                  </div>
+                  <div class="srow">
+                    <label style="font-size:11px;width:36px;flex-shrink:0">Max</label>
+                    <input type="number" class="snum" id="ds-yt-max" value="120" step="1" onchange="applyDashSettings()" style="width:70px">
+                    <span style="font-size:11px;color:var(--t3)" id="ds-yt-unit-lbl2">°F</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Y-Axis Precision -->
+        <div class="ssec" style="margin-bottom:10px">
+          <div class="ssec-hdr">🔢 Y-Axis Precision <span style="font-size:10px;font-weight:400;text-transform:none;letter-spacing:0;margin-left:6px;color:var(--t4)">Decimal places on chart axis labels</span></div>
+          <div class="ssec-bdy">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+              <div>
+                <div style="font-size:11px;font-weight:700;color:#1D9E75;margin-bottom:6px">● Pressure (PSI)</div>
+                <div class="srow">
+                  <label style="flex:1;font-size:11px">Decimal places</label>
+                  <select class="ssel" id="ds-psi-dec" onchange="applyDashSettings()">
+                    <option value="0">None &nbsp;(22)</option>
+                    <option value="1" selected>1 place (22.1)</option>
+                    <option value="2">2 places (22.11)</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <div style="font-size:11px;font-weight:700;color:#378ADD;margin-bottom:6px">● Temperature</div>
+                <div class="srow">
+                  <label style="flex:1;font-size:11px">Decimal places</label>
+                  <select class="ssel" id="ds-tmp-dec" onchange="applyDashSettings()">
+                    <option value="0">None &nbsp;(80)</option>
+                    <option value="1" selected>1 place (80.4)</option>
+                    <option value="2">2 places (80.44)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chart Line Styles -->
+        <div class="ssec" style="margin-bottom:0">
+          <div class="ssec-hdr">✏ Chart Line Styles <span style="font-size:10px;font-weight:400;text-transform:none;letter-spacing:0;margin-left:6px;color:var(--t4)">Color · Style · Thickness</span></div>
+          <div class="ssec-bdy">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+              <div>
+                <div style="font-size:11px;font-weight:700;color:#1D9E75;margin-bottom:6px">● Inlet Press (S1)</div>
+                <div style="display:flex;align-items:center;gap:6px">
+                  <input type="color" id="ds-clr-s1" value="#1D9E75" onchange="applyDashSettings()"
+                    style="width:34px;height:28px;border:1px solid var(--bor);border-radius:5px;padding:1px;cursor:pointer;flex-shrink:0">
+                  <select class="ssel" id="ds-sty-s1" onchange="applyDashSettings()" style="flex:1">
+                    <option value="solid" selected>Solid</option>
+                    <option value="dashed">Dashed</option>
+                    <option value="dotdash">Dot-Dash</option>
+                  </select>
+                  <select class="ssel" id="ds-wid-s1" onchange="applyDashSettings()">
+                    <option value="1.5">Thin</option>
+                    <option value="2" selected>Medium</option>
+                    <option value="3">Thick</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <div style="font-size:11px;font-weight:700;color:#378ADD;margin-bottom:6px">● Inlet Temp (S2)</div>
+                <div style="display:flex;align-items:center;gap:6px">
+                  <input type="color" id="ds-clr-s2" value="#378ADD" onchange="applyDashSettings()"
+                    style="width:34px;height:28px;border:1px solid var(--bor);border-radius:5px;padding:1px;cursor:pointer;flex-shrink:0">
+                  <select class="ssel" id="ds-sty-s2" onchange="applyDashSettings()" style="flex:1">
+                    <option value="solid">Solid</option>
+                    <option value="dashed" selected>Dashed</option>
+                    <option value="dotdash">Dot-Dash</option>
+                  </select>
+                  <select class="ssel" id="ds-wid-s2" onchange="applyDashSettings()">
+                    <option value="1.5" selected>Thin</option>
+                    <option value="2">Medium</option>
+                    <option value="3">Thick</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Update Performance -->
+        <div class="ssec" style="margin-bottom:0">
+          <div class="ssec-hdr">⚡ Live Update Performance
+            <span style="font-size:10px;font-weight:400;text-transform:none;letter-spacing:0;margin-left:6px;color:var(--t4)">Throttle intervals — resets to defaults on startup</span>
+          </div>
+          <div class="ssec-bdy">
+
+            <div class="throttle-row">
+              <span class="throttle-label">Stats &amp; Tiles</span>
+              <div class="throttle-wrap">
+                <input type="range" class="throttle-slider" id="thr-stats"
+                  min="500" max="10000" step="500" value="1500"
+                  oninput="onThrSlider('stats',this.value)">
+              </div>
+              <span class="throttle-val" id="thr-stats-val">1.5s</span>
+              <span class="throttle-default">(default 1.5s)</span>
+            </div>
+
+            <div class="throttle-row">
+              <span class="throttle-label">Chart</span>
+              <div class="throttle-wrap">
+                <input type="range" class="throttle-slider" id="thr-chart"
+                  min="500" max="15000" step="500" value="2000"
+                  oninput="onThrSlider('chart',this.value)">
+              </div>
+              <span class="throttle-val" id="thr-chart-val">2.0s</span>
+              <span class="throttle-default">(default 2.0s)</span>
+            </div>
+
+            <div class="throttle-row">
+              <span class="throttle-label">Readings Table</span>
+              <div class="throttle-wrap">
+                <input type="range" class="throttle-slider" id="thr-table"
+                  min="2000" max="30000" step="1000" value="8000"
+                  oninput="onThrSlider('table',this.value)">
+              </div>
+              <span class="throttle-val" id="thr-table-val">8.0s</span>
+              <span class="throttle-default">(default 8.0s)</span>
+            </div>
+
+            <div class="throttle-warn" id="thr-warn">
+              ⚠ One or more intervals are below the recommended defaults. The dashboard
+              may fall behind live events on long sessions or slower devices.
+              Defaults: Stats 1.5s · Chart 2.0s · Table 8.0s
+            </div>
+
+            <div style="margin-top:12px">
+              <button onclick="resetThrottles()"
+                style="padding:6px 14px;border:1.5px solid var(--bor);border-radius:8px;background:var(--card);color:var(--t2);font-size:12px;font-weight:600;cursor:pointer">
+                ↺ Reset to Defaults
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Shot Selector -->
+  <div id="selector-card">
+    <div class="sel-title">Select Shot</div>
+    <div class="sel-grid">
+      <div class="sel-field">
+        <label>Job #</label>
+        <select id="sel-job" onchange="onJobChange()">
+          <option value="">Loading…</option>
+        </select>
+      </div>
+      <div class="sel-field">
+        <label>Shot #</label>
+        <select id="sel-shot" onchange="onShotChange()" disabled>
+          <option value="">— Select Job —</option>
+        </select>
+      </div>
+      <div class="sel-field">
+        <label>Segment #</label>
+        <select id="sel-seg" onchange="onSegChange()" disabled>
+          <option value="">— Select Shot —</option>
+        </select>
+      </div>
+      <div class="sel-field">
+        <label>Truck ID</label>
+        <select id="sel-truck" disabled>
+          <option value="">— Select Seg —</option>
+        </select>
+      </div>
+      <div style="display:flex;gap:6px;align-items:flex-end">
+        <button id="btn-load" disabled onclick="loadShot()">▶ Load Shot</button>
+        <button id="btn-clear" onclick="clearShot()">✕ Clear</button>
+      </div>
+    </div>
+    <div id="sel-status"></div>
+  </div>
+
+  <!-- Live session bar (shown when data loaded) -->
+  <div id="live-bar">
+    <div class="tb-live-dot on" style="width:9px;height:9px;flex-shrink:0"></div>
+    <div class="live-session">
+      <span id="lb-path">—</span>
+    </div>
+    <div class="live-sp"></div>
+    <div class="live-rdg">Merged rows: <b id="lb-rdg">0</b></div>
+    <div class="live-elapsed" id="lb-elapsed" style="display:none"></div>
+  </div>
+
+  <!-- Content area -->
+  <div id="content">
+    <div id="empty-state">
+      <div class="es-icon">📊</div>
+      <div class="es-title">No shot selected</div>
+      <div class="es-sub">Select a Job, Shot, Segment and Truck above then click Load Shot to view data</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══ JAVASCRIPT ════════════════════════════════ -->
+<script>
+const DB_VER = '1.7.21';
+
+// ── FIREBASE ─────────────────────────────────────
+const FB_CFG = {
+  apiKey:            'AIzaSyD3FSkjfxfGPnVQ1i7IIHTcGdToBo93ORk',
+  authDomain:        'curelog-phase1.firebaseapp.com',
+  databaseURL:       'https://curelog-phase1-default-rtdb.firebaseio.com',
+  projectId:         'curelog-phase1',
+  storageBucket:     'curelog-phase1.firebasestorage.app',
+  messagingSenderId: '306221200717',
+  appId:             '1:306221200717:web:934242d11d9a653e23b304'
+};
+
+// ── STATE ─────────────────────────────────────────
+let db = null;
+let liveListener = null;   // active Firebase listener ref
+let dashChart = null;
+
+const D = {
+  // raw data from Firebase — keyed by truck|second
+  rows: {},
+  // sorted merged array for display
+  sorted: [],
+  // metadata
+  path: null,
+  truckId: null,
+  uclEn: true, ucl: 40,
+  lclEn: true, lcl: 5,
+  tUnit: 'F',
+  s1Color:'#1D9E75', s1Style:'solid',  s1Width:2,
+  s2Color:'#378ADD', s2Style:'dashed', s2Width:1.5,
+  pUnit:'PSI', psiDecimals:1, tmpDecimals:1,
+  yPauto:true, yPmin:0, yPmax:60, yTauto:true, yTmin:50, yTmax:120,
+  zoomMins: 'all',
+  // stats
+  maxPsi: null, minPsi: null,
+  maxTemp: null, minTemp: null,
+  firstTs: null, lastTs: null, liveStart: null, sessStartMs: null,
+  tubeDia: null, tubeThick: null, tubeLen: null,
+  s1Listener: null, s2Listener: null, renderHandle: null, chartHandle: null, tableHandle: null,
+  // throttle intervals (ms) — always reset to defaults on load
+  thrStats: 1500, thrChart: 2000, thrTable: 8000,
+};
+
+const $ = id => document.getElementById(id);
+const cToF = c => c * 9/5 + 32;
+const pConv = (v,u) => u==='Bar'?(v*0.0689476):u==='kPa'?(v*6.89476):v;
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+
+// ── INCREMENTAL LIVE UPDATE ──────────────────────────────────────────────
+function processNewReading(src, r) {
+  const k = Math.floor(r.tsMs / 1000) * 1000;
+  if (D.sessStartMs && k < D.sessStartMs - 5000) return;
+  let row = D.rows[k];
+  if (!row) {
+    row = { tsMs:k, ts:new Date(k).toISOString(), psi:null, tempC:null,
+            truck:r.truckId||D.truckId, pairedGap:null, approx:false };
+    D.rows[k] = row;
+    const ins = D.sorted.findIndex(x => x.tsMs > k);
+    if (ins === -1) D.sorted.push(row);
+    else D.sorted.splice(ins, 0, row);
+  }
+  if (src === 's1' && r.pressRaw != null) { row.psi = r.pressRaw; row.truck = r.truckId||D.truckId; }
+  if (src === 's2' && r.tempC   != null)   row.tempC = r.tempC;
+  if (row.psi   !== null) {
+    if (D.maxPsi  === null || row.psi   > D.maxPsi)  D.maxPsi  = row.psi;
+    if (D.minPsi  === null || row.psi   < D.minPsi)  D.minPsi  = row.psi;
+  }
+  if (row.tempC !== null) {
+    const tv = D.tUnit==='F' ? row.tempC*9/5+32 : row.tempC;
+    if (D.maxTemp === null || tv > D.maxTemp) D.maxTemp = tv;
+    if (D.minTemp === null || tv < D.minTemp) D.minTemp = tv;
+  }
+  D.lastTs = Math.max(D.lastTs || 0, k);
+  throttledRenderAll();   // stats, tiles, live bar
+  throttledRenderChart(); // chart
+  throttledRenderTable(); // table (slow)
+}
+
+// ── TIERED RENDER THROTTLES ──────────────────────────────────────────────
+// Tier A — stats, tiles, live bar: cheap, run every 1.5s
+function throttledRenderAll() {
+  if (D.renderHandle) return;
+  D.renderHandle = setTimeout(() => {
+    D.renderHandle = null;
+    renderStats();
+    renderTiles();
+    updateLiveBar();
+  }, D.thrStats);
+}
+// Tier B — chart: append new points efficiently, run every 2s
+function throttledRenderChart() {
+  if (D.chartHandle) return;
+  D.chartHandle = setTimeout(() => {
+    D.chartHandle = null;
+    renderChart();
+  }, D.thrChart);
+}
+// Tier C — table rebuild: expensive, run every 8s (recent rows only)
+function throttledRenderTable() {
+  if (D.tableHandle) return;
+  D.tableHandle = setTimeout(() => {
+    D.tableHandle = null;
+    renderTable();
+  }, D.thrTable);
+}
+
+
+// ── THROTTLE SLIDER LOGIC ─────────────────────────────────────────────────
+const THR_DEFAULTS = { stats: 1500, chart: 2000, table: 8000 };
+
+function onThrSlider(key, rawVal) {
+  const val = parseInt(rawVal);
+  D['thr' + key.charAt(0).toUpperCase() + key.slice(1)] = val;
+  const dispSec = (val / 1000).toFixed(1) + 's';
+  const valEl  = document.getElementById('thr-' + key + '-val');
+  const slider = document.getElementById('thr-' + key);
+  if (valEl) valEl.textContent = dispSec;
+  // Color: red if faster than default (lower ms = more load), green if slower
+  if (slider) {
+    const def = THR_DEFAULTS[key];
+    slider.style.background = buildSliderGradient(slider, val, def);
+    slider.className = 'throttle-slider ' + (val < def ? 'red' : val > def ? 'green' : '');
+  }
+  updateThrottleWarn();
+}
+
+function buildSliderGradient(slider, val, def) {
+  const min  = parseFloat(slider.min);
+  const max  = parseFloat(slider.max);
+  const pct  = ((val - min) / (max - min)) * 100;
+  const defPct = ((def - min) / (max - min)) * 100;
+  if (val < def) {
+    // Faster than default → red up to current, grey after
+    return 'linear-gradient(to right, #E24B4A 0%, #E24B4A ' + pct + '%, #e2e8f0 ' + pct + '%, #e2e8f0 100%)';
+  } else if (val > def) {
+    // Slower than default → green up to current, grey after
+    return 'linear-gradient(to right, #1D9E75 0%, #1D9E75 ' + pct + '%, #e2e8f0 ' + pct + '%, #e2e8f0 100%)';
+  } else {
+    // At default → solid brand green to pct, grey after
+    return 'linear-gradient(to right, #1D9E75 0%, #1D9E75 ' + pct + '%, #e2e8f0 ' + pct + '%, #e2e8f0 100%)';
+  }
+}
+
+function updateThrottleWarn() {
+  const warn = document.getElementById('thr-warn');
+  if (!warn) return;
+  const anyFaster = D.thrStats < THR_DEFAULTS.stats ||
+                    D.thrChart < THR_DEFAULTS.chart ||
+                    D.thrTable < THR_DEFAULTS.table;
+  warn.classList.toggle('show', anyFaster);
+}
+
+function resetThrottles() {
+  ['stats','chart','table'].forEach(key => {
+    const def = THR_DEFAULTS[key];
+    const slider = document.getElementById('thr-' + key);
+    if (slider) { slider.value = def; onThrSlider(key, def); }
+  });
+}
+
+function initThrottleSliders() {
+  // Always reset to defaults on startup — never persist these to localStorage
+  resetThrottles();
+}
+
+
+const CHANGELOG = [
+  ['1.7.20','Live Update Performance sliders added to settings — adjust throttle intervals on the fly; color-coded (red=faster/higher load, green=slower/safer); resets to defaults on every startup'],
+  ['1.7.19','Tiered render throttles: stats/tiles 1.5s, chart 2s, readings table 8s — eliminates lag on long sessions; table capped at 500 newest display rows'],
+  ['1.7.18','CSV export includes full session header block with version, app name, truck/job/shot/seg, tube specs'],
+  ['1.7.17','Live bar font/weight/color matched exactly to truck app (11px/500/t2); values use bold tags; separators matched'],
+  ['1.7.16','Live bar text darkened; settings button replaced with SVG gear icon matching truck app; tile min/max font 15px → 20px and darker color'],
+  ['1.7.15','Session data and tube specs added above chart legend in all apps — visible in screenshots'],
+  ['1.7.14','CSV export file naming convention: Dashboard - Readings Log - TVK# - Job - Shot - Seg - Date.csv'],
+  ['1.7.13','Version string in CSV export includes app name: (CureLog Dashboard)'],
+  ['1.7.12','Session info strip added above readings table rows'],
+  ['1.7.11','Tube specs added to live bar inline after Seg number'],
+  ['1.7.10','Tube thickness unit changed to mm throughout'],
+  ['1.7.9','Tube specs (diameter, thickness, length) read from Firebase _session; displayed in Duration card'],
+  ['1.7.8','Listener changed from on(value) full-reload to once() + child_added incremental — eliminates 10-minute lag on long sessions'],
+  ['1.7.7','D.sorted filtered by sessStartMs — rows before session start excluded; prevents old Firebase data inflating counts'],
+  ['1.7.6','Dashboard reads _session.startMs from Firebase; duration and timers now match truck app exactly'],
+  ['1.7.5','Live bar and stats duration both use D.lastTs - D.firstTs (actual data span)'],
+  ['1.7.4','Default zoom changed from 5m to All; table row cap removed; zoom resets to All on every shot load'],
+  ['1.7.3','Live bar elapsed timer fixed to use wall-clock since shot load — was showing inflated duration from old Firebase data'],
+  ['1.7.2','Fixed crash from dead DOM references to removed stat cards (st-maxp/minp/maxt/mint)'],
+  ['1.7.1','Removed Max/Min PSI and Max/Min Temp stat cards — data already shown in tiles'],
+  ['1.7.0','Pressure unit selector (PSI/Bar/kPa) added; Chart Scale Y-axis min/max controls added; pConv() conversion helper'],
+  ['1.6.3','spanGaps:true added to both chart datasets — lines bridge null gaps from S1 BLE dropouts'],
+  ['1.6.2','Merge logic rewritten: consumedS2 Set eliminates false ~ on every other row; approx only true for cross-bucket pairings'],
+  ['1.6.1','Y-axis decimal precision controls added (0/1/2 decimal places per axis)'],
+  ['1.6.0','Initial release — shot selector, live Firebase, chart, readings table, settings'],
+];
+
+// ── ABOUT MODAL ───────────────────────────────────────────────────────────
+function openAbout() {
+  const overlay = document.getElementById('about-overlay');
+  if (!overlay) return;
+  // Populate current version
+  const curVer  = typeof VER !== 'undefined' ? VER : (typeof DB_VER !== 'undefined' ? DB_VER : '—');
+  const curEntry = CHANGELOG.find(c => c[0] === curVer) || CHANGELOG[0];
+  const curVerEl = document.getElementById('about-cur-ver');
+  const curDescEl = document.getElementById('about-cur-desc');
+  if (curVerEl)  curVerEl.textContent = 'v' + curVer;
+  if (curDescEl) curDescEl.textContent = curEntry ? curEntry[1] : '';
+  // Render table
+  renderAboutTable('');
+  // Clear search
+  const s = document.getElementById('about-search');
+  if (s) s.value = '';
+  overlay.classList.add('show');
+}
+
+function closeAbout() {
+  const overlay = document.getElementById('about-overlay');
+  if (overlay) overlay.classList.remove('show');
+}
+
+function renderAboutTable(filter) {
+  const tbody = document.getElementById('about-tbody');
+  if (!tbody) return;
+  const curVer = typeof VER !== 'undefined' ? VER : (typeof DB_VER !== 'undefined' ? DB_VER : '');
+  const f = filter.toLowerCase();
+  const rows = CHANGELOG.filter(([ver, desc]) =>
+    !f || ver.includes(f) || desc.toLowerCase().includes(f)
+  );
+  tbody.innerHTML = rows.map(([ver, desc]) => {
+    const isCur = ver === curVer;
+    return '<tr class="' + (isCur ? 'current-ver' : '') + '">' +
+      '<td><span class="about-ver-badge ' + (isCur ? 'current' : '') + '">v' + ver + '</span></td>' +
+      '<td><span class="about-change-text">' + desc + '</span></td>' +
+      '</tr>';
+  }).join('');
+}
+
+function filterAbout(val) {
+  renderAboutTable(val);
+}
+
+// ── INIT ──────────────────────────────────────────
+window.addEventListener('load', async () => {
+  // Set version badge
+  const vEl = $('dash-ver');
+  if (vEl) vEl.textContent = 'v' + DB_VER;
+  loadDashSettings();
+  initThrottleSliders(); // always reset throttles to defaults
+
+  try {
+    firebase.initializeApp(FB_CFG);
+    db = firebase.database();
+    setLive('on', 'Connected');
+    await loadJobList();
+  } catch(e) {
+    setLive('err', 'Firebase error');
+    setSel('Firebase connection failed: ' + e.message, 'err');
+  }
+});
+
+function setLive(state, txt) {
+  const dot = $('live-dot'), t = $('live-txt');
+  dot.className = 'tb-live-dot' + (state === 'on' ? ' on' : state === 'err' ? ' err' : '');
+  t.className   = 'tb-live-txt' + (state === 'on' ? ' on' : '');
+  t.textContent = txt;
+}
+function setSel(msg, cls) {
+  const el = $('sel-status');
+  el.textContent = msg;
+  el.className = cls || '';
+}
+
+// ── CASCADING DROPDOWNS ───────────────────────────
+async function loadJobList() {
+  setSel('Loading jobs…');
+  try {
+    const snap = await db.ref('shots').once('value');
+    const data = snap.val();
+    const sel = $('sel-job');
+    sel.innerHTML = '<option value="">— Select Job —</option>';
+    if (!data) { setSel('No shots found in database', 'err'); return; }
+    Object.keys(data).sort().forEach(job => {
+      const o = document.createElement('option');
+      o.value = job; o.textContent = job;
+      sel.appendChild(o);
+    });
+    setSel('');
+  } catch(e) { setSel('Failed to load jobs: ' + e.message, 'err'); }
+}
+
+async function onJobChange() {
+  const job = $('sel-job').value;
+  resetDropdown('sel-shot', '— Select Shot —');
+  resetDropdown('sel-seg',  '— Select Shot —');
+  resetDropdown('sel-truck','— Select Seg —');
+  $('sel-shot').disabled = true;
+  $('sel-seg').disabled  = true;
+  $('sel-truck').disabled= true;
+  $('btn-load').disabled = true;
+  if (!job) { setSel(''); return; }
+  setSel('Loading shots…');
+  try {
+    const snap = await db.ref('shots/' + job).once('value');
+    const data = snap.val();
+    const sel = $('sel-shot');
+    sel.innerHTML = '<option value="">— Select Shot —</option>';
+    Object.keys(data || {}).sort().forEach(s => {
+      const o = document.createElement('option'); o.value = s; o.textContent = s; sel.appendChild(o);
+    });
+    sel.disabled = false;
+    setSel('');
+  } catch(e) { setSel('Failed to load shots: ' + e.message, 'err'); }
+}
+
+async function onShotChange() {
+  const job = $('sel-job').value, shot = $('sel-shot').value;
+  resetDropdown('sel-seg',  '— Select Segment —');
+  resetDropdown('sel-truck','— Select Seg —');
+  $('sel-seg').disabled   = true;
+  $('sel-truck').disabled = true;
+  $('btn-load').disabled  = true;
+  if (!shot) return;
+  setSel('Loading segments…');
+  try {
+    const snap = await db.ref('shots/' + job + '/' + shot).once('value');
+    const data = snap.val();
+    const sel = $('sel-seg');
+    sel.innerHTML = '<option value="">— Select Segment —</option>';
+    Object.keys(data || {}).sort().forEach(s => {
+      const o = document.createElement('option'); o.value = s; o.textContent = s; sel.appendChild(o);
+    });
+    sel.disabled = false;
+    setSel('');
+  } catch(e) { setSel('Failed to load segments: ' + e.message, 'err'); }
+}
+
+async function onSegChange() {
+  const job = $('sel-job').value, shot = $('sel-shot').value, seg = $('sel-seg').value;
+  resetDropdown('sel-truck','— Select Truck —');
+  $('sel-truck').disabled = true;
+  $('btn-load').disabled  = true;
+  if (!seg) return;
+  setSel('Loading trucks…');
+  try {
+    const snap = await db.ref('shots/' + job + '/' + shot + '/' + seg).once('value');
+    const data = snap.val();
+    const sel = $('sel-truck');
+    sel.innerHTML = '<option value="">— Select Truck —</option>';
+    Object.keys(data || {}).sort().forEach(t => {
+      const o = document.createElement('option'); o.value = t; o.textContent = t; sel.appendChild(o);
+    });
+    sel.disabled = false;
+    $('btn-load').disabled = false;
+    setSel('');
+  } catch(e) { setSel('Failed to load trucks: ' + e.message, 'err'); }
+}
+
+function resetDropdown(id, placeholder) {
+  const el = $(id);
+  el.innerHTML = '<option value="">' + placeholder + '</option>';
+  el.disabled = true;
+}
+
+// ── LOAD SHOT ─────────────────────────────────────
+async function loadShot() {
+  const job   = $('sel-job').value;
+  const shot  = $('sel-shot').value;
+  const seg   = $('sel-seg').value;
+  const truck = $('sel-truck').value;
+  if (!job || !shot || !seg || !truck) { setSel('Please select all fields', 'err'); return; }
+
+  // Detach any existing listener
+  if (liveListener)   { liveListener.off();   liveListener = null; }
+  if (D.s1Listener)   { D.s1Listener.off();  D.s1Listener = null; }
+  if (D.s2Listener)   { D.s2Listener.off();  D.s2Listener = null; }
+  if (D.renderHandle) { clearTimeout(D.renderHandle); D.renderHandle = null; }
+  if (D.chartHandle)  { clearTimeout(D.chartHandle);  D.chartHandle  = null; }
+  if (D.tableHandle)  { clearTimeout(D.tableHandle);  D.tableHandle  = null; }
+
+  // Reset data
+  D.rows = {}; D.sorted = [];
+  D.maxPsi = D.minPsi = D.maxTemp = D.minTemp = null;
+  D.firstTs = D.lastTs = null;
+  D.liveStart = Date.now();
+  D.zoomMins = 'all'; // always show full dataset when loading a shot
+  D.path = 'shots/' + job + '/' + shot + '/' + seg + '/' + truck;
+  D.truckId = truck;
+
+  setSel('Loading shot data…', '');
+  $('btn-load').disabled = true;
+  $('btn-load').textContent = 'Loading…';
+
+  // Build content area
+  buildContent();
+  D.zoomMins = 'all'; // ensure zoom starts at All for new shot
+
+  // Step 1: Full snapshot once for historical data
+  setSel('Loading shot data…');
+  try {
+    const snap = await db.ref(D.path).once('value');
+    processSnapshot(snap.val());
+  } catch(e) {
+    setSel('Failed to load: ' + e.message, 'err');
+    setLive('err', 'Error');
+    return;
+  }
+
+  // Step 2: child_added for live incremental updates only
+  const s1Ref = db.ref(D.path + '/sensor1/readings');
+  const s2Ref = db.ref(D.path + '/sensor2/readings');
+  D.s1Listener = s1Ref;
+  D.s2Listener = s2Ref;
+
+  // Get current counts so we skip already-loaded records
+  const [s1Snap, s2Snap] = await Promise.all([s1Ref.once('value'), s2Ref.once('value')]);
+  let s1Max = 0, s2Max = 0;
+  s1Snap.forEach(c => { s1Max++; });
+  s2Snap.forEach(c => { s2Max++; });
+  let s1Seen = 0, s2Seen = 0;
+
+  D.s1Listener.on('child_added', snap => {
+    s1Seen++;
+    if (s1Seen <= s1Max) return;
+    const r = snap.val();
+    if (r && r.pressRaw != null && r.tsMs) processNewReading('s1', r);
+  });
+  D.s2Listener.on('child_added', snap => {
+    s2Seen++;
+    if (s2Seen <= s2Max) return;
+    const r = snap.val();
+    if (r && r.tempC != null && r.tsMs) processNewReading('s2', r);
+  });
+
+  // Update UI state
+  $('btn-load').textContent = '▶ Load Shot';
+  $('btn-load').disabled = false;
+  $('btn-clear').style.display = '';
+  setSel('');
+
+  // Live bar
+  const tubeParts = [];
+  if (D.tubeDia)   tubeParts.push('Ø '    + D.tubeDia   + '"');
+  if (D.tubeThick) tubeParts.push('Wall ' + D.tubeThick + ' mm');
+  if (D.tubeLen)   tubeParts.push(D.tubeLen + ' ft');
+  const tubeStr = tubeParts.length > 0 ? ' &nbsp;|&nbsp; 📐 ' + tubeParts.join(' · ') : '';
+  $('lb-path').innerHTML = '<b>' + truck + '</b>&nbsp; · &nbsp;Job <b>' + job + '</b>&nbsp; · &nbsp;Shot <b>' + shot + '</b>&nbsp; · &nbsp;Seg <b>' + seg + '</b>' + tubeStr;
+  $('live-bar').classList.add('on');
+}
+
+function clearShot() {
+  if (liveListener)   { liveListener.off();   liveListener = null; }
+  if (D.s1Listener)   { D.s1Listener.off();  D.s1Listener = null; }
+  if (D.s2Listener)   { D.s2Listener.off();  D.s2Listener = null; }
+  if (D.renderHandle) { clearTimeout(D.renderHandle); D.renderHandle = null; }
+  if (D.chartHandle)  { clearTimeout(D.chartHandle);  D.chartHandle  = null; }
+  if (D.tableHandle)  { clearTimeout(D.tableHandle);  D.tableHandle  = null; }
+  D.rows = {}; D.sorted = [];
+  $('live-bar').classList.remove('on');
+  $('btn-clear').style.display = 'none';
+  $('content').innerHTML = `
+    <div id="empty-state">
+      <div class="es-icon">📊</div>
+      <div class="es-title">No shot selected</div>
+      <div class="es-sub">Select a Job, Shot, Segment and Truck above then click Load Shot</div>
+    </div>`;
+  dashChart = null;
+  setSel('');
+  setLive('on', 'Connected');
+}
+
+// ── PROCESS FIREBASE SNAPSHOT ─────────────────────
+function processSnapshot(data) {
+  if (!data) {
+    setSel('No data found for this shot', 'err');
+    setLive('err', 'No data');
+    return;
+  }
+
+  // Reset and re-parse everything from the snapshot
+  D.rows = {};
+  // Use official session start time if written by truck app
+  if (data._session) {
+    if (data._session.startMs)   D.sessStartMs = data._session.startMs;
+    if (data._session.tubeDia)   D.tubeDia     = data._session.tubeDia;
+    if (data._session.tubeThick) D.tubeThick   = data._session.tubeThick;
+    if (data._session.tubeLen)   D.tubeLen     = data._session.tubeLen;
+  }
+
+  // ── Pass 1: bucket each sensor into 1-second bins ────────────────────────
+  // Match truck app exactly: one row per second, created for any data
+  const s1rows = {}; // bucket-key → {tsMs, ts, psi, truck}
+  const s2rows = {}; // bucket-key → {tsMs, ts, tempC}
+
+  const s1 = data.sensor1?.readings || {};
+  Object.values(s1).forEach(r => {
+    if (!r || r.pressRaw == null) return;
+    const k = Math.floor(r.tsMs / 1000) * 1000;
+    // Keep the latest reading per bucket
+    if (!s1rows[k] || r.tsMs > s1rows[k].tsMs) {
+      s1rows[k] = { tsMs: r.tsMs, ts: r.ts, psi: r.pressRaw, truck: r.truckId || D.truckId };
+    }
+  });
+
+  const s2 = data.sensor2?.readings || {};
+  Object.values(s2).forEach(r => {
+    if (!r || r.tempC == null) return;
+    const k = Math.floor(r.tsMs / 1000) * 1000;
+    if (!s2rows[k] || r.tsMs > s2rows[k].tsMs) {
+      s2rows[k] = { tsMs: r.tsMs, ts: r.ts, tempC: r.tempC };
+    }
+  });
+
+  const s2Keys = Object.keys(s2rows).map(Number).sort((a,b) => a - b);
+  const s1Keys = Object.keys(s1rows).map(Number).sort((a,b) => a - b);
+
+  const findNearest = (keys, rows, targetMs, maxGapMs) => {
+    if (!keys.length) return null;
+    let lo = 0, hi = keys.length - 1, best = null, bestDist = maxGapMs + 1;
+    while (lo <= hi) {
+      const mid = (lo + hi) >> 1;
+      const dist = Math.abs(keys[mid] - targetMs);
+      if (dist < bestDist) { bestDist = dist; best = keys[mid]; }
+      if (keys[mid] < targetMs) lo = mid + 1; else hi = mid - 1;
+    }
+    return best !== null && bestDist <= maxGapMs ? { key: best, row: rows[best] } : null;
+  };
+
+  // ── Pass 2: build merged rows ─────────────────────────────────────────────
+  // Strategy:
+  //   • Every S1 bucket → one row (pair with same-bucket S2 if available,
+  //     else nearest S2 within ±1500ms)
+  //   • S2-only buckets → only add if NOT already consumed by an S1 row
+  //     (prevents double-counting S2's extra 500ms firing)
+  //
+  // approx flag: true ONLY when S2 came from a DIFFERENT bucket than S1
+  // (natural same-bucket gap of 0–999ms is NEVER marked approx)
+
+  const merged = {};
+  const consumedS2 = new Set(); // track which S2 bucket keys were used by S1 rows
+
+  // First pass: create one row per S1 bucket
+  s1Keys.forEach(k => {
+    const r1 = s1rows[k];
+    const r2same = s2rows[k]; // same-second S2 reading
+
+    if (r2same) {
+      // Perfect: both sensors in same second bucket
+      merged[k] = {
+        tsMs: r1.tsMs, ts: r1.ts,
+        psi: r1.psi, tempC: r2same.tempC,
+        truck: r1.truck,
+        pairedGap: Math.abs(r1.tsMs - r2same.tsMs),
+        approx: false   // same bucket = exact, regardless of ms gap
+      };
+      consumedS2.add(k);
+    } else {
+      // No S2 in this bucket — find nearest within ±1500ms
+      const found = findNearest(s2Keys, s2rows, r1.tsMs, 1500);
+      if (found) {
+        merged[k] = {
+          tsMs: r1.tsMs, ts: r1.ts,
+          psi: r1.psi, tempC: found.row.tempC,
+          truck: r1.truck,
+          pairedGap: Math.abs(r1.tsMs - found.row.tsMs),
+          approx: true    // cross-bucket = genuinely approximate
+        };
+        consumedS2.add(found.key);
+      } else {
+        // No S2 anywhere near — pressure-only row
+        merged[k] = {
+          tsMs: r1.tsMs, ts: r1.ts,
+          psi: r1.psi, tempC: null,
+          truck: r1.truck,
+          pairedGap: null, approx: false
+        };
+      }
+    }
+  });
+
+  // Second pass: add S2-only rows that were NOT consumed by any S1 row
+  s2Keys.forEach(k => {
+    if (consumedS2.has(k)) return; // already used
+    if (merged[k]) return;         // S1 row already in this bucket
+    // Truly orphaned S2 — no S1 paired to it
+    merged[k] = {
+      tsMs: s2rows[k].tsMs, ts: s2rows[k].ts,
+      psi: null, tempC: s2rows[k].tempC,
+      truck: D.truckId,
+      pairedGap: null, approx: false
+    };
+  });
+
+  D.rows = merged;
+
+  // Sort
+  // If we have an official session start time (written by truck app at session start),
+  // filter out any rows that predate it — these are readings from previous sessions
+  // stored at the same Firebase path.
+  let allRows = Object.values(D.rows).sort((a,b) => a.tsMs - b.tsMs);
+  if (D.sessStartMs) {
+    // Allow 5s of slack before sessStartMs for sensor readings that arrived
+    // just before the session was officially started
+    const cutoff = D.sessStartMs - 5000;
+    allRows = allRows.filter(r => r.tsMs >= cutoff);
+  }
+  D.sorted = allRows;
+
+  // Compute stats
+  D.maxPsi = D.minPsi = D.maxTemp = D.minTemp = null;
+  D.sorted.forEach(r => {
+    if (r.psi !== null) {
+      if (D.maxPsi === null || r.psi > D.maxPsi) D.maxPsi = r.psi;
+      if (D.minPsi === null || r.psi < D.minPsi) D.minPsi = r.psi;
+    }
+    if (r.tempC !== null) {
+      const td = D.tUnit === 'F' ? cToF(r.tempC) : r.tempC;
+      if (D.maxTemp === null || td > D.maxTemp) D.maxTemp = td;
+      if (D.minTemp === null || td < D.minTemp) D.minTemp = td;
+    }
+  });
+  if (D.sorted.length) {
+    // Use the official session start as firstTs so duration matches truck app exactly
+    D.firstTs = D.sessStartMs || D.sorted[0].tsMs;
+    D.lastTs  = D.sorted[D.sorted.length-1].tsMs;
+  }
+
+  setLive('on', 'Live');
+  setSel('');
+  renderAll();
+}
+
+// ── BUILD CONTENT SKELETON ────────────────────────
+function buildContent() {
+  $('content').innerHTML = `
+    <!-- Stats -->
+    <div id="stats-grid">
+      <div class="stat-card"><div class="stat-lbl">Merged Rows</div><div class="stat-val" id="st-rdg">—</div><div class="stat-sub" id="st-rdg-sub" style="font-size:10px;color:var(--t4);margin-top:2px"></div></div>
+      <div class="stat-card"><div class="stat-lbl">Duration</div><div class="stat-val" id="st-dur">—</div><div class="stat-sub" id="st-truck"></div><div id="st-tube" style="font-size:9px;color:var(--t4);margin-top:2px"></div></div>
+    </div>
+
+    <!-- Live reading tiles -->
+    <div id="reading-tiles">
+      <!-- Pressure tile -->
+      <div class="rtile s1" id="tile-press">
+        <div class="rtile-top">
+          <div class="rtile-label">Inlet Pressure</div>
+          <div class="rtile-val psi" id="tile-press-val">—<span>PSI</span></div>
+          <div class="rtile-age" id="tile-press-age"></div>
+        </div>
+        <div class="rtile-stats">
+          <div class="rtile-stat">
+            <div class="rtile-stat-lbl">Min PSI</div>
+            <div class="rtile-stat-val" id="tile-pmin">—</div>
+          </div>
+          <div class="rtile-stat">
+            <div class="rtile-stat-lbl">Max PSI</div>
+            <div class="rtile-stat-val" id="tile-pmax">—</div>
+          </div>
+        </div>
+      </div>
+      <!-- Temperature tile -->
+      <div class="rtile s2" id="tile-temp">
+        <div class="rtile-top">
+          <div class="rtile-label">Inlet Temperature</div>
+          <div class="rtile-val temp" id="tile-temp-val">—<span>°F</span></div>
+          <div class="rtile-age" id="tile-temp-age"></div>
+        </div>
+        <div class="rtile-stats">
+          <div class="rtile-stat">
+            <div class="rtile-stat-lbl">Min °</div>
+            <div class="rtile-stat-val" id="tile-tmin">—</div>
+          </div>
+          <div class="rtile-stat">
+            <div class="rtile-stat-lbl">Max °</div>
+            <div class="rtile-stat-val" id="tile-tmax">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chart -->
+    <div id="chart-card">
+      <div class="chart-hdr">
+        <!-- Session info above chart legend -->
+        <div id="chart-session-info" style="width:100%;font-size:10px;font-weight:500;color:var(--t3);padding-bottom:7px;margin-bottom:7px;border-bottom:1px solid var(--bor);display:none"></div>
+        <div class="chart-leg">
+          <div class="leg-item"><svg id="d-leg-sw-s1" width="28" height="14" viewBox="0 0 28 14" style="display:block;flex-shrink:0"></svg><span id="d-leg-lbl-s1">Inlet Press</span></div>
+          <div class="leg-item"><svg id="d-leg-sw-s2" width="28" height="14" viewBox="0 0 28 14" style="display:block;flex-shrink:0"></svg><span id="d-leg-lbl-s2">Inlet Temp</span></div>
+          <div class="leg-item"><svg width="28" height="14" viewBox="0 0 28 14" style="display:block;flex-shrink:0"><line x1="0" y1="7" x2="28" y2="7" stroke="#E24B4A" stroke-width="2" stroke-dasharray="5,3"/></svg>UCL</div>
+          <div class="leg-item"><svg width="28" height="14" viewBox="0 0 28 14" style="display:block;flex-shrink:0"><line x1="0" y1="7" x2="28" y2="7" stroke="#E8A838" stroke-width="2" stroke-dasharray="5,3"/></svg>LCL</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <div class="cl-ctrl">
+            <input type="checkbox" class="cl-cb" id="d-ucl-en" checked onchange="applyLimits()">
+            <label style="font-size:11px;color:var(--re)">UCL</label>
+            <input type="number" class="cl-inp" id="d-ucl" value="40" onchange="applyLimits()">
+          </div>
+          <div class="cl-ctrl">
+            <input type="checkbox" class="cl-cb" id="d-lcl-en" checked onchange="applyLimits()">
+            <label style="font-size:11px;color:var(--am)">LCL</label>
+            <input type="number" class="cl-inp" id="d-lcl" value="5" onchange="applyLimits()">
+          </div>
+          <div class="zoom-btns">
+            <button class="zoom-btn active" onclick="setZoom('all')">All</button>
+            <button class="zoom-btn" onclick="setZoom(30)">30m</button>
+            <button class="zoom-btn" onclick="setZoom(15)">15m</button>
+            <button class="zoom-btn" onclick="setZoom(5)">5m</button>
+            <button class="zoom-btn" onclick="setZoom(1)">1m</button>
+          </div>
+        </div>
+      </div>
+      <canvas id="dashCanvas"></canvas>
+    </div>
+
+    <!-- Readings table -->
+    <div id="table-card">
+      <div class="tbl-hdr">
+        <div class="tbl-title">Readings Log</div>
+        <span class="tbl-cnt" id="tbl-cnt">0</span>
+        <div class="tb-sp" style="flex:1"></div>
+        <button id="btn-csv" onclick="exportCSV()">⬇ Export CSV</button>
+        <span id="approx-legend" style="display:none;font-size:10px;color:#7a5c00;background:#fffbe6;border:1px solid #e8d87a;border-radius:4px;padding:3px 8px;margin-left:8px;font-style:italic">~ = nearest-neighbor paired temp</span>
+      </div>
+      <div id="tbl-wrap">
+        <div id="rdg-session-strip" style="display:none;padding:8px 12px;background:#f5f6f8;border-bottom:1px solid var(--bor);font-size:10px;color:var(--t2);line-height:1.7"></div>
+        <table id="rdg-tbl">
+          <thead><tr>
+            <th>Time</th><th>Inlet Press</th><th>Inlet Temp</th><th>Truck</th>
+          </tr></thead>
+          <tbody id="rdg-tbody"></tbody>
+        </table>
+      </div>
+    </div>`;
+
+  // Init chart after DOM exists
+  setTimeout(() => initChart(), 50);
+}
+
+// ── RENDER ALL ────────────────────────────────────
+function renderAll() {
+  renderStats();
+  renderTiles();
+  renderChart();
+  renderTable();
+  updateLiveBar();
+  // Refresh live bar path with tube specs if they arrived after initial load
+  if (D.tubeDia || D.tubeThick || D.tubeLen) {
+    const lp = $('lb-path');
+    if (lp && !lp.innerHTML.includes('📐')) {
+      const tp = [];
+      if (D.tubeDia)   tp.push('Ø '    + D.tubeDia   + '"');
+      if (D.tubeThick) tp.push('Wall ' + D.tubeThick + ' mm');
+      if (D.tubeLen)   tp.push(D.tubeLen + ' ft');
+      lp.innerHTML += '&nbsp; | &nbsp;📐 ' + tp.join(' · ');
+    }
+  }
+}
+
+function renderStats() {
+  const n = D.sorted.length;
+  if (!$('st-rdg')) return;
+  // Count raw S1 and S2 Firebase records
+  const s1Count = D.sorted.filter(r => r.psi   !== null).length;
+  const s2Count = D.sorted.filter(r => r.tempC !== null).length;
+  $('st-rdg').textContent = n.toLocaleString();
+  const exactCount  = D.sorted.filter(r => r.psi !== null && r.tempC !== null && !r.approx).length;
+  const approxCount = D.sorted.filter(r => r.approx).length;
+  const pressOnly   = D.sorted.filter(r => r.psi !== null && r.tempC === null).length;
+  const tempOnly    = D.sorted.filter(r => r.psi === null && r.tempC !== null).length;
+  const rdgSub = $('st-rdg-sub');
+  if (rdgSub) {
+    const parts = [];
+    if (exactCount  > 0) parts.push(exactCount  + ' exact');
+    if (approxCount > 0) parts.push(approxCount + ' paired (~)');
+    if (pressOnly   > 0) parts.push(pressOnly   + ' press-only');
+    if (tempOnly    > 0) parts.push(tempOnly    + ' temp-only');
+    rdgSub.innerHTML = parts.join('&nbsp; · &nbsp;');
+  }
+  // Max/Min PSI and Temp shown in tiles — not repeated in stats bar
+  const durStart = D.sessStartMs || D.firstTs;
+  if (durStart && D.lastTs) {
+    const ms = D.lastTs - durStart;
+    const s = Math.floor(ms/1000), m = Math.floor(s/60), h = Math.floor(m/60);
+    $('st-dur').textContent = h > 0 ? h+'h '+String(m%60).padStart(2,'0')+'m' : m+'m '+String(s%60).padStart(2,'0')+'s';
+  }
+  $('st-truck').textContent = D.truckId || '';
+  const tubeEl = $('st-tube');
+  if (tubeEl) {
+    const tp = [];
+    if (D.tubeDia)   tp.push('Ø '     + D.tubeDia   + '"');
+    if (D.tubeThick) tp.push('Wall '  + D.tubeThick + ' mm');
+    if (D.tubeLen)   tp.push(D.tubeLen + ' ft');
+    tubeEl.textContent = tp.join('  ·  ');
+  }
+  $('lb-rdg').textContent = n.toLocaleString();
+
+
+}
+
+function renderTiles() {
+  if (!$('tile-press-val')) return;
+  if (!D.sorted.length) return;
+
+  // Latest pressure
+  const lastPress = [...D.sorted].reverse().find(r => r.psi !== null);
+  if (lastPress) {
+    const pu2=D.pUnit||'PSI',pd2=pu2==='Bar'?3:pu2==='kPa'?1:D.psiDecimals;
+    $('tile-press-val').innerHTML = pConv(lastPress.psi,pu2).toFixed(pd2)+'<span>'+pu2+'</span>';
+    const age = Math.round((Date.now() - lastPress.tsMs) / 1000);
+    $('tile-press-age').textContent = age < 5 ? 'Live' : age + 's ago';
+    $('tile-pmin').textContent = D.minPsi !== null ? pConv(D.minPsi,pu2).toFixed(pd2) : '—';
+    $('tile-pmax').textContent = D.maxPsi !== null ? pConv(D.maxPsi,pu2).toFixed(pd2) : '—';
+    const ucl = D.uclEn ? D.ucl : null;
+    $('tile-press').classList.toggle('ucl-alarm', ucl !== null && lastPress.psi > ucl);
+  }
+
+  // Latest temp
+  const lastTemp = [...D.sorted].reverse().find(r => r.tempC !== null);
+  if (lastTemp) {
+    const disp = D.tUnit === 'F' ? cToF(lastTemp.tempC) : lastTemp.tempC;
+    const unit = '°' + D.tUnit;
+    $('tile-temp-val').innerHTML = disp.toFixed(1) + '<span>' + unit + '</span>';
+    const age = Math.round((Date.now() - lastTemp.tsMs) / 1000);
+    $('tile-temp-age').textContent = age < 5 ? 'Live' : age + 's ago';
+    $('tile-tmin').textContent = D.minTemp !== null ? D.minTemp.toFixed(1) + unit : '—';
+    $('tile-tmax').textContent = D.maxTemp !== null ? D.maxTemp.toFixed(1) + unit : '—';
+  }
+}
+
+function initChart() {
+  const canvas = $('dashCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  dashChart = new Chart(ctx, {
+    type: 'line',
+    data: { labels:[], datasets:[
+      { label:'Inlet Press', data:[], borderColor:'#1D9E75', backgroundColor:'rgba(29,158,117,.07)', borderWidth:2, pointRadius:0, tension:.3, yAxisID:'yP', fill:true,  spanGaps:true },
+      { label:'Inlet Temp',  data:[], borderColor:'#378ADD', backgroundColor:'transparent',          borderWidth:1.5, pointRadius:0, tension:.3, yAxisID:'yT', borderDash:[5,3], fill:false, spanGaps:true }
+    ]},
+    options:{
+      responsive:true, maintainAspectRatio:false, animation:false,
+      interaction:{mode:'index',intersect:false},
+      plugins:{ legend:{display:false}, annotation:{annotations:{}} },
+      scales:{
+        x:{type:'category', ticks:{maxTicksLimit:8,font:{size:9}}, grid:{display:false}},
+        yP:{position:'left',  title:{display:true,text:'PSI',font:{size:9}}, ticks:{font:{size:9},callback:(v)=>Number(v).toFixed(D.psiDecimals)}, grid:{color:'rgba(0,0,0,.04)'}},
+        yT:{position:'right', title:{display:true,text:'Temp',font:{size:9}}, ticks:{font:{size:9},callback:(v)=>Number(v).toFixed(D.tmpDecimals)}, grid:{display:false}}
+      }
+    }
+  });
+  applyDashSettings(); updateDashLegend();
+  if (D.sorted.length) renderChart();
+}
+
+function renderChart() {
+  if (!dashChart) return;
+  // Update chart session info bar
+  const csi = document.getElementById('chart-session-info');
+  if (csi && D.path) {
+    const pts = D.path.split('/');
+    const trk = pts[4]||'—', job=pts[1]||'—', shot=pts[2]||'—', seg=pts[3]||'—';
+    const tp = [];
+    if (D.tubeDia)   tp.push('Ø ' + D.tubeDia + '"');
+    if (D.tubeThick) tp.push('Wall ' + D.tubeThick + ' mm');
+    if (D.tubeLen)   tp.push(D.tubeLen + ' ft');
+    const tubeStr = tp.length > 0 ? '&nbsp; | &nbsp;📐 ' + tp.join(' · ') : '';
+    csi.innerHTML =
+      '<b>' + trk + '</b>' +
+      '&nbsp; · &nbsp;Job <b>' + job  + '</b>' +
+      '&nbsp; · &nbsp;Shot <b>' + shot + '</b>' +
+      '&nbsp; · &nbsp;Seg <b>'  + seg  + '</b>' +
+      tubeStr;
+    csi.style.display = '';
+  }
+  const ucl = D.uclEn ? D.ucl : null;
+  const lcl = D.lclEn ? D.lcl : null;
+
+  // Apply zoom filter
+  let rows = D.sorted;
+  if (D.zoomMins !== 'all' && D.lastTs) {
+    const cutoff = D.lastTs - D.zoomMins * 60 * 1000;
+    rows = D.sorted.filter(r => r.tsMs >= cutoff);
+  }
+
+  const labels = rows.map(r => new Date(r.tsMs).toLocaleTimeString());
+  const pUnit = D.pUnit||'PSI';
+  const pDec  = pUnit==='Bar'?3:pUnit==='kPa'?1:D.psiDecimals;
+  const psi   = rows.map(r => r.psi !== null ? parseFloat(pConv(r.psi,pUnit).toFixed(pDec)) : null);
+  const temp   = rows.map(r => r.tempC !== null ? parseFloat((D.tUnit==='F'?cToF(r.tempC):r.tempC).toFixed(1)) : null);
+
+  dashChart.data.labels           = labels;
+  dashChart.data.datasets[0].data = psi;
+  dashChart.data.datasets[1].data = temp;
+
+  // Annotations
+  const anns = {};
+  if (ucl !== null) anns.ucl = { type:'line',yMin:ucl,yMax:ucl,yScaleID:'yP',borderColor:'#E24B4A',borderWidth:1.5,borderDash:[6,3],label:{content:'UCL '+ucl,display:true,position:'end',font:{size:8},color:'#E24B4A',backgroundColor:'rgba(226,75,74,.08)'}};
+  if (lcl !== null) anns.lcl = { type:'line',yMin:lcl,yMax:lcl,yScaleID:'yP',borderColor:'#E8A838',borderWidth:1.5,borderDash:[6,3],label:{content:'LCL '+lcl,display:true,position:'end',font:{size:8},color:'#E8A838',backgroundColor:'rgba(232,168,56,.08)'}};
+  dashChart.options.plugins.annotation.annotations = anns;
+  dashChart.update('none');
+}
+
+function renderTable() {
+  const tbody = $('rdg-tbody');
+  if (!tbody) return;
+  // Session info strip
+  const strip = $('rdg-session-strip');
+  if (strip && D.path) {
+    const tp = [];
+    if (D.tubeDia)   tp.push('Ø ' + D.tubeDia + '"');
+    if (D.tubeThick) tp.push('Wall ' + D.tubeThick + ' mm');
+    if (D.tubeLen)   tp.push(D.tubeLen + ' ft');
+    const tubeStr = tp.length > 0 ? ' &nbsp;|&nbsp; 📐 ' + tp.join(' · ') : '';
+    const pts = D.path.split('/');
+    const trk = pts[4]||'—', job = pts[1]||'—', shot = pts[2]||'—', seg = pts[3]||'—';
+    strip.innerHTML =
+      '<b>' + trk + '</b> &nbsp;·&nbsp; Job <b>' + job + '</b>' +
+      ' &nbsp;·&nbsp; Shot <b>' + shot + '</b>' +
+      ' &nbsp;·&nbsp; Seg <b>'  + seg  + '</b>' +
+      '<span style="color:var(--t3)">' + tubeStr + '</span>';
+    strip.style.display = '';
+  }
+  const ucl = D.uclEn ? D.ucl : null;
+  const lcl = D.lclEn ? D.lcl : null;
+  const tu  = '°' + D.tUnit;
+  // Newest first, max 300 rows shown
+  // Cap display at 500 newest rows — monitoring use case doesn't need all rows on screen.
+  // Full dataset always available via CSV export.
+  const displayRows = D.sorted.length > 500
+    ? D.sorted.slice(D.sorted.length - 500).reverse()
+    : [...D.sorted].reverse();
+  const rows = displayRows;
+  tbody.innerHTML = rows.map(r => {
+    const pu3=D.pUnit||'PSI',pd3=pu3==='Bar'?3:pu3==='kPa'?1:D.psiDecimals;
+    const p  = r.psi !== null ? pConv(r.psi,pu3).toFixed(pd3)+' '+pu3 : '—';
+    const tv = r.tempC !== null ? (D.tUnit==='F'?cToF(r.tempC):r.tempC).toFixed(1) + tu : '—';
+    const ts = new Date(r.tsMs).toLocaleTimeString();
+    const ov = ucl !== null && r.psi !== null && r.psi > ucl;
+    const un = lcl !== null && r.psi !== null && r.psi < lcl;
+    const isApprox = r.approx && r.tempC !== null;
+    const gapStr   = isApprox && r.pairedGap != null
+      ? (r.pairedGap >= 1000 ? (r.pairedGap/1000).toFixed(1)+'s' : r.pairedGap+'ms') + ' apart'
+      : '';
+    const tCell = isApprox
+      ? `<td class="approx-cell${ov?' ucl-approx':''}">~${tv}<span class="approx-tip">⚠ Nearest-neighbor — ${gapStr}</span></td>`
+      : `<td>${tv}</td>`;
+    return `<tr class="${ov?'ucl-row':un?'lcl-row':''}">
+      <td>${ts}</td><td>${p}</td>${tCell}<td>${r.truck||'—'}</td>
+    </tr>`;
+  }).join('');
+  const total = D.sorted.length;
+  const shown = Math.min(total, 500);
+  if ($('tbl-cnt')) $('tbl-cnt').textContent = total === shown
+    ? total.toLocaleString()
+    : 'Showing ' + shown.toLocaleString() + ' of ' + total.toLocaleString();
+  const hasApprox = D.sorted.some(r => r.approx);
+  const legEl = $('approx-legend');
+  if (legEl) legEl.style.display = hasApprox ? '' : 'none';
+}
+
+function updateLiveBar() {
+  const el = $('lb-elapsed');
+  if (!el || !D.lastTs) return;
+  // Use official session start if available (written by truck app),
+  // otherwise fall back to first reading timestamp
+  const startMs = D.sessStartMs || D.firstTs;
+  if (!startMs) return;
+  const ms = D.lastTs - startMs;
+  const s = Math.floor(ms/1000), m = Math.floor(s/60), h = Math.floor(m/60);
+  el.textContent = String(h).padStart(2,'0')+':'+String(m%60).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+  el.style.display = '';
+}
+
+// ── CONTROLS ──────────────────────────────────────
+function applyLimits() {
+  D.uclEn = $('d-ucl-en') && $('d-ucl-en').checked;
+  D.lcl   = $('d-lcl')   ? (parseFloat($('d-lcl').value) || 5)  : 5;
+  D.lclEn = $('d-lcl-en') && $('d-lcl-en').checked;
+  D.ucl   = $('d-ucl')   ? (parseFloat($('d-ucl').value) || 40) : 40;
+  // Sync back to settings panel
+  const s  = (id,v) => { const e=$(id); if(e)e.value=v; };
+  const sb = (id,v) => { const e=$(id); if(e)e.checked=v; };
+  sb('ds-ucl-en',D.uclEn); s('ds-ucl',String(D.ucl));
+  sb('ds-lcl-en',D.lclEn); s('ds-lcl',String(D.lcl));
+  renderChart();
+  renderTable();
+  renderTiles();
+  saveDashSettings();
+}
+
+function setZoom(val) {
+  D.zoomMins = val;
+  document.querySelectorAll('.zoom-btn').forEach(b => {
+    const bv = b.onclick.toString().includes("'all'") ? 'all' : parseInt(b.textContent);
+    b.classList.toggle('active', bv == val || (val==='all' && b.textContent==='All'));
+  });
+  renderChart();
+}
+
+// ── CSV EXPORT ────────────────────────────────────
+function exportCSV() {
+  const tu  = '°' + D.tUnit;
+  const pu  = D.pUnit || 'PSI';
+  const pts = (D.path || '').split('/');
+  const trk = pts[4]||'—', job=pts[1]||'—', shot=pts[2]||'—', seg=pts[3]||'—';
+  const now = new Date();
+  const exported = now.toLocaleString();
+
+  // Session header block — same format as truck app
+  const meta = [
+    '# ═══════════════════════════════════════════════',
+    '#   CureLog Dashboard — Readings Log',
+    '#   Version: v' + DB_VER + '  (CureLog Dashboard)',
+    '#   Exported: ' + exported,
+    '#',
+    '#   Truck:          ' + trk,
+    '#   Job:            ' + job,
+    '#   Shot:           ' + shot,
+    '#   Segment:        ' + seg,
+    '#   Tube Diameter:  ' + (D.tubeDia   ? D.tubeDia   + '"'   : '—'),
+    '#   Tube Thickness: ' + (D.tubeThick ? D.tubeThick + ' mm' : '—'),
+    '#   Tube Length:    ' + (D.tubeLen   ? D.tubeLen   + ' ft' : '—'),
+    '# ═══════════════════════════════════════════════',
+    '#'
+  ];
+
+  const hdr = ['Timestamp','Time','Inlet Press (' + pu + ')','Inlet Temp (' + tu + ')','Truck'].join(',');
+  const body = D.sorted.map(r => [
+    r.ts || new Date(r.tsMs).toISOString(),
+    new Date(r.tsMs).toLocaleTimeString(),
+    r.psi   !== null ? pConv(r.psi,pu).toFixed(pu==='Bar'?3:pu==='kPa'?1:D.psiDecimals) : '',
+    r.tempC !== null ? (D.tUnit==='F'?cToF(r.tempC):r.tempC).toFixed(1) : '',
+    r.truck || ''
+  ].join(','));
+  const NL   = String.fromCharCode(10);
+  const blob = new Blob([[...meta, hdr, ...body].join(NL)], {type:'text/csv'});
+  const a    = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = (() => {
+    const pts = (D.path || '').split('/');
+    const trk = pts[4]||'???', job=pts[1]||'???', shot=pts[2]||'???', seg=pts[3]||'???';
+    const d = new Date();
+    const date = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+    return `Dashboard - Readings Log - ${trk} - Job ${job} - Shot ${shot} - Seg ${seg} - ${date}.csv`;
+  })()
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+// ── PERIODIC TILE REFRESH (updates "Ns ago" labels) ──
+setInterval(() => { if (D.sorted.length) renderTiles(); }, 5000);
+
+
+// ── SETTINGS PANEL ───────────────────────────────
+function togDashSettings() {
+  const bdy = document.getElementById('dcoll-bdy');
+  const hdr = document.getElementById('dcoll-hdr');
+  if (!bdy) return;
+  const open = bdy.classList.toggle('open');
+  if (hdr) hdr.classList.toggle('open', open);
+}
+
+function dashDA(s){return s==='dashed'?[5,3]:s==='dotdash'?[2,3,8,3]:[];}
+
+function updateDashLegend(){
+  const draw=(id,c,s,w)=>{
+    const svg=document.getElementById(id); if(!svg)return;
+    while(svg.firstChild)svg.removeChild(svg.firstChild);
+    const l=document.createElementNS('http://www.w3.org/2000/svg','line');
+    l.setAttribute('x1','0');l.setAttribute('y1','7');
+    l.setAttribute('x2','28');l.setAttribute('y2','7');
+    l.setAttribute('stroke',c);
+    l.setAttribute('stroke-width',Math.max(Number(w),1.5));
+    const d=dashDA(s); if(d.length)l.setAttribute('stroke-dasharray',d.join(','));
+    svg.appendChild(l);
+  };
+  draw('d-leg-sw-s1',D.s1Color,D.s1Style,D.s1Width);
+  draw('d-leg-sw-s2',D.s2Color,D.s2Style,D.s2Width);
+}
+
+function applyDashSettings() {
+  const g  = id => { const e=document.getElementById(id); return e?e.value:null; };
+  const gb = id => { const e=document.getElementById(id); return e?e.checked:null; };
+
+  // Read from new settings panel controls
+  if(g('ds-clr-s1')!=null) D.s1Color = g('ds-clr-s1');
+  if(g('ds-sty-s1')!=null) D.s1Style = g('ds-sty-s1');
+  if(g('ds-wid-s1')!=null) D.s1Width = parseFloat(g('ds-wid-s1'))||2;
+  if(g('ds-clr-s2')!=null) D.s2Color = g('ds-clr-s2');
+  if(g('ds-sty-s2')!=null) D.s2Style = g('ds-sty-s2');
+  if(g('ds-wid-s2')!=null) D.s2Width = parseFloat(g('ds-wid-s2'))||1.5;
+  if(gb('ds-ucl-en')!=null) D.uclEn  = gb('ds-ucl-en');
+  if(g('ds-ucl')!=null)     D.ucl    = parseFloat(g('ds-ucl'))||40;
+  if(gb('ds-lcl-en')!=null) D.lclEn  = gb('ds-lcl-en');
+  if(g('ds-lcl')!=null)     D.lcl    = parseFloat(g('ds-lcl'))||5;
+  if(g('ds-tunit')!=null)   D.tUnit  = g('ds-tunit');
+
+  // Also sync the in-chart UCL/LCL controls if they exist
+  const syncEl = (id,v) => { const e=document.getElementById(id); if(e)e.value=v; };
+  const syncCh = (id,v) => { const e=document.getElementById(id); if(e)e.checked=v; };
+  syncCh('d-ucl-en', D.uclEn); syncEl('d-ucl', D.ucl);
+  syncCh('d-lcl-en', D.lclEn); syncEl('d-lcl', D.lcl);
+
+  // Read precision
+  const pDecEl = document.getElementById('ds-psi-dec');
+  const tDecEl = document.getElementById('ds-tmp-dec');
+  if(pDecEl) D.psiDecimals = parseInt(pDecEl.value)||0;
+  if(tDecEl) D.tmpDecimals = parseInt(tDecEl.value)||0;
+  // Read pressure unit
+  const pUnitEl = document.getElementById('ds-punit');
+  if(pUnitEl) D.pUnit = pUnitEl.value;
+  // Read Y-axis scale
+  const ypAutoEl = document.getElementById('ds-yp-auto');
+  const ytAutoEl = document.getElementById('ds-yt-auto');
+  if(ypAutoEl) D.yPauto = ypAutoEl.checked;
+  if(ytAutoEl) D.yTauto = ytAutoEl.checked;
+  if(!D.yPauto){ const mn=$('ds-yp-min'),mx=$('ds-yp-max'); if(mn)D.yPmin=parseFloat(mn.value)||0; if(mx)D.yPmax=parseFloat(mx.value)||60; }
+  if(!D.yTauto){ const mn=$('ds-yt-min'),mx=$('ds-yt-max'); if(mn)D.yTmin=parseFloat(mn.value)||50; if(mx)D.yTmax=parseFloat(mx.value)||120; }
+  const ypWrap=document.getElementById('ds-yp-range-wrap'), ytWrap=document.getElementById('ds-yt-range-wrap');
+  if(ypWrap) ypWrap.style.display = D.yPauto?'none':'block';
+  if(ytWrap) ytWrap.style.display = D.yTauto?'none':'block';
+  const pu=D.pUnit||'PSI', tu='°'+D.tUnit;
+  ['ds-yp-unit-lbl','ds-yp-unit-lbl2'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=pu;});
+  ['ds-yt-unit-lbl','ds-yt-unit-lbl2'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=tu;});
+
+  // Apply to chart
+  if(dashChart){
+    dashChart.data.datasets[0].borderColor     = D.s1Color;
+    dashChart.data.datasets[0].backgroundColor = D.s1Color+'12';
+    dashChart.data.datasets[0].borderWidth      = D.s1Width;
+    dashChart.data.datasets[0].borderDash       = dashDA(D.s1Style);
+    dashChart.data.datasets[1].borderColor     = D.s2Color;
+    dashChart.data.datasets[1].borderWidth      = D.s2Width;
+    dashChart.data.datasets[1].borderDash       = dashDA(D.s2Style);
+    const scYP=dashChart.options.scales.yP, scYT=dashChart.options.scales.yT;
+    if(D.yPauto){scYP.min=undefined;scYP.max=undefined;}else{scYP.min=D.yPmin;scYP.max=D.yPmax;}
+    if(D.yTauto){scYT.min=undefined;scYT.max=undefined;}else{scYT.min=D.yTmin;scYT.max=D.yTmax;}
+    const pd4=(D.pUnit||'PSI')==='Bar'?3:(D.pUnit||'PSI')==='kPa'?1:D.psiDecimals;
+    scYP.ticks.callback = v => Number(v).toFixed(pd4);
+    scYT.ticks.callback = v => Number(v).toFixed(D.tmpDecimals);
+    dashChart.update('none');
+  }
+  updateDashLegend();
+  saveDashSettings();
+  // Re-render so temp units and limits take effect immediately
+  if(D.sorted.length) renderAll();
+}
+
+// Keep applyChartStyle as alias so initChart hook still works
+function applyChartStyle() { applyDashSettings(); }
+
+function saveDashSettings(){
+  try{
+    localStorage.setItem('cl_dash_settings', JSON.stringify({
+      s1Color:D.s1Color, s1Style:D.s1Style, s1Width:D.s1Width,
+      s2Color:D.s2Color, s2Style:D.s2Style, s2Width:D.s2Width,
+      uclEn:D.uclEn, ucl:D.ucl, lclEn:D.lclEn, lcl:D.lcl, tUnit:D.tUnit, pUnit:D.pUnit,
+      psiDecimals:D.psiDecimals, tmpDecimals:D.tmpDecimals,
+      yPauto:D.yPauto, yPmin:D.yPmin, yPmax:D.yPmax,
+      yTauto:D.yTauto, yTmin:D.yTmin, yTmax:D.yTmax
+    }));
+  } catch(e){}
+}
+
+function loadDashSettings(){
+  let c; try{c=JSON.parse(localStorage.getItem('cl_dash_settings')||'null');}catch(e){c=null;}
+  if(!c) return;
+  const s  = (id,v) => { const e=document.getElementById(id); if(e&&v!=null)e.value=v; };
+  const sb = (id,v) => { const e=document.getElementById(id); if(e&&v!=null)e.checked=v; };
+
+  if(c.s1Color){ D.s1Color=c.s1Color; s('ds-clr-s1',c.s1Color); }
+  if(c.s1Style){ D.s1Style=c.s1Style; s('ds-sty-s1',c.s1Style); }
+  if(c.s1Width!=null){ D.s1Width=c.s1Width; s('ds-wid-s1',String(c.s1Width)); }
+  if(c.s2Color){ D.s2Color=c.s2Color; s('ds-clr-s2',c.s2Color); }
+  if(c.s2Style){ D.s2Style=c.s2Style; s('ds-sty-s2',c.s2Style); }
+  if(c.s2Width!=null){ D.s2Width=c.s2Width; s('ds-wid-s2',String(c.s2Width)); }
+  if(c.uclEn!=null){ D.uclEn=c.uclEn; sb('ds-ucl-en',c.uclEn); sb('d-ucl-en',c.uclEn); }
+  if(c.ucl!=null)  { D.ucl=c.ucl;     s('ds-ucl',String(c.ucl)); s('d-ucl',String(c.ucl)); }
+  if(c.lclEn!=null){ D.lclEn=c.lclEn; sb('ds-lcl-en',c.lclEn); sb('d-lcl-en',c.lclEn); }
+  if(c.lcl!=null)  { D.lcl=c.lcl;     s('ds-lcl',String(c.lcl)); s('d-lcl',String(c.lcl)); }
+  if(c.tUnit)           { D.tUnit=c.tUnit; s('ds-tunit',c.tUnit); }
+  if(c.psiDecimals!=null){ D.psiDecimals=c.psiDecimals; s('ds-psi-dec',String(c.psiDecimals)); }
+  if(c.tmpDecimals!=null){ D.tmpDecimals=c.tmpDecimals; s('ds-tmp-dec',String(c.tmpDecimals)); }
+  if(c.pUnit)    { D.pUnit=c.pUnit;   s('ds-punit',c.pUnit); }
+  if(c.yPauto!=null){ D.yPauto=c.yPauto; sb('ds-yp-auto',c.yPauto); }
+  if(c.yPmin!=null) { D.yPmin=c.yPmin;   s('ds-yp-min',String(c.yPmin)); }
+  if(c.yPmax!=null) { D.yPmax=c.yPmax;   s('ds-yp-max',String(c.yPmax)); }
+  if(c.yTauto!=null){ D.yTauto=c.yTauto; sb('ds-yt-auto',c.yTauto); }
+  if(c.yTmin!=null) { D.yTmin=c.yTmin;   s('ds-yt-min',String(c.yTmin)); }
+  if(c.yTmax!=null) { D.yTmax=c.yTmax;   s('ds-yt-max',String(c.yTmax)); }
+}
+
+
+</script>
+
+<!-- About Modal -->
+<div id="about-overlay" onclick="if(event.target===this)closeAbout()">
+  <div id="about-card">
+    <div class="about-hdr">
+      <div class="about-logo">📊</div>
+      <div class="about-hdr-text">
+        <h2>CureLog</h2>
+        <p id="about-app-subtitle">Phase 1 — Dashboard</p>
+      </div>
+      <button class="about-close-btn" onclick="closeAbout()">✕</button>
+    </div>
+    <div class="about-current">
+      <div class="about-current-lbl">Current Version</div>
+      <div class="about-current-ver" id="about-cur-ver">—</div>
+      <div class="about-current-desc" id="about-cur-desc">—</div>
+    </div>
+    <div class="about-search-wrap">
+      <input class="about-search" id="about-search" type="text"
+        placeholder="Search versions or changes…"
+        oninput="filterAbout(this.value)">
+    </div>
+    <div class="about-table-wrap">
+      <table class="about-table">
+        <thead>
+          <tr>
+            <th style="width:90px">Version</th>
+            <th>Changes</th>
+          </tr>
+        </thead>
+        <tbody id="about-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
