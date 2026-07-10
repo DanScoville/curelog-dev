@@ -308,6 +308,30 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:-apple-sy
 .abv.cur{background:#1D9E75;color:#fff}
 .abt{color:#1a2332;line-height:1.5;font-size:12px}
 
+/* ── TABLET LANDSCAPE SPLIT (Galaxy Tab A11+ and similar) ── */
+/* Wide landscape only: Setup on the left, Monitor on the right, both always visible.
+   Logs and Settings still work as tab-swap pages, overlaying the split when active.
+   Portrait keeps the single-page phone UX. */
+@media (min-width: 900px) and (orientation: landscape) {
+  #pages{display:grid;grid-template-columns:minmax(360px,42%) 1fr;grid-template-rows:1fr;gap:0;position:relative}
+  .page{position:relative;inset:auto;height:100%;padding:12px 12px calc(var(--nav) + 12px + var(--safe-bottom));display:none;overflow-y:auto;overflow-x:hidden}
+  /* Split panels: always visible in this mode, regardless of .active */
+  #page-setup{display:block !important;grid-column:1;grid-row:1;padding-bottom:calc(var(--nav) + 12px + var(--safe-bottom)) !important;border-right:1px solid var(--bor);background:var(--bg)}
+  #page-monitor{display:block !important;grid-column:2;grid-row:1;background:var(--bg)}
+  /* Overlay pages: when Logs or Settings is active, cover the whole grid */
+  #pages:has(#page-logs.active) #page-setup,
+  #pages:has(#page-logs.active) #page-monitor,
+  #pages:has(#page-settings.active) #page-setup,
+  #pages:has(#page-settings.active) #page-monitor{display:none !important}
+  #pages:has(#page-logs.active) #page-logs,
+  #pages:has(#page-settings.active) #page-settings{display:block !important;grid-column:1 / -1;grid-row:1}
+  /* Start Session footer: sticks to bottom of the left (Setup) panel instead of the viewport */
+  #start-footer{position:sticky;left:auto;right:auto;bottom:0;margin:0 -12px;padding:12px 16px}
+  /* Nav: Setup + Monitor buttons are redundant when both panels are always on screen.
+     Keep Setup visible as a "close overlay / return to split" affordance; hide Monitor. */
+  #nav-monitor{display:none}
+}
+
 </style>
 </head>
 <body>
@@ -874,7 +898,7 @@ function toggleConnLog() {
 
 
 'use strict';
-const VER = '2.1.58-m';
+const VER = '2.1.59-m';
 
 // ── FIREBASE ─────────────────────────────────────────────────
 const FB_CFG = {
@@ -3309,6 +3333,7 @@ function updateSessionInfoDisplays() {
 
 
 const CHANGELOG = [
+  ['2.1.59-m','Tablet landscape split layout: Setup panel left, Monitor panel right on wide landscape screens (Galaxy Tab A11+ etc). Portrait and phones keep the single-page tab UX unchanged.'],
   ['2.1.58-m','Shortened End Session button to End to fit topbar on narrow phone screens'],
   ['2.1.57-m','Restored Azuria Water Solutions subtitle as stacked second line under CureLog in topbar'],
   ['2.1.56-m','Removed Azuria subtitle and About button from topbar to make room for End Session button on narrow phone screens'],
