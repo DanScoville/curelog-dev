@@ -898,7 +898,7 @@ function toggleConnLog() {
 
 
 'use strict';
-const VER = '2.1.59-m';
+const VER = '2.1.60-m';
 
 // ── FIREBASE ─────────────────────────────────────────────────
 const FB_CFG = {
@@ -3333,6 +3333,7 @@ function updateSessionInfoDisplays() {
 
 
 const CHANGELOG = [
+  ['2.1.60-m','Wake Lock failure log now includes error name, document.visibilityState and document.hasFocus() to diagnose why NotAllowedError is thrown (Samsung Power Saving, tab not focused, etc)'],
   ['2.1.59-m','Tablet landscape split layout: Setup panel left, Monitor panel right on wide landscape screens (Galaxy Tab A11+ etc). Portrait and phones keep the single-page tab UX unchanged.'],
   ['2.1.58-m','Shortened End Session button to End to fit topbar on narrow phone screens'],
   ['2.1.57-m','Restored Azuria Water Solutions subtitle as stacked second line under CureLog in topbar'],
@@ -3525,7 +3526,10 @@ async function acquireWakeLock() {
       LOG('Wake Lock released -- Android may dim screen', 'warn');
       if (A.sess && A.sess.active) setTimeout(acquireWakeLock, 2000);
     });
-  } catch(e) { LOG('Wake Lock failed: ' + e.message + ' -- keep screen on manually', 'warn'); }
+  } catch(e) {
+    const diag = 'name=' + (e && e.name || '?') + ' vis=' + document.visibilityState + ' focus=' + document.hasFocus();
+    LOG('Wake Lock failed: ' + (e && e.message || e) + ' [' + diag + '] -- keep screen on manually', 'warn');
+  }
 }
 function releaseWakeLock() {
   if (_wakeLock) { _wakeLock.release().catch(()=>{}); _wakeLock = null; }
