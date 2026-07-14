@@ -439,7 +439,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--fon
 <script>
 'use strict';
 
-const DB_VER = '1.7.19-m';
+const DB_VER = '1.7.20-m';
 
 // ── FIREBASE ─────────────────────────────────────
 const FB_CFG = {
@@ -681,6 +681,7 @@ function clearShot() {
     const e=$(id); if(e) e.style.display='none';
   });
   const es=$('empty-state'); if(es) es.style.display='';
+  if (dashChart) { try { dashChart.destroy(); } catch(e) {} }
   dashChart = null;
   setSel('');
   setLive('on','Connected');
@@ -821,9 +822,10 @@ function processSnapshot(data) {
       if (D.minPsi === null || r.psi < D.minPsi) D.minPsi = r.psi;
     }
     if (r.tempC !== null) {
-      const td = D.tUnit === 'F' ? cToF(r.tempC) : r.tempC;
-      if (D.maxTemp === null || td > D.maxTemp) D.maxTemp = td;
-      if (D.minTemp === null || td < D.minTemp) D.minTemp = td;
+      // Store raw Celsius (like pressure); convert at display in renderTiles so switching
+      // temp units stays correct instead of relabeling a stale F number as C.
+      if (D.maxTemp === null || r.tempC > D.maxTemp) D.maxTemp = r.tempC;
+      if (D.minTemp === null || r.tempC < D.minTemp) D.minTemp = r.tempC;
     }
   });
   if (D.sorted.length) {
@@ -842,7 +844,8 @@ function buildContent() {
   const ids = ['stats-grid','reading-tiles','chart-card','table-card'];
   ids.forEach(id => { const e = $(id); if(e) e.style.display=''; });
   const es = $('empty-state'); if(es) es.style.display='none';
-  // Reset chart
+  // Reset chart (destroy first so we never orphan a chart still bound to the canvas)
+  if (dashChart) { try { dashChart.destroy(); } catch(e) {} }
   dashChart = null;
   setSel('');
   setLive('on','Connected');
@@ -937,14 +940,21 @@ function renderTiles() {
     $('tile-temp-val').innerHTML = disp.toFixed(1) + '<span>' + unit + '</span>';
     const age = Math.round((Date.now() - lastTemp.tsMs) / 1000);
     $('tile-temp-age').textContent = age < 5 ? 'Live' : age + 's ago';
-    $('tile-tmin').textContent = D.minTemp !== null ? D.minTemp.toFixed(1) + unit : '—';
-    $('tile-tmax').textContent = D.maxTemp !== null ? D.maxTemp.toFixed(1) + unit : '—';
+    $('tile-tmin').textContent = D.minTemp !== null ? (D.tUnit === 'F' ? cToF(D.minTemp) : D.minTemp).toFixed(1) + unit : '—';
+    $('tile-tmax').textContent = D.maxTemp !== null ? (D.tUnit === 'F' ? cToF(D.maxTemp) : D.maxTemp).toFixed(1) + unit : '—';
   }
 }
 
 function initChart() {
   const canvas = $('dashCanvas');
   if (!canvas) return;
+  // Destroy any chart still bound to this canvas first. Otherwise loading a 2nd shot calls
+  // new Chart() on a canvas Chart.js 4 still owns -> throws "Canvas is already in use",
+  // the throw is swallowed in the setTimeout, dashChart stays null, and the chart is blank
+  // until a full page reload. Chart.getChart() also catches an orphaned instance.
+  const prev = (window.Chart && typeof Chart.getChart === 'function') ? Chart.getChart(canvas) : dashChart;
+  if (prev) { try { prev.destroy(); } catch(e) {} }
+  dashChart = null;
   const ctx = canvas.getContext('2d');
   dashChart = new Chart(ctx, {
     type: 'line',
@@ -965,6 +975,20 @@ function initChart() {
   });
   applyDashSettings(); updateDashLegend();
   if (D.sorted.length) renderChart();
+}
+
+// Cap plotted chart points. A multi-hour cure is thousands of readings; re-rendering all of
+// them on every 2s update janks/freezes a phone. Stride down to at most MAX_CHART_PTS points,
+// always keeping the latest so the live edge stays current. The table keeps full detail.
+const MAX_CHART_PTS = 400;
+function decimateRows(rows, maxPts) {
+  if (rows.length <= maxPts) return rows;
+  const stride = Math.ceil(rows.length / maxPts);
+  const out = [];
+  for (let i = 0; i < rows.length; i += stride) out.push(rows[i]);
+  const last = rows[rows.length - 1];
+  if (out[out.length - 1] !== last) out.push(last);
+  return out;
 }
 
 function renderChart() {
@@ -990,6 +1014,7 @@ function renderChart() {
     const cutoff = D.lastTs - D.zoomMins * 60 * 1000;
     rows = D.sorted.filter(r => r.tsMs >= cutoff);
   }
+  rows = decimateRows(rows, MAX_CHART_PTS);
 
   const labels = rows.map(r => new Date(r.tsMs).toLocaleTimeString());
   const pUnit = D.pUnit||'PSI';
