@@ -903,7 +903,7 @@ function toggleConnLog() {
 
 
 'use strict';
-const VER = '2.1.62-m';
+const VER = '2.1.63-m';
 
 // ── FIREBASE ─────────────────────────────────────────────────
 const FB_CFG = {
@@ -1595,26 +1595,15 @@ function onS1PressNotify(event) {
   A.s1._lastNotify = now;
   $('raw-p').textContent = hex(dv);
 
-  // Try both byte orders and pick the one that gives a plausible PSI value
-  // (between -5 and 1000 PSI). Log first notify to help diagnose encoding.
-  const rawBE = dv.getInt16(0, false); // big-endian (spec says BE)
-  const rawLE = dv.getInt16(0, true);  // little-endian (fallback)
-  const psiBE = rawBE * A.s1.scale + A.s1.calOff;
-  const psiLE = rawLE * A.s1.scale + A.s1.calOff;
-
-  // Pick whichever reading is in a plausible range
-  let raw, psi;
-  if (psiBE >= -5 && psiBE <= 1000) {
-    raw = rawBE; psi = psiBE;
-    if (!A.s1._notifyLogged) { LOG('S1: notify BE raw=' + rawBE + ' psi=' + psiBE.toFixed(1), 'info'); A.s1._notifyLogged = true; }
-  } else if (psiLE >= -5 && psiLE <= 1000) {
-    raw = rawLE; psi = psiLE;
-    if (!A.s1._notifyLogged) { LOG('S1: notify LE raw=' + rawLE + ' psi=' + psiLE.toFixed(1) + ' (using LE)', 'warn'); A.s1._notifyLogged = true; }
-  } else {
-    // Both out of range -- log it so we can see what's coming
-    if (!A.s1._notifyLogged) { LOG('S1: notify both out of range -- BE=' + psiBE.toFixed(1) + ' LE=' + psiLE.toFixed(1) + ' scale=' + A.s1.scale, 'err'); A.s1._notifyLogged = true; }
-    return; // skip this reading
-  }
+  // Pressure Measurement value (TDWLB5 attr 0x001c) is sint16 BIG-ENDIAN, scaled by the
+  // 0x2904 descriptor -- IDENTICAL to the readValue() poll path. NOTIFY delivers the same
+  // GATT attribute, so it is big-endian too. (Little-endian is watchlist/advertisement
+  // only -- attr 0x2aff -- which this app must not use; see hard rule #1. Confirmed against
+  // the TDWLB-G2G5 Attribute Database V5.) No byte-order guessing.
+  if (dv.byteLength < 2) return; // ignore short/empty packet
+  const raw = dv.getInt16(0, false); // sint16 BE
+  const psi = raw * A.s1.scale + A.s1.calOff;
+  if (!A.s1._notifyLogged) { LOG('S1: notify BE raw=' + raw + ' psi=' + psi.toFixed(1), 'info'); A.s1._notifyLogged = true; }
 
   A.s1.psi = psi;
   if (A.s1.minP === null || psi < A.s1.minP) A.s1.minP = psi;
@@ -1948,6 +1937,7 @@ async function runPoll() {
     A.poll.inFlight = true;
     try {
       const dv = await A.s1.chr.readValue();
+      A.s1.lastReadMs = Date.now(); // feed the 20s data watchdog (H3) -- poll path was not setting this, so the watchdog was dead whenever S1 ran in poll fallback
       const elapsed = performance.now() - t0;
 
       // Warn if sensor is slow (interval write wasn't accepted)
@@ -3351,6 +3341,7 @@ function updateSessionInfoDisplays() {
 
 
 const CHANGELOG = [
+  ['2.1.63-m','Pressure reliability fixes. (1) NOTIFY pressure parse is now strict sint16 big-endian, matching the readValue path and the TDWLB5 datasheet (attr 0x001c). Removed the old BE/LE auto-guess that could silently pick little-endian and report a wrong PSI -- NOTIFY delivers the same big-endian GATT value as a read; little-endian is watchlist/advertisement only, which this app does not use. (2) The 20s data watchdog now also works when pressure runs in poll fallback: runPoll now stamps lastReadMs on each successful read, so a wedged-but-connected pressure sensor is detected and reconnected. NOTIFY remains the preferred pressure path (~1Hz vs ~0.5Hz polling).'],
   ['2.1.62-m','Firebase uploads now retry on failure instead of being dropped. Previously a reading whose REST write failed (cell/wifi hiccup, offline) was marked queued and never resent, so the remote dashboard silently lost those seconds. Uploads are now tracked per sensor and marked done only on server ack, so failed writes re-queue and retry every 2s, and a second-sensor value that arrives after its bucket was first sent now uploads too. No duplicate writes.'],
   ['2.1.61-m','Sensor cards on Setup screen now have a permanent color-coded left rail (S1 green, S2 blue) and light background tint, always visible not just when connected, so it is obvious at a glance which controls belong to which sensor on tablet. Also fixed stale class names (sensor-card, sc-dot, sc-status) in the connect UI JS that were preventing the connected-state tint from ever rendering.'],
   ['2.1.60-m','Wake Lock failure log now includes error name, document.visibilityState and document.hasFocus() to diagnose why NotAllowedError is thrown (Samsung Power Saving, tab not focused, etc)'],
