@@ -652,7 +652,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--t1);min-height:100
 
 <!-- ══ JAVASCRIPT ════════════════════════════════ -->
 <script>
-const DB_VER = '1.7.22';
+const DB_VER = '1.7.23';
 
 // ── FIREBASE ─────────────────────────────────────
 const FB_CFG = {
@@ -824,6 +824,7 @@ function initThrottleSliders() {
 
 
 const CHANGELOG = [
+  ['1.7.23','Loading a shot now re-syncs the zoom buttons to All, so the highlighted timebase always matches the full-dataset default and never shows a stale zoom from a previous shot.'],
   ['1.7.22','Pre-test hardening. (1) Temperature Min/Max are now stored in raw Celsius and converted at display, so switching the temperature unit no longer shows the old Fahrenheit number relabeled as C or freezes the running max. (2) Chart now caps at 800 plotted points (stride decimation, always keeps the latest) so a multi-hour session no longer lags or freezes the browser at All zoom; the table already capped separately. (3) When a shot is loaded before any data exists, the first live reading now clears the No data indicator and starts the duration/live-bar timer instead of staying stuck.'],
   ['1.7.20','Live Update Performance sliders added to settings — adjust throttle intervals on the fly; color-coded (red=faster/higher load, green=slower/safer); resets to defaults on every startup'],
   ['1.7.19','Tiered render throttles: stats/tiles 1.5s, chart 2s, readings table 8s — eliminates lag on long sessions; table capped at 500 newest display rows'],
@@ -1051,6 +1052,9 @@ async function loadShot() {
   // Build content area
   buildContent();
   D.zoomMins = 'all'; // ensure zoom starts at All for new shot
+  // Re-sync the zoom buttons to All so the highlight matches the full-timebase default
+  // (otherwise a manually-picked zoom from a previous shot could still look active).
+  document.querySelectorAll('.zoom-btn').forEach(b => b.classList.toggle('active', /All/.test(b.textContent)));
 
   // Step 1: Full snapshot once for historical data
   setSel('Loading shot data…');

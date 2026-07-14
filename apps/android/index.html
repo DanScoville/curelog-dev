@@ -550,10 +550,10 @@ body.recording #not-rec-banner{display:none}
             <div class="leg-item"><svg width="24" height="12" viewBox="0 0 24 12" style="display:block;flex-shrink:0"><line x1="0" y1="6" x2="24" y2="6" stroke="#E8A838" stroke-width="1.5" stroke-dasharray="5,3"/></svg>LCL</div>
           </div>
           <div class="chart-range-wrap">
-            <button class="cr-btn" onclick="setRange('all')">All</button>
+            <button class="cr-btn active" onclick="setRange('all')">All</button>
             <button class="cr-btn" onclick="setRange(30)">30m</button>
             <button class="cr-btn" onclick="setRange(15)">15m</button>
-            <button class="cr-btn active" onclick="setRange(5)">5m</button>
+            <button class="cr-btn" onclick="setRange(5)">5m</button>
             <button class="cr-btn" onclick="setRange(1)">1m</button>
           </div>
         </div>
@@ -927,7 +927,7 @@ function toggleConnLog() {
 
 
 'use strict';
-const VER = '2.1.68-m';
+const VER = '2.1.69-m';
 
 // ── FIREBASE ─────────────────────────────────────────────────
 const FB_CFG = {
@@ -2625,6 +2625,7 @@ function startSession() {
   try { initFB(); LOG('startSession: initFB OK', 'ok'); }
   catch(e) { LOG('startSession: initFB CRASHED -- ' + e.message, 'err'); }
   try { startDisp(); } catch(e) { LOG('startSession: startDisp CRASHED -- ' + e.message, 'err'); }
+  try { setRange('all'); } catch(e) {} // default the chart to the full session so the user sees all data, not a 5m window
   if (!A.uplH) A.uplH = setInterval(drainUpload, 2000);
   if (A.s1.con) kickPoll();
   LOG('Session started -- ' + A.sess.truck + ' Job:' + A.sess.job + ' Shot:' + A.sess.shot + ' Seg:' + A.sess.seg, 'ok');
@@ -3379,6 +3380,7 @@ function updateSessionInfoDisplays() {
 
 
 const CHANGELOG = [
+  ['2.1.69-m','Chart now defaults to the All timebase so you see every data point of the session. Previously the chart opened on a 5-minute window, which could look like only part of the cure was captured. The All button is the default, and pressing Start Session forces the chart back to All.'],
   ['2.1.68-m','Setup data-entry card now visually separates the two sections with a colored left rail: indigo for Session Info, teal for Tube Specs. Makes it clear at a glance which fields belong to which, matching the colored-rail style already used on the sensor cards.'],
   ['2.1.67-m','Moved the NOT RECORDING banner from the top of Setup to the top of the Monitor panel, directly above the Inlet Pressure and Temperature tiles (top-right in the tablet split layout), so it reads as a warning that those live values are not being saved yet. Still disappears once Start Session is pressed.'],
   ['2.1.66-m','Setup screen UX. (1) Opens full screen on the first tap (browsers block auto-fullscreen without a tap). (2) Reordered so all the operator data entry is together at the top -- Session Info and Tube Specs in the first card -- then the sensor connect chips, with the Connection Log now beside the chips. Encourages entering job/tube info before connecting. (3) A red NOT RECORDING banner is shown at the top of Setup until Start Session is pressed, so it is obvious the cure is not being saved yet; it disappears once recording starts.'],

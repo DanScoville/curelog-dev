@@ -1,6 +1,6 @@
 # CLAUDE.md — Mobile Dashboard (phone-sized live monitor)
 
-Refines the root `CLAUDE.md`. Same nature as `apps/dashboard/` — read-only live Firebase monitor — but sized for a phone. Current file: `CureLog Mobile Dashboard - v1.7.19.html` (`VER = '1.7.19-m'`, note the `-m` suffix like the Android app).
+Refines the root `CLAUDE.md`. Same nature as `apps/dashboard/` — read-only live Firebase monitor — but sized for a phone. File: `CureLog Mobile Dashboard.html` (stable, version-less filename so the URL never changes). Version lives only in `const DB_VER` inside the file (currently `'1.7.22-m'`, note the `-m` suffix like the Android app) — do NOT re-add the version to the filename.
 
 ## Same rules as the desktop dashboard
 

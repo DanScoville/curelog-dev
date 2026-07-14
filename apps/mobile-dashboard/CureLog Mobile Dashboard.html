@@ -439,7 +439,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--fon
 <script>
 'use strict';
 
-const DB_VER = '1.7.21-m';
+const DB_VER = '1.7.22-m';
 
 // ── FIREBASE ─────────────────────────────────────
 const FB_CFG = {
@@ -644,6 +644,8 @@ async function loadShot() {
   // Build content area
   buildContent();
   D.zoomMins = 'all'; // ensure zoom starts at All for new shot
+  // Re-sync the zoom buttons to All so the highlight matches the full-timebase default.
+  document.querySelectorAll('.zoom-btn').forEach(b => b.classList.toggle('active', /All/.test(b.textContent)));
 
   // Attach real-time listener to the entire shot path
   liveListener = db.ref(D.path);

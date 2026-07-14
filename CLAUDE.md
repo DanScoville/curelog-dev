@@ -14,11 +14,11 @@ CureLog is a suite of **single-file HTML5** field data-acquisition apps for moni
 
 ```
 apps/
-  android/index.html                    Android Chrome mobile truck app (PWA)   VER 2.1.61-m
-  ipad/iPad.html                        iPad truck app (Bluefy browser for BLE) VER 2.1.64-ipad
-  pc/PC.html                            Windows/Mac desktop truck app           VER 2.1.19
-  dashboard/*.html                      Office/remote live Firebase monitor     VER 1.7.21
-  mobile-dashboard/*.html               Phone-sized live dashboard              VER 1.7.19-m
+  android/index.html                          Android Chrome mobile truck app (PWA)   VER 2.1.69-m
+  ipad/iPad.html                              iPad truck app (Bluefy browser for BLE) VER 2.1.64-ipad
+  pc/PC.html                                  Windows/Mac desktop truck app           VER 2.1.19
+  dashboard/curelog-phase1-dashboard.html     Office/remote live Firebase monitor     VER 1.7.23
+  mobile-dashboard/CureLog Mobile Dashboard.html  Phone-sized live dashboard          VER 1.7.22-m
   tablet/                               Galaxy Tab A11 split-layout build
 archive/                                Old versioned files
 reports/                                Shot reports (roadmap)
