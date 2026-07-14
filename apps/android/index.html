@@ -366,10 +366,6 @@ body.recording #not-rec-banner{display:none}
 
     <!-- SETUP PAGE -->
     <div class="page active" id="page-setup">
-      <div id="not-rec-banner">
-        <span class="nr-dot"></span>
-        <span><b>NOT RECORDING</b> - nothing is being saved yet. Enter the info, connect the sensors, then press <b>Start Session</b> to begin recording.</span>
-      </div>
       <div class="su-card">
         <div class="su-card-title">📋 Session Info</div>
         <div class="su-field">
@@ -469,6 +465,10 @@ body.recording #not-rec-banner{display:none}
 
     <!-- MONITOR PAGE -->
     <div class="page" id="page-monitor">
+      <div id="not-rec-banner">
+        <span class="nr-dot"></span>
+        <span><b>NOT RECORDING</b> - live values are shown but not being saved. Press <b>Start Session</b> to begin recording.</span>
+      </div>
       <!-- Active Collection Timer -->
       <div class="coll-bar" id="collection-timer-bar">
         <div style="display:flex;align-items:flex-start;gap:7px;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--bor)">
@@ -914,7 +914,7 @@ function toggleConnLog() {
 
 
 'use strict';
-const VER = '2.1.66-m';
+const VER = '2.1.67-m';
 
 // ── FIREBASE ─────────────────────────────────────────────────
 const FB_CFG = {
@@ -3366,6 +3366,7 @@ function updateSessionInfoDisplays() {
 
 
 const CHANGELOG = [
+  ['2.1.67-m','Moved the NOT RECORDING banner from the top of Setup to the top of the Monitor panel, directly above the Inlet Pressure and Temperature tiles (top-right in the tablet split layout), so it reads as a warning that those live values are not being saved yet. Still disappears once Start Session is pressed.'],
   ['2.1.66-m','Setup screen UX. (1) Opens full screen on the first tap (browsers block auto-fullscreen without a tap). (2) Reordered so all the operator data entry is together at the top -- Session Info and Tube Specs in the first card -- then the sensor connect chips, with the Connection Log now beside the chips. Encourages entering job/tube info before connecting. (3) A red NOT RECORDING banner is shown at the top of Setup until Start Session is pressed, so it is obvious the cure is not being saved yet; it disappears once recording starts.'],
   ['2.1.65-m','Recording now starts at the Start button. Previously the reading log and chart began filling as soon as the sensors connected, during the connect/preview phase. Now nothing is collected -- no log, no chart, no CSV, no cloud upload -- until Start is pressed; the live sensor value tiles still update so you can confirm the sensors are alive first. Start also clears any preview/leftover data so each cure begins clean. (Cloud upload was already gated on Start; this closes the local-collection gap.)'],
   ['2.1.64-m','Pre-test hardening. (1) Tapping the Connection Log header no longer throws -- a duplicate toggle function referenced a button id that does not exist; removed it so the working collapse/expand handler runs. (2) Firebase path segments (job/shot/seg/truck) are now sanitized of characters RTDB keys cannot contain (. # $ [ ] /), so an odd job number can no longer break or misfile the upload. Raw values are still stored in each reading.'],
