@@ -7,14 +7,14 @@ Guidance for Claude Code working in the **CureLog** repo (`DanScoville/curelog-d
 CureLog is a suite of **single-file HTML5** field data-acquisition apps for monitoring **CIPP (Cured In Place Pipe)** sewer rehabilitation. Each app connects to BLE sensors on the job truck, captures live **pressure and temperature** during a cure ("shot"), streams readings to **Firebase Realtime Database**, and exports CSV logs. Remote dashboards read the same Firebase data live.
 
 - **Owner:** Dan Scoville, Azuria Water Solutions
-- **Hosting:** static files on GitHub Pages — `https://danscoville.github.io/curelog-mobile/`
+- **Hosting:** static files on GitHub Pages, served from **this repo** (`curelog-dev`) at `https://danscoville.github.io/curelog-dev/apps/android/index.html`. (The old `curelog-mobile` repo/URL was the previous host and is being retired — do not push there.)
 - **Stack:** vanilla HTML/CSS/JS. **No build system, no bundler, no npm, no frameworks.** Every app is one self-contained `.html` file.
 
 ## Repo layout
 
 ```
 apps/
-  android/index.html                    Android Chrome mobile truck app (PWA)   VER 2.1.58-m
+  android/index.html                    Android Chrome mobile truck app (PWA)   VER 2.1.61-m
   ipad/iPad.html                        iPad truck app (Bluefy browser for BLE) VER 2.1.64-ipad
   pc/PC.html                            Windows/Mac desktop truck app           VER 2.1.19
   dashboard/*.html                      Office/remote live Firebase monitor     VER 1.7.21
@@ -26,7 +26,7 @@ scripts/                                Python/bash patching scripts
 docs/                                   Reference docs (incl. bom/)
 ```
 
-Each app file is ~1,300–3,600 lines. The truck app served as `apps/android/index.html` is the primary GitHub Pages entry point; other apps are reached by direct filename URL.
+Each app file is ~1,300–3,600 lines. The truck app at `apps/android/index.html` is the primary GitHub Pages entry point (`.../curelog-dev/apps/android/index.html`); other apps are reached by direct path under the same repo URL.
 
 ## Hard rules — do not change without explicit instruction from Dan
 
@@ -86,7 +86,11 @@ Prefer small Python/bash patch scripts in `scripts/` over hand-editing thousands
 
 ## Deploy
 
-Upload/commit the new file → push to `main` → GitHub Pages auto-deploys in ~1 minute. No CI build.
+Commit the new file → push to `main` on `curelog-dev` → GitHub Pages auto-deploys this repo in ~1 minute. No CI build.
+
+- **Live URL is the deep path** `https://danscoville.github.io/curelog-dev/apps/android/index.html` (Pages serves from `main`, root folder — the app is not at the site root).
+- **Pushing to `main` is now sufficient.** There is no longer a separate `curelog-mobile` deploy repo to sync; that split silently stranded 2.1.59-2.1.61 on the dev repo while the tablet stayed on 2.1.58. If the live version lags after a push, check Pages build status on `curelog-dev`, not a second repo.
+- **Tablet/PWA:** the home-screen icon is pinned to whatever URL it was installed from. After a host/URL change, re-add to home screen from the new URL and delete the old icon, or the stale cached app keeps loading.
 
 ## Roadmap / on the horizon
 
