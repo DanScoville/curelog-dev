@@ -439,7 +439,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--fon
 <script>
 'use strict';
 
-const DB_VER = '1.7.20-m';
+const DB_VER = '1.7.21-m';
 
 // ── FIREBASE ─────────────────────────────────────
 const FB_CFG = {
@@ -813,6 +813,15 @@ function processSnapshot(data) {
 
   // Sort
   D.sorted = Object.values(D.rows).sort((a,b) => a.tsMs - b.tsMs);
+
+  // Show only readings from the official session start (the truck app's Start button),
+  // matching the office dashboard. 5s slack for readings that landed just before Start.
+  // Without this, a shot whose sensors logged long before Start showed hours of pre-session
+  // data here while the office dashboard (which trims) showed only the real cure.
+  if (D.sessStartMs) {
+    const cutoff = D.sessStartMs - 5000;
+    D.sorted = D.sorted.filter(r => r.tsMs >= cutoff);
+  }
 
   // Compute stats
   D.maxPsi = D.minPsi = D.maxTemp = D.minTemp = null;

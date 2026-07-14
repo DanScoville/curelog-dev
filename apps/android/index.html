@@ -903,7 +903,7 @@ function toggleConnLog() {
 
 
 'use strict';
-const VER = '2.1.64-m';
+const VER = '2.1.65-m';
 
 // ── FIREBASE ─────────────────────────────────────────────────
 const FB_CFG = {
@@ -1976,8 +1976,14 @@ async function runPoll() {
 
 // ── READINGS QUEUE ────────────────────────────────────────────
 function pushReading({ psi, tempC, src, tsMs }) {
+  // Record ONLY while a session is active. Before Start (the sensor connect/preview phase)
+  // we deliberately collect nothing -- no rdMap, no chart, no CSV, no Firebase upload -- so a
+  // cure only exists from the moment Start is pressed. Live sensor value tiles still update
+  // (they read A.s1.psi / A.s2 directly in the display loop), so the operator can still
+  // confirm the sensors are alive and reading before starting.
+  if (!A.sess.active) return;
   // Start collection timer on first real data
-  if (!A.collectActive && A.sess.active) startCollectionTimer();
+  if (!A.collectActive) startCollectionTimer();
   // ── Readings map: keyed by whole second -- one row per second in the log ──
   // Multiple readings within the same second update the same row (latest wins)
   const k = Math.floor(tsMs / 1000) * 1000;
@@ -2570,6 +2576,14 @@ function startSession() {
   A.sess.tubeThick = $('fi-tube-thick') ? $('fi-tube-thick').value.trim() : '';
   A.sess.tubeLen   = $('fi-tube-len')   ? $('fi-tube-len').value.trim()   : '';
   A.sess.active = true; A.dev = false;
+  // Start recording clean: discard anything captured during the connect/preview phase (and
+  // any leftover from a prior session on this tablet) so the cure begins at the Start button.
+  A.rdMap = {};
+  A.upQ = [];
+  if (A.chart) { A.chart.lbl.length = 0; A.chart.psi.length = 0; A.chart.tmp.length = 0; }
+  for (const _k in secMap) delete secMap[_k];
+  A.s1.minP = A.s1.maxP = null;
+  A.s2.minT = A.s2.maxT = null;
   saveTruck($('fi-truck').value.trim());
   localStorage.setItem('cl_job',  A.sess.job);
   localStorage.setItem('cl_shot', A.sess.shot);
@@ -3339,6 +3353,7 @@ function updateSessionInfoDisplays() {
 
 
 const CHANGELOG = [
+  ['2.1.65-m','Recording now starts at the Start button. Previously the reading log and chart began filling as soon as the sensors connected, during the connect/preview phase. Now nothing is collected -- no log, no chart, no CSV, no cloud upload -- until Start is pressed; the live sensor value tiles still update so you can confirm the sensors are alive first. Start also clears any preview/leftover data so each cure begins clean. (Cloud upload was already gated on Start; this closes the local-collection gap.)'],
   ['2.1.64-m','Pre-test hardening. (1) Tapping the Connection Log header no longer throws -- a duplicate toggle function referenced a button id that does not exist; removed it so the working collapse/expand handler runs. (2) Firebase path segments (job/shot/seg/truck) are now sanitized of characters RTDB keys cannot contain (. # $ [ ] /), so an odd job number can no longer break or misfile the upload. Raw values are still stored in each reading.'],
   ['2.1.63-m','Pressure reliability fixes. (1) NOTIFY pressure parse is now strict sint16 big-endian, matching the readValue path and the TDWLB5 datasheet (attr 0x001c). Removed the old BE/LE auto-guess that could silently pick little-endian and report a wrong PSI -- NOTIFY delivers the same big-endian GATT value as a read; little-endian is watchlist/advertisement only, which this app does not use. (2) The 20s data watchdog now also works when pressure runs in poll fallback: runPoll now stamps lastReadMs on each successful read, so a wedged-but-connected pressure sensor is detected and reconnected. NOTIFY remains the preferred pressure path (~1Hz vs ~0.5Hz polling).'],
   ['2.1.62-m','Firebase uploads now retry on failure instead of being dropped. Previously a reading whose REST write failed (cell/wifi hiccup, offline) was marked queued and never resent, so the remote dashboard silently lost those seconds. Uploads are now tracked per sensor and marked done only on server ack, so failed writes re-queue and retry every 2s, and a second-sensor value that arrives after its bucket was first sent now uploads too. No duplicate writes.'],
