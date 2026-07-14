@@ -245,6 +245,16 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:-apple-sy
 @keyframes nrpulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.75)}}
 body.recording #not-rec-banner{display:none}
 
+/* ── Setup section rails (indigo = Session Info, teal = Tube Specs) ── */
+.su-sec{position:relative;padding-left:14px;margin-bottom:16px}
+.su-sec:last-child{margin-bottom:0}
+.su-sec::before{content:'';position:absolute;left:0;top:1px;bottom:1px;width:4px;border-radius:3px}
+.su-sec-session::before{background:#6366f1}
+.su-sec-tube::before{background:#14b8a6}
+.su-sec-hdr{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.su-sec-session .su-sec-hdr{color:#4f46e5}
+.su-sec-tube .su-sec-hdr{color:#0d9488}
+
 /* ── STICKY START SESSION FOOTER ───────────────────────────────── */
 #start-footer{
   position:fixed;
@@ -367,42 +377,45 @@ body.recording #not-rec-banner{display:none}
     <!-- SETUP PAGE -->
     <div class="page active" id="page-setup">
       <div class="su-card">
-        <div class="su-card-title">📋 Session Info</div>
-        <div class="su-field">
-          <label>Truck ID</label>
-          <div class="su-inp-prefix">
-            <span class="su-prefix-lbl">BTK-</span>
-            <input id="fi-truck" type="text" inputmode="numeric" maxlength="5" placeholder="00001" oninput="chkReady()">
-          </div>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div class="su-sec su-sec-session">
+          <div class="su-sec-hdr">📋 Session Info</div>
           <div class="su-field">
-            <label>Job #</label>
-            <input class="su-inp" id="fi-job" type="text" inputmode="numeric" placeholder="190889" oninput="chkReady()">
+            <label>Truck ID</label>
+            <div class="su-inp-prefix">
+              <span class="su-prefix-lbl">BTK-</span>
+              <input id="fi-truck" type="text" inputmode="numeric" maxlength="5" placeholder="00001" oninput="chkReady()">
+            </div>
           </div>
-          <div class="su-field">
-            <label>Shot #</label>
-            <input class="su-inp" id="fi-shot" type="text" inputmode="numeric" placeholder="001" oninput="chkReady()">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div class="su-field">
+              <label>Job #</label>
+              <input class="su-inp" id="fi-job" type="text" inputmode="numeric" placeholder="190889" oninput="chkReady()">
+            </div>
+            <div class="su-field">
+              <label>Shot #</label>
+              <input class="su-inp" id="fi-shot" type="text" inputmode="numeric" placeholder="001" oninput="chkReady()">
+            </div>
+          </div>
+          <div class="su-field" style="margin-bottom:0">
+            <label>Segment #</label>
+            <input class="su-inp" id="fi-seg" type="text" inputmode="numeric" placeholder="001" oninput="chkReady()">
           </div>
         </div>
-        <div class="su-field">
-          <label>Segment #</label>
-          <input class="su-inp" id="fi-seg" type="text" inputmode="numeric" placeholder="001" oninput="chkReady()">
-        </div>
-        <div style="height:1px;background:var(--bor);margin:12px 0 10px"></div>
-        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--t3);margin-bottom:10px">Tube Specs</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
-          <div>
-            <div style="font-size:10px;font-weight:600;color:var(--t3);margin-bottom:4px">Diameter <span style="font-weight:400">in</span></div>
-            <input class="su-inp" id="fi-tube-dia" type="number" inputmode="decimal" step="0.001" placeholder="6.0">
-          </div>
-          <div>
-            <div style="font-size:10px;font-weight:600;color:var(--t3);margin-bottom:4px">Thickness <span style="font-weight:400">mm</span></div>
-            <input class="su-inp" id="fi-tube-thick" type="number" inputmode="decimal" step="0.1" placeholder="6.4">
-          </div>
-          <div>
-            <div style="font-size:10px;font-weight:600;color:var(--t3);margin-bottom:4px">Length <span style="font-weight:400">ft</span></div>
-            <input class="su-inp" id="fi-tube-len" type="number" inputmode="decimal" step="0.1" placeholder="250">
+        <div class="su-sec su-sec-tube">
+          <div class="su-sec-hdr">📏 Tube Specs</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+            <div>
+              <div style="font-size:10px;font-weight:600;color:var(--t3);margin-bottom:4px">Diameter <span style="font-weight:400">in</span></div>
+              <input class="su-inp" id="fi-tube-dia" type="number" inputmode="decimal" step="0.001" placeholder="6.0">
+            </div>
+            <div>
+              <div style="font-size:10px;font-weight:600;color:var(--t3);margin-bottom:4px">Thickness <span style="font-weight:400">mm</span></div>
+              <input class="su-inp" id="fi-tube-thick" type="number" inputmode="decimal" step="0.1" placeholder="6.4">
+            </div>
+            <div>
+              <div style="font-size:10px;font-weight:600;color:var(--t3);margin-bottom:4px">Length <span style="font-weight:400">ft</span></div>
+              <input class="su-inp" id="fi-tube-len" type="number" inputmode="decimal" step="0.1" placeholder="250">
+            </div>
           </div>
         </div>
       </div>
@@ -914,7 +927,7 @@ function toggleConnLog() {
 
 
 'use strict';
-const VER = '2.1.67-m';
+const VER = '2.1.68-m';
 
 // ── FIREBASE ─────────────────────────────────────────────────
 const FB_CFG = {
@@ -3366,6 +3379,7 @@ function updateSessionInfoDisplays() {
 
 
 const CHANGELOG = [
+  ['2.1.68-m','Setup data-entry card now visually separates the two sections with a colored left rail: indigo for Session Info, teal for Tube Specs. Makes it clear at a glance which fields belong to which, matching the colored-rail style already used on the sensor cards.'],
   ['2.1.67-m','Moved the NOT RECORDING banner from the top of Setup to the top of the Monitor panel, directly above the Inlet Pressure and Temperature tiles (top-right in the tablet split layout), so it reads as a warning that those live values are not being saved yet. Still disappears once Start Session is pressed.'],
   ['2.1.66-m','Setup screen UX. (1) Opens full screen on the first tap (browsers block auto-fullscreen without a tap). (2) Reordered so all the operator data entry is together at the top -- Session Info and Tube Specs in the first card -- then the sensor connect chips, with the Connection Log now beside the chips. Encourages entering job/tube info before connecting. (3) A red NOT RECORDING banner is shown at the top of Setup until Start Session is pressed, so it is obvious the cure is not being saved yet; it disappears once recording starts.'],
   ['2.1.65-m','Recording now starts at the Start button. Previously the reading log and chart began filling as soon as the sensors connected, during the connect/preview phase. Now nothing is collected -- no log, no chart, no CSV, no cloud upload -- until Start is pressed; the live sensor value tiles still update so you can confirm the sensors are alive first. Start also clears any preview/leftover data so each cure begins clean. (Cloud upload was already gated on Start; this closes the local-collection gap.)'],
