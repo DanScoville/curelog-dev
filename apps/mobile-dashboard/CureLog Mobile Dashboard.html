@@ -439,7 +439,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--fon
 <script>
 'use strict';
 
-const DB_VER = '1.7.22-m';
+const DB_VER = '1.7.23-m';
 
 // ── FIREBASE ─────────────────────────────────────
 const FB_CFG = {
@@ -498,6 +498,23 @@ function goPage(name) {
 
 // ── INIT ──────────────────────────────────────────
 window.addEventListener('load', async () => {
+  // Auto-update: reload once if the server has a newer build. Offline-safe (fetch fails ->
+  // keep running the cached build); runs at load before a shot is selected. No service worker.
+  (function checkForUpdate(){
+    try {
+      if (sessionStorage.getItem('cl_mdash_upd_done')) return;
+      fetch(location.pathname + '?_cv=' + Date.now(), { cache: 'no-store' })
+        .then(r => r.ok ? r.text() : null)
+        .then(html => {
+          if (!html) return;
+          const m = html.match(/const DB_VER = '(\d[^']*)'/);
+          if (!m || m[1] === DB_VER) return;
+          sessionStorage.setItem('cl_mdash_upd_done', '1');
+          location.replace(location.pathname + '?_v=' + encodeURIComponent(m[1]));
+        })
+        .catch(() => {});
+    } catch(e) {}
+  })();
   // Set version badge
   ['dash-ver','sf-ver'].forEach(id => { const e=$(id); if(e) e.textContent='v'+DB_VER; });
   loadDashSettings();
