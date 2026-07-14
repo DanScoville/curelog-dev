@@ -471,7 +471,7 @@ body.recording #not-rec-banner{display:none}
         <button class="btn-start" id="btn-start" disabled
           onclick="startSession()"
           ontouchstart="this.classList.add('tapping')"
-          ontouchend="this.classList.remove('tapping');startSession()"
+          ontouchend="this.classList.remove('tapping');if(!this.disabled)startSession()"
           ontouchcancel="this.classList.remove('tapping')">▶ Start Session</button>
       </div>
     </div>
@@ -927,7 +927,7 @@ function toggleConnLog() {
 
 
 'use strict';
-const VER = '2.1.72-m';
+const VER = '2.1.73-m';
 
 // ── FIREBASE ─────────────────────────────────────────────────
 const FB_CFG = {
@@ -1330,12 +1330,17 @@ function resetFilters() {
 }
 
 // ── START READY CHECK ─────────────────────────────────────────
+// Start Session requires ALL session + tube fields filled AND at least one sensor connected.
+const REQUIRED_FIELDS = {
+  'fi-truck':'Truck ID', 'fi-job':'Job #', 'fi-shot':'Shot #', 'fi-seg':'Segment #',
+  'fi-tube-dia':'Diameter', 'fi-tube-thick':'Thickness', 'fi-tube-len':'Length'
+};
+function isReadyToStart() {
+  const fieldsOk = Object.keys(REQUIRED_FIELDS).every(id => $(id) && $(id).value.trim() !== '');
+  return fieldsOk && (A.s1.con || A.s2.con);
+}
 function chkReady() {
-  // Start Session requires ALL session + tube fields filled AND at least one sensor connected.
-  const REQUIRED = {
-    'fi-truck':'Truck ID', 'fi-job':'Job #', 'fi-shot':'Shot #', 'fi-seg':'Segment #',
-    'fi-tube-dia':'Diameter', 'fi-tube-thick':'Thickness', 'fi-tube-len':'Length'
-  };
+  const REQUIRED = REQUIRED_FIELDS;
   const missing  = Object.keys(REQUIRED).filter(id => !$(id) || $(id).value.trim() === '');
   const fieldsOk = missing.length === 0;
   const sensOk   = A.s1.con || A.s2.con;
@@ -2591,6 +2596,13 @@ function startDevSim() {
 function startSession() {
   // Guard against double-fire (touchend + onclick both fire on mobile)
   if (A.sess.active) { LOG('startSession: already active, ignoring duplicate call', 'warn'); return; }
+  // Hard guard: never start unless ready. A disabled button can still fire touch events on
+  // some Android browsers (ontouchend), so the disabled attribute alone does not block start.
+  if (!isReadyToStart()) {
+    LOG('Start blocked -- connect a sensor and fill in all session + tube fields first', 'warn');
+    chkReady();
+    return;
+  }
 
   A.sess.truck     = 'BTK-' + $('fi-truck').value.trim();
   A.sess.job       = $('fi-job').value.trim();
@@ -3380,6 +3392,7 @@ function updateSessionInfoDisplays() {
 
 
 const CHANGELOG = [
+  ['2.1.73-m','Fixed Start Session firing even while disabled. On Android a disabled button still fires touch events, so tapping the greyed-out button ran the ontouchend handler and started a shot with no sensor connected and empty fields. startSession() now hard-blocks unless all session + tube fields are filled and a sensor is connected, and the touch handler ignores taps while disabled.'],
   ['2.1.72-m','Start Session is now disabled until every field is filled -- Truck ID, Job, Shot, Segment AND Tube Diameter, Thickness, Length -- and at least one sensor is connected. Previously tube specs were not required and typing in them did not update the button; now they do. The hint lists exactly which fields are still missing.'],
   ['2.1.71-m','Auto-update: on open the app checks the server for a newer build and, if found, reloads to it automatically -- no more clearing cache or adding ?v= to the URL. Offline-safe (keeps running the installed build if the server cannot be reached) and never reloads during an active session.'],
   ['2.1.70-m','Setup screen now opens scrolled to the top so the operator immediately sees the Session Info fields to fill in. Previously boot-time connection-log messages auto-scrolled the page down to the log (which sits below the sensors after the recent reorder), opening the app mid-scroll on empty space. Removed that page auto-scroll; the log box still auto-scrolls to its newest line on its own.'],
