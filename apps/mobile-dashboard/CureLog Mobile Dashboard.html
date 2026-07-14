@@ -441,7 +441,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--fon
 <script>
 'use strict';
 
-const DB_VER = '1.7.24-m';
+const DB_VER = '1.7.25-m';
 
 // ── FIREBASE ─────────────────────────────────────
 const FB_CFG = {
@@ -545,15 +545,23 @@ function setSel(msg, cls) {
 }
 
 // ── CASCADING DROPDOWNS ───────────────────────────
+// Fetch ONLY the child keys at a path via Firebase REST shallow query. Avoids downloading
+// the whole subtree (all shots/segments/trucks/readings -- tens of MB) just to fill a
+// dropdown. Returns [] on empty. Used for the Job/Shot/Segment/Truck pickers.
+async function fbShallowKeys(path) {
+  const r = await fetch(FB_CFG.databaseURL + '/' + path + '.json?shallow=true');
+  if (!r.ok) throw new Error('HTTP ' + r.status);
+  const obj = await r.json();
+  return obj ? Object.keys(obj) : [];
+}
 async function loadJobList() {
   setSel('Loading jobs…');
   try {
-    const snap = await db.ref('shots').once('value');
-    const data = snap.val();
+    const jobs = await fbShallowKeys('shots');
     const sel = $('sel-job');
     sel.innerHTML = '<option value="">— Select Job —</option>';
-    if (!data) { setSel('No shots found in database', 'err'); return; }
-    Object.keys(data).sort().forEach(job => {
+    if (!jobs.length) { setSel('No shots found in database', 'err'); return; }
+    jobs.sort().forEach(job => {
       const o = document.createElement('option');
       o.value = job; o.textContent = job;
       sel.appendChild(o);
@@ -575,11 +583,10 @@ async function onJobChange() {
   if (!job) { setSel(''); return; }
   setSel('Loading shots…');
   try {
-    const snap = await db.ref('shots/' + job).once('value');
-    const data = snap.val();
+    const shots = await fbShallowKeys('shots/' + encodeURIComponent(job));
     const sel = $('sel-shot');
     sel.innerHTML = '<option value="">— Select Shot —</option>';
-    Object.keys(data || {}).sort().forEach(s => {
+    shots.sort().forEach(s => {
       const o = document.createElement('option'); o.value = s; o.textContent = s; sel.appendChild(o);
     });
     sel.disabled = false;
@@ -597,11 +604,10 @@ async function onShotChange() {
   if (!shot) return;
   setSel('Loading segments…');
   try {
-    const snap = await db.ref('shots/' + job + '/' + shot).once('value');
-    const data = snap.val();
+    const segs = await fbShallowKeys('shots/' + encodeURIComponent(job) + '/' + encodeURIComponent(shot));
     const sel = $('sel-seg');
     sel.innerHTML = '<option value="">— Select Segment —</option>';
-    Object.keys(data || {}).sort().forEach(s => {
+    segs.sort().forEach(s => {
       const o = document.createElement('option'); o.value = s; o.textContent = s; sel.appendChild(o);
     });
     sel.disabled = false;
@@ -617,11 +623,10 @@ async function onSegChange() {
   if (!seg) return;
   setSel('Loading trucks…');
   try {
-    const snap = await db.ref('shots/' + job + '/' + shot + '/' + seg).once('value');
-    const data = snap.val();
+    const trucks = await fbShallowKeys('shots/' + encodeURIComponent(job) + '/' + encodeURIComponent(shot) + '/' + encodeURIComponent(seg));
     const sel = $('sel-truck');
     sel.innerHTML = '<option value="">— Select Truck —</option>';
-    Object.keys(data || {}).sort().forEach(t => {
+    trucks.sort().forEach(t => {
       const o = document.createElement('option'); o.value = t; o.textContent = t; sel.appendChild(o);
     });
     sel.disabled = false;

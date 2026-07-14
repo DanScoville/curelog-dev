@@ -655,7 +655,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--t1);min-height:100
 
 <!-- ══ JAVASCRIPT ════════════════════════════════ -->
 <script>
-const DB_VER = '1.7.27';
+const DB_VER = '1.7.28';
 
 // ── FIREBASE ─────────────────────────────────────
 const FB_CFG = {
@@ -827,6 +827,7 @@ function initThrottleSliders() {
 
 
 const CHANGELOG = [
+  ['1.7.28','Much faster job/shot/segment/truck dropdowns. They previously downloaded the entire shots tree (every reading in the database -- tens of MB) just to list the keys, which got slower as data grew and was very slow on tablets. Now they use a Firebase shallow query that returns only the keys (a few hundred bytes). Selecting a shot to view still loads its full data as before.'],
   ['1.7.27','Header now shows a blue DESKTOP badge with a monitor glyph, so it is clear at a glance this is the desktop version vs the amber MOBILE badge on the phone/tablet dashboard.'],
   ['1.7.26','New dashboard icon -- a monitor showing the pulse waveform, a viewing variant of the CureLog capture mark. Set as the top-left header logo and the browser-tab favicon so the dashboard is distinct from the truck capture app.'],
   ['1.7.25','Higher-contrast shot selector -- the Job/Shot/Segment/Truck dropdowns had near-invisible borders and very light disabled text, and the Load Shot button faded to 40% when disabled, making the controls hard to see. Dropdowns now have a clearly visible border, disabled dropdowns show legible text on a light fill, the disabled Load Shot button is a solid grey, and borders across the page are a bit darker for better definition.'],
@@ -954,15 +955,23 @@ function setSel(msg, cls) {
 }
 
 // ── CASCADING DROPDOWNS ───────────────────────────
+// Fetch ONLY the child keys at a path via Firebase REST shallow query. Avoids downloading
+// the whole subtree (all shots/segments/trucks/readings -- tens of MB) just to fill a
+// dropdown. Returns [] on empty. Used for the Job/Shot/Segment/Truck pickers.
+async function fbShallowKeys(path) {
+  const r = await fetch(FB_CFG.databaseURL + '/' + path + '.json?shallow=true');
+  if (!r.ok) throw new Error('HTTP ' + r.status);
+  const obj = await r.json();
+  return obj ? Object.keys(obj) : [];
+}
 async function loadJobList() {
   setSel('Loading jobs…');
   try {
-    const snap = await db.ref('shots').once('value');
-    const data = snap.val();
+    const jobs = await fbShallowKeys('shots');
     const sel = $('sel-job');
     sel.innerHTML = '<option value="">— Select Job —</option>';
-    if (!data) { setSel('No shots found in database', 'err'); return; }
-    Object.keys(data).sort().forEach(job => {
+    if (!jobs.length) { setSel('No shots found in database', 'err'); return; }
+    jobs.sort().forEach(job => {
       const o = document.createElement('option');
       o.value = job; o.textContent = job;
       sel.appendChild(o);
@@ -983,11 +992,10 @@ async function onJobChange() {
   if (!job) { setSel(''); return; }
   setSel('Loading shots…');
   try {
-    const snap = await db.ref('shots/' + job).once('value');
-    const data = snap.val();
+    const shots = await fbShallowKeys('shots/' + encodeURIComponent(job));
     const sel = $('sel-shot');
     sel.innerHTML = '<option value="">— Select Shot —</option>';
-    Object.keys(data || {}).sort().forEach(s => {
+    shots.sort().forEach(s => {
       const o = document.createElement('option'); o.value = s; o.textContent = s; sel.appendChild(o);
     });
     sel.disabled = false;
@@ -1005,11 +1013,10 @@ async function onShotChange() {
   if (!shot) return;
   setSel('Loading segments…');
   try {
-    const snap = await db.ref('shots/' + job + '/' + shot).once('value');
-    const data = snap.val();
+    const segs = await fbShallowKeys('shots/' + encodeURIComponent(job) + '/' + encodeURIComponent(shot));
     const sel = $('sel-seg');
     sel.innerHTML = '<option value="">— Select Segment —</option>';
-    Object.keys(data || {}).sort().forEach(s => {
+    segs.sort().forEach(s => {
       const o = document.createElement('option'); o.value = s; o.textContent = s; sel.appendChild(o);
     });
     sel.disabled = false;
@@ -1025,11 +1032,10 @@ async function onSegChange() {
   if (!seg) return;
   setSel('Loading trucks…');
   try {
-    const snap = await db.ref('shots/' + job + '/' + shot + '/' + seg).once('value');
-    const data = snap.val();
+    const trucks = await fbShallowKeys('shots/' + encodeURIComponent(job) + '/' + encodeURIComponent(shot) + '/' + encodeURIComponent(seg));
     const sel = $('sel-truck');
     sel.innerHTML = '<option value="">— Select Truck —</option>';
-    Object.keys(data || {}).sort().forEach(t => {
+    trucks.sort().forEach(t => {
       const o = document.createElement('option'); o.value = t; o.textContent = t; sel.appendChild(o);
     });
     sel.disabled = false;
