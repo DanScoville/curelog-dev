@@ -9,6 +9,10 @@
 <meta name="theme-color" content="#0e1e2e">
 <title>CureLog Dashboard</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'%3E%3Crect width='96' height='96' rx='22' fill='%231D9E75'/%3E%3Crect x='22' y='26' width='52' height='36' rx='5' fill='none' stroke='%23fff' stroke-width='5'/%3E%3Cpolyline points='30,46 38,46 42,37 48,53 52,46 66,46' fill='none' stroke='%23fff' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cline x1='48' y1='62' x2='48' y2='70' stroke='%23fff' stroke-width='5'/%3E%3Cline x1='37' y1='72' x2='59' y2='72' stroke='%23fff' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCA5NiA5Nic+PHJlY3Qgd2lkdGg9Jzk2JyBoZWlnaHQ9Jzk2JyByeD0nMjInIGZpbGw9JyMxRDlFNzUnLz48cmVjdCB4PScyMicgeT0nMjYnIHdpZHRoPSc1MicgaGVpZ2h0PSczNicgcng9JzUnIGZpbGw9J25vbmUnIHN0cm9rZT0nI2ZmZicgc3Ryb2tlLXdpZHRoPSc1Jy8+PHBvbHlsaW5lIHBvaW50cz0nMzAsNDYgMzgsNDYgNDIsMzcgNDgsNTMgNTIsNDYgNjYsNDYnIGZpbGw9J25vbmUnIHN0cm9rZT0nI2ZmZicgc3Ryb2tlLXdpZHRoPSc0JyBzdHJva2UtbGluZWNhcD0ncm91bmQnIHN0cm9rZS1saW5lam9pbj0ncm91bmQnLz48bGluZSB4MT0nNDgnIHkxPSc2MicgeDI9JzQ4JyB5Mj0nNzAnIHN0cm9rZT0nI2ZmZicgc3Ryb2tlLXdpZHRoPSc1Jy8+PGxpbmUgeDE9JzM3JyB5MT0nNzInIHgyPSc1OScgeTI9JzcyJyBzdHJva2U9JyNmZmYnIHN0cm9rZS13aWR0aD0nNScgc3Ryb2tlLWxpbmVjYXA9J3JvdW5kJy8+PC9zdmc+">
+<link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiQ3VyZUxvZyBNb2JpbGUgRGFzaGJvYXJkIiwic2hvcnRfbmFtZSI6IkN1cmVMb2cgTW9iaWxlIiwic3RhcnRfdXJsIjoiLiIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiMwZTFlMmUiLCJ0aGVtZV9jb2xvciI6IiMxRDlFNzUiLCJpY29ucyI6W3sic3JjIjoiZGF0YTppbWFnZS9zdmcreG1sO2Jhc2U2NCxQSE4yWnlCNGJXeHVjejBuYUhSMGNEb3ZMM2QzZHk1M015NXZjbWN2TWpBd01DOXpkbWNuSUhacFpYZENiM2c5SnpBZ01DQTVOaUE1TmljK1BISmxZM1FnZDJsa2RHZzlKemsySnlCb1pXbG5hSFE5SnprMkp5QnllRDBuTWpJbklHWnBiR3c5SnlNeFJEbEZOelVuTHo0OGNtVmpkQ0I0UFNjeU1pY2dlVDBuTWpZbklIZHBaSFJvUFNjMU1pY2dhR1ZwWjJoMFBTY3pOaWNnY25nOUp6VW5JR1pwYkd3OUoyNXZibVVuSUhOMGNtOXJaVDBuSTJabVppY2djM1J5YjJ0bExYZHBaSFJvUFNjMUp5OCtQSEJ2Ykhsc2FXNWxJSEJ2YVc1MGN6MG5NekFzTkRZZ016Z3NORFlnTkRJc016Y2dORGdzTlRNZ05USXNORFlnTmpZc05EWW5JR1pwYkd3OUoyNXZibVVuSUhOMGNtOXJaVDBuSTJabVppY2djM1J5YjJ0bExYZHBaSFJvUFNjMEp5QnpkSEp2YTJVdGJHbHVaV05oY0QwbmNtOTFibVFuSUhOMGNtOXJaUzFzYVc1bGFtOXBiajBuY205MWJtUW5MejQ4YkdsdVpTQjRNVDBuTkRnbklIa3hQU2MyTWljZ2VESTlKelE0SnlCNU1qMG5OekFuSUhOMGNtOXJaVDBuSTJabVppY2djM1J5YjJ0bExYZHBaSFJvUFNjMUp5OCtQR3hwYm1VZ2VERTlKek0zSnlCNU1UMG5OekluSUhneVBTYzFPU2NnZVRJOUp6Y3lKeUJ6ZEhKdmEyVTlKeU5tWm1ZbklITjBjbTlyWlMxM2FXUjBhRDBuTlNjZ2MzUnliMnRsTFd4cGJtVmpZWEE5SjNKdmRXNWtKeTgrUEM5emRtYysiLCJzaXplcyI6ImFueSIsInR5cGUiOiJpbWFnZS9zdmcreG1sIn1dfQ==">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="CureLog Mobile">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -441,7 +445,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--fon
 <script>
 'use strict';
 
-const DB_VER = '1.7.25-m';
+const DB_VER = '1.7.26-m';
 
 // ── FIREBASE ─────────────────────────────────────
 const FB_CFG = {
