@@ -652,7 +652,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--t1);min-height:100
 
 <!-- ══ JAVASCRIPT ════════════════════════════════ -->
 <script>
-const DB_VER = '1.7.21';
+const DB_VER = '1.7.22';
 
 // ── FIREBASE ─────────────────────────────────────
 const FB_CFG = {
@@ -722,10 +722,13 @@ function processNewReading(src, r) {
     if (D.minPsi  === null || row.psi   < D.minPsi)  D.minPsi  = row.psi;
   }
   if (row.tempC !== null) {
-    const tv = D.tUnit==='F' ? row.tempC*9/5+32 : row.tempC;
-    if (D.maxTemp === null || tv > D.maxTemp) D.maxTemp = tv;
-    if (D.minTemp === null || tv < D.minTemp) D.minTemp = tv;
+    // Store raw Celsius (like pressure); convert at display so a unit switch stays correct
+    if (D.maxTemp === null || row.tempC > D.maxTemp) D.maxTemp = row.tempC;
+    if (D.minTemp === null || row.tempC < D.minTemp) D.minTemp = row.tempC;
   }
+  // First live reading when the initial snapshot had no data: clear the stale "No data"
+  // state and seed firstTs so the duration and live bar start counting.
+  if (D.firstTs == null) { D.firstTs = D.sessStartMs || k; setLive('on', 'Live'); }
   D.lastTs = Math.max(D.lastTs || 0, k);
   throttledRenderAll();   // stats, tiles, live bar
   throttledRenderChart(); // chart
@@ -821,6 +824,7 @@ function initThrottleSliders() {
 
 
 const CHANGELOG = [
+  ['1.7.22','Pre-test hardening. (1) Temperature Min/Max are now stored in raw Celsius and converted at display, so switching the temperature unit no longer shows the old Fahrenheit number relabeled as C or freezes the running max. (2) Chart now caps at 800 plotted points (stride decimation, always keeps the latest) so a multi-hour session no longer lags or freezes the browser at All zoom; the table already capped separately. (3) When a shot is loaded before any data exists, the first live reading now clears the No data indicator and starts the duration/live-bar timer instead of staying stuck.'],
   ['1.7.20','Live Update Performance sliders added to settings — adjust throttle intervals on the fly; color-coded (red=faster/higher load, green=slower/safer); resets to defaults on every startup'],
   ['1.7.19','Tiered render throttles: stats/tiles 1.5s, chart 2s, readings table 8s — eliminates lag on long sessions; table capped at 500 newest display rows'],
   ['1.7.18','CSV export includes full session header block with version, app name, truck/job/shot/seg, tube specs'],
@@ -1267,9 +1271,9 @@ function processSnapshot(data) {
       if (D.minPsi === null || r.psi < D.minPsi) D.minPsi = r.psi;
     }
     if (r.tempC !== null) {
-      const td = D.tUnit === 'F' ? cToF(r.tempC) : r.tempC;
-      if (D.maxTemp === null || td > D.maxTemp) D.maxTemp = td;
-      if (D.minTemp === null || td < D.minTemp) D.minTemp = td;
+      // Store raw Celsius; convert at display (renderTiles) so switching units stays correct
+      if (D.maxTemp === null || r.tempC > D.maxTemp) D.maxTemp = r.tempC;
+      if (D.minTemp === null || r.tempC < D.minTemp) D.minTemp = r.tempC;
     }
   });
   if (D.sorted.length) {
@@ -1476,14 +1480,19 @@ function renderTiles() {
     $('tile-temp-val').innerHTML = disp.toFixed(1) + '<span>' + unit + '</span>';
     const age = Math.round((Date.now() - lastTemp.tsMs) / 1000);
     $('tile-temp-age').textContent = age < 5 ? 'Live' : age + 's ago';
-    $('tile-tmin').textContent = D.minTemp !== null ? D.minTemp.toFixed(1) + unit : '—';
-    $('tile-tmax').textContent = D.maxTemp !== null ? D.maxTemp.toFixed(1) + unit : '—';
+    $('tile-tmin').textContent = D.minTemp !== null ? (D.tUnit === 'F' ? cToF(D.minTemp) : D.minTemp).toFixed(1) + unit : '—';
+    $('tile-tmax').textContent = D.maxTemp !== null ? (D.tUnit === 'F' ? cToF(D.maxTemp) : D.maxTemp).toFixed(1) + unit : '—';
   }
 }
 
 function initChart() {
   const canvas = $('dashCanvas');
   if (!canvas) return;
+  // Destroy any chart still bound to this canvas first, so re-init never hits Chart.js
+  // "Canvas is already in use" or leaks the old instance across shot loads.
+  const prev = (window.Chart && typeof Chart.getChart === 'function') ? Chart.getChart(canvas) : dashChart;
+  if (prev) { try { prev.destroy(); } catch(e) {} }
+  dashChart = null;
   const ctx = canvas.getContext('2d');
   dashChart = new Chart(ctx, {
     type: 'line',
@@ -1504,6 +1513,20 @@ function initChart() {
   });
   applyDashSettings(); updateDashLegend();
   if (D.sorted.length) renderChart();
+}
+
+// Cap plotted chart points -- a multi-hour cure is thousands of readings; re-rendering all
+// of them on every update janks/freezes the browser (the table is already capped). Stride
+// down to at most MAX_CHART_PTS, always keeping the latest point so the live edge is current.
+const MAX_CHART_PTS = 800;
+function decimateRows(rows, maxPts) {
+  if (rows.length <= maxPts) return rows;
+  const stride = Math.ceil(rows.length / maxPts);
+  const out = [];
+  for (let i = 0; i < rows.length; i += stride) out.push(rows[i]);
+  const last = rows[rows.length - 1];
+  if (out[out.length - 1] !== last) out.push(last);
+  return out;
 }
 
 function renderChart() {
@@ -1535,6 +1558,7 @@ function renderChart() {
     const cutoff = D.lastTs - D.zoomMins * 60 * 1000;
     rows = D.sorted.filter(r => r.tsMs >= cutoff);
   }
+  rows = decimateRows(rows, MAX_CHART_PTS);
 
   const labels = rows.map(r => new Date(r.tsMs).toLocaleTimeString());
   const pUnit = D.pUnit||'PSI';
