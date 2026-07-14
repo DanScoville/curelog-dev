@@ -4,7 +4,7 @@ Refines the root `CLAUDE.md` for this directory. Where the two differ, this file
 
 ## What this app is
 
-Read-only live monitor of Firebase session data for office/remote viewers. It does **not** connect to BLE, does **not** capture or upload readings — it only *reads* what the truck apps wrote. File: `curelog-phase1-dashboard.html` (stable, version-less filename so the URL never changes). Version lives only in `const DB_VER` inside the file (currently `'1.7.23'`) — do NOT re-add the version to the filename.
+Read-only live monitor of Firebase session data for office/remote viewers. It does **not** connect to BLE, does **not** capture or upload readings — it only *reads* what the truck apps wrote. File: `CureLog Desktop Dashboard.html` (stable, version-less filename so the URL never changes). Version lives only in `const DB_VER` inside the file (currently `'1.7.24'`) — do NOT re-add the version to the filename.
 
 ## Key differences from the truck apps
 
