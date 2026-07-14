@@ -903,7 +903,7 @@ function toggleConnLog() {
 
 
 'use strict';
-const VER = '2.1.63-m';
+const VER = '2.1.64-m';
 
 // ── FIREBASE ─────────────────────────────────────────────────
 const FB_CFG = {
@@ -2043,6 +2043,15 @@ function pushReading({ psi, tempC, src, tsMs }) {
 // ── Firebase REST helper ─────────────────────────────────────────────────
 const FB_REST = 'https://curelog-phase1-default-rtdb.firebaseio.com';
 
+// RTDB keys may not contain . # $ [ ] / -- sanitize free-text path segments (job/shot/seg)
+// so an odd entry can never break the REST URL or misfile the write. The reading payload
+// still carries the raw job/shot/segment values; the dashboard lists whatever keys exist,
+// so write and read stay consistent.
+function fbKey(s) {
+  s = String(s == null ? '' : s).trim().replace(/[.#$\[\]\/]/g, '-').replace(/\s+/g, '_');
+  return s.length ? s : 'NA';
+}
+
 function fbPush(path, data) {
   const url = FB_REST + '/' + path + '.json';
   return fetch(url, {
@@ -2565,7 +2574,7 @@ function startSession() {
   localStorage.setItem('cl_job',  A.sess.job);
   localStorage.setItem('cl_shot', A.sess.shot);
   localStorage.setItem('cl_seg',  A.sess.seg);
-  A.fbPath = `shots/${A.sess.job}/${A.sess.shot}/${A.sess.seg}/${A.sess.truck}`;
+  A.fbPath = `shots/${fbKey(A.sess.job)}/${fbKey(A.sess.shot)}/${fbKey(A.sess.seg)}/${fbKey(A.sess.truck)}`;
   LOG('startSession: fbPath set to ' + A.fbPath, 'ok');
   // Immediate visual feedback -- disable button and show "Starting..."
   const _btn = $('btn-start');
@@ -2958,20 +2967,9 @@ async function sdClose() {
 }
 
 // ── CONNECTION LOG HELPERS ───────────────────────────────────
-let connLogExpanded = false;
-function toggleConnLog() {
-  connLogExpanded = !connLogExpanded;
-  const clog = $('su-clog');
-  const btn  = $('su-log-expand-btn');
-  if (connLogExpanded) {
-    clog.style.setProperty('--clog-h', '280px');
-    clog.style.height = '280px';
-    btn.textContent = 'Collapse';
-  } else {
-    clog.style.height = '110px';
-    btn.textContent = 'Expand';
-  }
-}
+// (toggleConnLog is defined earlier -- it collapses #su-clog-wrap and rotates #clog-arrow.
+//  A duplicate definition here referenced a non-existent #su-log-expand-btn and threw a
+//  TypeError on every Connection Log header tap; removed in 2.1.64-m.)
 
 function downloadConnLog() {
   const el = $('su-clog');
@@ -3341,6 +3339,7 @@ function updateSessionInfoDisplays() {
 
 
 const CHANGELOG = [
+  ['2.1.64-m','Pre-test hardening. (1) Tapping the Connection Log header no longer throws -- a duplicate toggle function referenced a button id that does not exist; removed it so the working collapse/expand handler runs. (2) Firebase path segments (job/shot/seg/truck) are now sanitized of characters RTDB keys cannot contain (. # $ [ ] /), so an odd job number can no longer break or misfile the upload. Raw values are still stored in each reading.'],
   ['2.1.63-m','Pressure reliability fixes. (1) NOTIFY pressure parse is now strict sint16 big-endian, matching the readValue path and the TDWLB5 datasheet (attr 0x001c). Removed the old BE/LE auto-guess that could silently pick little-endian and report a wrong PSI -- NOTIFY delivers the same big-endian GATT value as a read; little-endian is watchlist/advertisement only, which this app does not use. (2) The 20s data watchdog now also works when pressure runs in poll fallback: runPoll now stamps lastReadMs on each successful read, so a wedged-but-connected pressure sensor is detected and reconnected. NOTIFY remains the preferred pressure path (~1Hz vs ~0.5Hz polling).'],
   ['2.1.62-m','Firebase uploads now retry on failure instead of being dropped. Previously a reading whose REST write failed (cell/wifi hiccup, offline) was marked queued and never resent, so the remote dashboard silently lost those seconds. Uploads are now tracked per sensor and marked done only on server ack, so failed writes re-queue and retry every 2s, and a second-sensor value that arrives after its bucket was first sent now uploads too. No duplicate writes.'],
   ['2.1.61-m','Sensor cards on Setup screen now have a permanent color-coded left rail (S1 green, S2 blue) and light background tint, always visible not just when connected, so it is obvious at a glance which controls belong to which sensor on tablet. Also fixed stale class names (sensor-card, sc-dot, sc-status) in the connect UI JS that were preventing the connected-state tint from ever rendering.'],
