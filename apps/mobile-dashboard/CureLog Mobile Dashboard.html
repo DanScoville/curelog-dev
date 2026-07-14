@@ -8,6 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#0e1e2e">
 <title>CureLog Dashboard</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'%3E%3Crect width='96' height='96' rx='22' fill='%231D9E75'/%3E%3Crect x='22' y='26' width='52' height='36' rx='5' fill='none' stroke='%23fff' stroke-width='5'/%3E%3Cpolyline points='30,46 38,46 42,37 48,53 52,46 66,46' fill='none' stroke='%23fff' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cline x1='48' y1='62' x2='48' y2='70' stroke='%23fff' stroke-width='5'/%3E%3Cline x1='37' y1='72' x2='59' y2='72' stroke='%23fff' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -184,7 +185,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--fon
   <!-- TOP BAR -->
   <div id="topbar">
     <div class="tb-logo">
-      <div class="tb-logo-icon">📊</div>
+      <div class="tb-logo-icon"><svg width="20" height="20" viewBox="14 16 68 68"><rect x="22" y="26" width="52" height="36" rx="5" fill="none" stroke="#fff" stroke-width="6"/><polyline points="30,46 38,46 42,37 48,53 52,46 66,46" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><line x1="48" y1="62" x2="48" y2="70" stroke="#fff" stroke-width="6"/><line x1="37" y1="72" x2="59" y2="72" stroke="#fff" stroke-width="6" stroke-linecap="round"/></svg></div>
       <div class="tb-logo-text">Cure<span>Log</span></div>
       <span class="tb-tag">DASHBOARD</span>
     </div>
@@ -439,7 +440,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:var(--fon
 <script>
 'use strict';
 
-const DB_VER = '1.7.23-m';
+const DB_VER = '1.7.24-m';
 
 // ── FIREBASE ─────────────────────────────────────
 const FB_CFG = {
