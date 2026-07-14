@@ -927,7 +927,7 @@ function toggleConnLog() {
 
 
 'use strict';
-const VER = '2.1.70-m';
+const VER = '2.1.71-m';
 
 // ── FIREBASE ─────────────────────────────────────────────────
 const FB_CFG = {
@@ -3376,6 +3376,7 @@ function updateSessionInfoDisplays() {
 
 
 const CHANGELOG = [
+  ['2.1.71-m','Auto-update: on open the app checks the server for a newer build and, if found, reloads to it automatically -- no more clearing cache or adding ?v= to the URL. Offline-safe (keeps running the installed build if the server cannot be reached) and never reloads during an active session.'],
   ['2.1.70-m','Setup screen now opens scrolled to the top so the operator immediately sees the Session Info fields to fill in. Previously boot-time connection-log messages auto-scrolled the page down to the log (which sits below the sensors after the recent reorder), opening the app mid-scroll on empty space. Removed that page auto-scroll; the log box still auto-scrolls to its newest line on its own.'],
   ['2.1.69-m','Chart now defaults to the All timebase so you see every data point of the session. Previously the chart opened on a 5-minute window, which could look like only part of the cure was captured. The All button is the default, and pressing Start Session forces the chart back to All.'],
   ['2.1.68-m','Setup data-entry card now visually separates the two sections with a colored left rail: indigo for Session Info, teal for Tube Specs. Makes it clear at a glance which fields belong to which, matching the colored-rail style already used on the sensor cards.'],
@@ -3609,6 +3610,25 @@ document.addEventListener('visibilitychange', () => {
 
 // ── BOOT ─────────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', () => {
+  // ── Auto-update: if the server has a newer build, reload once to it. Offline-safe (fetch
+  //    fails -> keep running the cached build) and never interrupts a running cure. No SW.
+  (function checkForUpdate(){
+    try {
+      if (sessionStorage.getItem('cl_upd_done')) return; // at most one auto-reload per app session
+      fetch(location.pathname + '?_cv=' + Date.now(), { cache: 'no-store' })
+        .then(r => r.ok ? r.text() : null)
+        .then(html => {
+          if (!html) return;
+          const m = html.match(/const VER = '(\d[^']*)'/);
+          if (!m || m[1] === VER) return;               // already on the latest (or cannot tell)
+          if (A.sess && A.sess.active) return;           // never reload mid-session
+          sessionStorage.setItem('cl_upd_done', '1');
+          LOG('Update found (' + VER + ' -> ' + m[1] + ') -- reloading to latest...', 'ok');
+          location.replace(location.pathname + '?_v=' + encodeURIComponent(m[1]));
+        })
+        .catch(() => {});                                // offline or blocked -- keep running cached build
+    } catch(e) {}
+  })();
   // Always run settings/init -- never bail out early
   loadSettings(); loadTruck(); loadFilters();
   updateLegend();
