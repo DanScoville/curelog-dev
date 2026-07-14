@@ -87,9 +87,14 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:-apple-sy
 .su-inp-prefix:focus-within{border-color:var(--g)}
 .su-prefix-lbl{padding:0 10px;font-size:14px;font-weight:700;color:var(--g);background:var(--gl);height:44px;display:flex;align-items:center;border-right:1.5px solid var(--bor);flex-shrink:0}
 .su-inp-prefix input{flex:1;padding:11px 12px;border:none;font-size:15px;color:var(--t1);outline:none;background:transparent}
-.sensor-card{background:var(--card);border-radius:var(--rl2);padding:14px;margin-bottom:10px;box-shadow:var(--sh);border:2px solid transparent;transition:border-color .2s}
-.sensor-card.ok-s1{border-color:var(--g);background:var(--gl)}
-.sensor-card.ok-s2{border-color:var(--b);background:var(--bl)}
+.sensor-card{background:var(--card);border-radius:var(--rl2);padding:14px 14px 14px 18px;margin-bottom:16px;box-shadow:var(--sh);border:1.5px solid var(--bor);border-left-width:6px;transition:border-color .2s,background .2s}
+.sensor-card:last-child{margin-bottom:0}
+#sc1{border-left-color:var(--g);background:var(--gl)}
+#sc2{border-left-color:var(--b);background:var(--bl)}
+.sensor-card.ok-s1{border-color:var(--g);border-left-color:var(--g)}
+.sensor-card.ok-s2{border-color:var(--b);border-left-color:var(--b)}
+#sc1 .sc-title{color:var(--gd);font-weight:800;font-size:15px}
+#sc2 .sc-title{color:var(--bd);font-weight:800;font-size:15px}
 .sc-row{display:flex;align-items:center;gap:10px}
 .sc-dot{width:10px;height:10px;border-radius:50%;background:var(--t4);flex-shrink:0;transition:background .3s}
 .sc-dot.g{background:var(--g);box-shadow:0 0 8px var(--g)}
@@ -898,7 +903,7 @@ function toggleConnLog() {
 
 
 'use strict';
-const VER = '2.1.60-m';
+const VER = '2.1.61-m';
 
 // ── FIREBASE ─────────────────────────────────────────────────
 const FB_CFG = {
@@ -1346,10 +1351,10 @@ function updS1UI() {
   const scb1e=$('scb1'); if(scb1e)scb1e.style.display=con?'none':'block';
   const mbt1=$('mbt1'); if(mbt1&&con&&A.s1.batt!==null){mbt1.textContent='🔋 '+A.s1.batt+'%';mbt1.style.display='';}
   // Startup card
-  $('sd1').className = con ? 'su-dot g' : 'su-dot';
-  $('sc1').className = con ? 'su-sc ok-s1' : 'su-sc';
+  $('sd1').className = con ? 'sc-dot g' : 'sc-dot';
+  $('sc1').className = con ? 'sensor-card ok-s1' : 'sensor-card';
   $('ss1').textContent = con ? 'OK ' + (A.s1.name || 'Connected') : 'Not connected';
-  $('ss1').className  = 'su-sc-status ' + (con ? 'ok' : 'idle');
+  $('ss1').className  = 'sc-status ' + (con ? 'ok' : 'idle');
   $('scb1').textContent = con ? 'Reconnect Reconnect' : 'Connect';
   $('sdb1').disabled    = !con;
   // Settings info
@@ -1374,10 +1379,10 @@ function updS2UI() {
   const sdb2e=$('sdb2'); if(sdb2e)sdb2e.style.display=con?'block':'none';
   const scb2e=$('scb2'); if(scb2e)scb2e.style.display=con?'none':'block';
   const mbt2=$('mbt2'); if(mbt2&&con&&A.s2.batt!==null){mbt2.textContent='🔋 '+A.s2.batt+'%';mbt2.style.display='';}
-  $('sd2').className = con ? 'su-dot b' : 'su-dot';
-  $('sc2').className = con ? 'su-sc ok-s2' : 'su-sc';
+  $('sd2').className = con ? 'sc-dot b' : 'sc-dot';
+  $('sc2').className = con ? 'sensor-card ok-s2' : 'sensor-card';
   $('ss2').textContent = con ? 'OK ' + (A.s2.name || 'Connected') : 'Not connected';
-  $('ss2').className  = 'su-sc-status ' + (con ? 'ok' : 'idle');
+  $('ss2').className  = 'sc-status ' + (con ? 'ok' : 'idle');
   $('scb2').textContent = con ? 'Reconnect Reconnect' : 'Connect';
   $('sdb2').disabled    = !con;
   $('si-n2').textContent = A.s2.name || '--';
@@ -1402,13 +1407,13 @@ async function blePickS1() {
     );
   } catch(e) {
     const msg = (e.name === 'NotFoundError' || e.name === 'AbortError') ? 'Cancelled' : e.message;
-    $('ss1').textContent = msg; $('ss1').className = 'su-sc-status err';
+    $('ss1').textContent = msg; $('ss1').className = 'sc-status err';
     LOG('S1 picker: ' + msg, 'warn');
     return;
   }
   // Device picked -- safe to update UI now
   $('ss1').textContent = 'Connecting to ' + (dev.name || 'device') + '...';
-  $('ss1').className   = 'su-sc-status busy';
+  $('ss1').className   = 'sc-status busy';
   $('scb1').disabled   = true;
   $('scb1').textContent = 'Connecting...';
   LOG('S1: device picked -- ' + (dev.name||'(no name)') + (fUse?' [filter: '+fVal+']':' [no filter]'), 'info');
@@ -1437,7 +1442,7 @@ async function doConnectS1(dev) {
   }
   if (!gattOk1) {
     LOG('S1: GATT connect FAILED after 4 attempts', 'err');
-    $('ss1').textContent = 'X Cannot connect -- see log'; $('ss1').className = 'su-sc-status err';
+    $('ss1').textContent = 'X Cannot connect -- see log'; $('ss1').className = 'sc-status err';
     if (!s.manualDisc) scheduleS1Reconnect();
     return;
   }
@@ -1460,7 +1465,7 @@ async function doConnectS1(dev) {
   if (!svc) {
     LOG('S1: pressure service NOT found -- wrong device?', 'err');
     LOG('S1: UUIDs seen: ' + allSvcs1.map(x=>x.uuid).join(', '), 'warn');
-    $('ss1').textContent = 'X Wrong device -- check log'; $('ss1').className = 'su-sc-status err';
+    $('ss1').textContent = 'X Wrong device -- check log'; $('ss1').className = 'sc-status err';
     return;
   }
   LOG('S1: pressure service OK', 'ok');
@@ -1669,12 +1674,12 @@ async function blePickS2() {
     );
   } catch(e) {
     const msg = (e.name === 'NotFoundError' || e.name === 'AbortError') ? 'Cancelled' : e.message;
-    $('ss2').textContent = msg; $('ss2').className = 'su-sc-status err';
+    $('ss2').textContent = msg; $('ss2').className = 'sc-status err';
     LOG('S2 picker: ' + msg, 'warn');
     return;
   }
   $('ss2').textContent = 'Connecting to ' + (dev.name || 'device') + '...';
-  $('ss2').className   = 'su-sc-status busy';
+  $('ss2').className   = 'sc-status busy';
   $('scb2').disabled   = true;
   $('scb2').textContent = 'Connecting...';
   LOG('S2: device picked -- ' + (dev.name||'(no name)') + (fUse?' [filter: '+fVal+']':' [no filter]'), 'info');
@@ -1711,7 +1716,7 @@ async function doConnectS2(dev) {
     LOG('S2: │ 3. Re-install battery and wait 5s', 'warn');
     LOG('S2: │ 4. Click Reconnect on this page', 'warn');
     LOG('S2: └────────────────────────────────────────────', 'warn');
-    $('ss2').textContent = 'X Cannot connect -- see log'; $('ss2').className = 'su-sc-status err';
+    $('ss2').textContent = 'X Cannot connect -- see log'; $('ss2').className = 'sc-status err';
     // After 5 hard failures, back off much longer before auto-retry
     if (!s.manualDisc) {
       A.s2.reConAttempts = 4; // jump to the long end of the backoff table
@@ -1773,7 +1778,7 @@ async function doConnectS2(dev) {
   if (!ds) {
     LOG('S2: diagnostics service NOT found -- wrong device?', 'err');
     LOG('S2: UUIDs seen: ' + allSvcs.map(x=>x.uuid).join(', '), 'warn');
-    $('ss2').textContent = 'X Wrong device?'; $('ss2').className = 'su-sc-status err';
+    $('ss2').textContent = 'X Wrong device?'; $('ss2').className = 'sc-status err';
     return;
   }
   LOG('S2: diagnostics service OK', 'ok');
@@ -2995,8 +3000,8 @@ function downloadConnLog() {
 window.addEventListener('DOMContentLoaded', () => {
   $('scb1').onclick = blePickS1;  // S1 Connect
   $('scb2').onclick = blePickS2;  // S2 Connect
-  $('sdb1').onclick = () => { A.s1.manualDisc=true; discS1(); $('ss1').textContent='Disconnected'; $('ss1').className='su-sc-status idle'; chkReady(); };
-  $('sdb2').onclick = () => { A.s2.manualDisc=true; discS2(); $('ss2').textContent='Disconnected'; $('ss2').className='su-sc-status idle'; chkReady(); };
+  $('sdb1').onclick = () => { A.s1.manualDisc=true; discS1(); $('ss1').textContent='Disconnected'; $('ss1').className='sc-status idle'; chkReady(); };
+  $('sdb2').onclick = () => { A.s2.manualDisc=true; discS2(); $('ss2').textContent='Disconnected'; $('ss2').className='sc-status idle'; chkReady(); };
 });
 
 
@@ -3333,6 +3338,7 @@ function updateSessionInfoDisplays() {
 
 
 const CHANGELOG = [
+  ['2.1.61-m','Sensor cards on Setup screen now have a permanent color-coded left rail (S1 green, S2 blue) and light background tint, always visible not just when connected, so it is obvious at a glance which controls belong to which sensor on tablet. Also fixed stale class names (sensor-card, sc-dot, sc-status) in the connect UI JS that were preventing the connected-state tint from ever rendering.'],
   ['2.1.60-m','Wake Lock failure log now includes error name, document.visibilityState and document.hasFocus() to diagnose why NotAllowedError is thrown (Samsung Power Saving, tab not focused, etc)'],
   ['2.1.59-m','Tablet landscape split layout: Setup panel left, Monitor panel right on wide landscape screens (Galaxy Tab A11+ etc). Portrait and phones keep the single-page tab UX unchanged.'],
   ['2.1.58-m','Shortened End Session button to End to fit topbar on narrow phone screens'],
