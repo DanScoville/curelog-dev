@@ -406,15 +406,15 @@ body.recording #not-rec-banner{display:none}
           <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
             <div>
               <div style="font-size:10px;font-weight:600;color:var(--t3);margin-bottom:4px">Diameter <span style="font-weight:400">in</span></div>
-              <input class="su-inp" id="fi-tube-dia" type="number" inputmode="decimal" step="0.001" placeholder="6.0">
+              <input class="su-inp" id="fi-tube-dia" type="number" inputmode="decimal" step="0.001" placeholder="6.0" oninput="chkReady()">
             </div>
             <div>
               <div style="font-size:10px;font-weight:600;color:var(--t3);margin-bottom:4px">Thickness <span style="font-weight:400">mm</span></div>
-              <input class="su-inp" id="fi-tube-thick" type="number" inputmode="decimal" step="0.1" placeholder="6.4">
+              <input class="su-inp" id="fi-tube-thick" type="number" inputmode="decimal" step="0.1" placeholder="6.4" oninput="chkReady()">
             </div>
             <div>
               <div style="font-size:10px;font-weight:600;color:var(--t3);margin-bottom:4px">Length <span style="font-weight:400">ft</span></div>
-              <input class="su-inp" id="fi-tube-len" type="number" inputmode="decimal" step="0.1" placeholder="250">
+              <input class="su-inp" id="fi-tube-len" type="number" inputmode="decimal" step="0.1" placeholder="250" oninput="chkReady()">
             </div>
           </div>
         </div>
@@ -927,7 +927,7 @@ function toggleConnLog() {
 
 
 'use strict';
-const VER = '2.1.71-m';
+const VER = '2.1.72-m';
 
 // ── FIREBASE ─────────────────────────────────────────────────
 const FB_CFG = {
@@ -1331,29 +1331,33 @@ function resetFilters() {
 
 // ── START READY CHECK ─────────────────────────────────────────
 function chkReady() {
-  const fieldsOk = ['fi-truck','fi-job','fi-shot','fi-seg'].every(id => $(id) && $(id).value.trim() !== '');
+  // Start Session requires ALL session + tube fields filled AND at least one sensor connected.
+  const REQUIRED = {
+    'fi-truck':'Truck ID', 'fi-job':'Job #', 'fi-shot':'Shot #', 'fi-seg':'Segment #',
+    'fi-tube-dia':'Diameter', 'fi-tube-thick':'Thickness', 'fi-tube-len':'Length'
+  };
+  const missing  = Object.keys(REQUIRED).filter(id => !$(id) || $(id).value.trim() === '');
+  const fieldsOk = missing.length === 0;
   const sensOk   = A.s1.con || A.s2.con;
   const allOk    = fieldsOk && sensOk;
   const btn = $('btn-start');
   if (btn) btn.disabled = !allOk;
   const hint = $('su-hint');
   if (!hint) return;
+  hint.style.cssText = ''; // clear any inline style left by a previous missing-fields state
+  const missLbls = missing.map(id => REQUIRED[id]).join(', ');
   if (allOk) {
     hint.textContent = 'OK Ready -- tap Start Session to begin';
     hint.className = 'su-hint ok';
   } else if (!sensOk && !fieldsOk) {
-    hint.textContent = 'Connect a sensor and fill in all session fields above';
+    hint.textContent = 'Connect a sensor and fill in: ' + missLbls;
     hint.className = 'su-hint';
   } else if (!sensOk) {
     hint.textContent = 'Connect at least one sensor to continue';
     hint.className = 'su-hint';
   } else {
-    const missing = ['fi-truck','fi-job','fi-shot','fi-seg']
-      .filter(id => !$(id) || !$(id).value.trim())
-      .map(id => ({
-        'fi-truck':'Truck ID','fi-job':'Job #','fi-shot':'Shot #','fi-seg':'Segment #'
-      }[id]));
-    hint.textContent = '! Fill in: ' + missing.join(', ');
+    hint.textContent = '! Fill in: ' + missLbls;
+    hint.className = 'su-hint';
     hint.style.cssText = 'color:#b45309;font-weight:600;font-size:12px;margin-bottom:8px;display:block';
   }
 }
@@ -3376,6 +3380,7 @@ function updateSessionInfoDisplays() {
 
 
 const CHANGELOG = [
+  ['2.1.72-m','Start Session is now disabled until every field is filled -- Truck ID, Job, Shot, Segment AND Tube Diameter, Thickness, Length -- and at least one sensor is connected. Previously tube specs were not required and typing in them did not update the button; now they do. The hint lists exactly which fields are still missing.'],
   ['2.1.71-m','Auto-update: on open the app checks the server for a newer build and, if found, reloads to it automatically -- no more clearing cache or adding ?v= to the URL. Offline-safe (keeps running the installed build if the server cannot be reached) and never reloads during an active session.'],
   ['2.1.70-m','Setup screen now opens scrolled to the top so the operator immediately sees the Session Info fields to fill in. Previously boot-time connection-log messages auto-scrolled the page down to the log (which sits below the sensors after the recent reorder), opening the app mid-scroll on empty space. Removed that page auto-scroll; the log box still auto-scrolls to its newest line on its own.'],
   ['2.1.69-m','Chart now defaults to the All timebase so you see every data point of the session. Previously the chart opened on a 5-minute window, which could look like only part of the cure was captured. The All button is the default, and pressing Start Session forces the chart back to All.'],
