@@ -238,6 +238,13 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:-apple-sy
 /* ── SETUP PAGE PADDING for sticky footer ── */
 #page-setup{padding-bottom:calc(var(--nav) + 120px + env(safe-area-inset-bottom,0px)) !important}
 
+/* ── NOT RECORDING banner (shown until Start Session is pressed) ── */
+#not-rec-banner{display:flex;align-items:center;gap:10px;background:#b45309;color:#fff;border-radius:12px;padding:12px 14px;margin-bottom:14px;font-size:13px;line-height:1.35;box-shadow:0 2px 10px rgba(180,83,9,.35)}
+#not-rec-banner b{color:#fff}
+#not-rec-banner .nr-dot{width:11px;height:11px;border-radius:50%;background:#fde68a;box-shadow:0 0 10px #fde68a;flex-shrink:0;animation:nrpulse 1.2s ease-in-out infinite}
+@keyframes nrpulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.75)}}
+body.recording #not-rec-banner{display:none}
+
 /* ── STICKY START SESSION FOOTER ───────────────────────────────── */
 #start-footer{
   position:fixed;
@@ -359,6 +366,10 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:-apple-sy
 
     <!-- SETUP PAGE -->
     <div class="page active" id="page-setup">
+      <div id="not-rec-banner">
+        <span class="nr-dot"></span>
+        <span><b>NOT RECORDING</b> - nothing is being saved yet. Enter the info, connect the sensors, then press <b>Start Session</b> to begin recording.</span>
+      </div>
       <div class="su-card">
         <div class="su-card-title">📋 Session Info</div>
         <div class="su-field">
@@ -382,13 +393,6 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:-apple-sy
           <label>Segment #</label>
           <input class="su-inp" id="fi-seg" type="text" inputmode="numeric" placeholder="001" oninput="chkReady()">
         </div>
-        <!-- Connection log - shown right after sensors so user sees BLE activity -->
-        <div style="height:1px;background:var(--bor);margin:12px 0 10px"></div>
-        <div style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;margin-bottom:6px" onclick="toggleConnLog()">
-          <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--t3)">🔌 Connection Log <span id="su-log-dot" style="display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--g);margin-left:4px;box-shadow:0 0 5px var(--g)"></span></span>
-          <span id="clog-arrow" style="font-size:12px;color:var(--t3);transition:transform .2s;transform:rotate(180deg)">▼</span>
-        </div>
-        <div id="su-clog-wrap" style="display:block"><div id="su-clog"></div></div>
         <div style="height:1px;background:var(--bor);margin:12px 0 10px"></div>
         <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--t3);margin-bottom:10px">Tube Specs</div>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
@@ -441,6 +445,13 @@ html,body{height:100%;overflow:hidden;background:var(--bg);font-family:-apple-sy
           </label>
           <button class="sc-btn disc" id="sdb2" onclick="discS2()" style="display:none;width:100%;margin-top:8px">Disconnect</button>
         </div>
+        <!-- Connection Log - kept next to the sensor chips so BLE activity is right here -->
+        <div style="height:1px;background:var(--bor);margin:12px 0 10px"></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;margin-bottom:6px" onclick="toggleConnLog()">
+          <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--t3)">🔌 Connection Log <span id="su-log-dot" style="display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--g);margin-left:4px;box-shadow:0 0 5px var(--g)"></span></span>
+          <span id="clog-arrow" style="font-size:12px;color:var(--t3);transition:transform .2s;transform:rotate(180deg)">▼</span>
+        </div>
+        <div id="su-clog-wrap" style="display:block"><div id="su-clog"></div></div>
       </div>
 
       <button class="dev-bypass-btn" onclick="devBypass()">🔧 Dev Bypass</button>
@@ -903,7 +914,7 @@ function toggleConnLog() {
 
 
 'use strict';
-const VER = '2.1.65-m';
+const VER = '2.1.66-m';
 
 // ── FIREBASE ─────────────────────────────────────────────────
 const FB_CFG = {
@@ -2584,6 +2595,7 @@ function startSession() {
   for (const _k in secMap) delete secMap[_k];
   A.s1.minP = A.s1.maxP = null;
   A.s2.minT = A.s2.maxT = null;
+  document.body.classList.add('recording'); // hide the NOT RECORDING banner -- we are now recording
   saveTruck($('fi-truck').value.trim());
   localStorage.setItem('cl_job',  A.sess.job);
   localStorage.setItem('cl_shot', A.sess.shot);
@@ -2609,6 +2621,7 @@ function startSession() {
 
 function devBypass() {
   A.dev = true; A.sess.active = true;
+  document.body.classList.add('recording'); // hide the NOT RECORDING banner in dev mode too
   A.sess.truck = 'BTK-DEV01';
   A.sess.job   = $('fi-job').value.trim()  || 'DEV JOB';
   A.sess.shot  = $('fi-shot').value.trim() || 'DEV SHOT';
@@ -3353,6 +3366,7 @@ function updateSessionInfoDisplays() {
 
 
 const CHANGELOG = [
+  ['2.1.66-m','Setup screen UX. (1) Opens full screen on the first tap (browsers block auto-fullscreen without a tap). (2) Reordered so all the operator data entry is together at the top -- Session Info and Tube Specs in the first card -- then the sensor connect chips, with the Connection Log now beside the chips. Encourages entering job/tube info before connecting. (3) A red NOT RECORDING banner is shown at the top of Setup until Start Session is pressed, so it is obvious the cure is not being saved yet; it disappears once recording starts.'],
   ['2.1.65-m','Recording now starts at the Start button. Previously the reading log and chart began filling as soon as the sensors connected, during the connect/preview phase. Now nothing is collected -- no log, no chart, no CSV, no cloud upload -- until Start is pressed; the live sensor value tiles still update so you can confirm the sensors are alive first. Start also clears any preview/leftover data so each cure begins clean. (Cloud upload was already gated on Start; this closes the local-collection gap.)'],
   ['2.1.64-m','Pre-test hardening. (1) Tapping the Connection Log header no longer throws -- a duplicate toggle function referenced a button id that does not exist; removed it so the working collapse/expand handler runs. (2) Firebase path segments (job/shot/seg/truck) are now sanitized of characters RTDB keys cannot contain (. # $ [ ] /), so an odd job number can no longer break or misfile the upload. Raw values are still stored in each reading.'],
   ['2.1.63-m','Pressure reliability fixes. (1) NOTIFY pressure parse is now strict sint16 big-endian, matching the readValue path and the TDWLB5 datasheet (attr 0x001c). Removed the old BE/LE auto-guess that could silently pick little-endian and report a wrong PSI -- NOTIFY delivers the same big-endian GATT value as a read; little-endian is watchlist/advertisement only, which this app does not use. (2) The 20s data watchdog now also works when pressure runs in poll fallback: runPoll now stamps lastReadMs on each successful read, so a wedged-but-connected pressure sensor is detected and reconnected. NOTIFY remains the preferred pressure path (~1Hz vs ~0.5Hz polling).'],
@@ -3590,6 +3604,21 @@ window.addEventListener('DOMContentLoaded', () => {
   setTimeout(chkReady, 300);
   setTimeout(chkReady, 1000);
   setTimeout(chkReady, 2500);
+  // Expand to full screen on the first user interaction. Browsers block auto-fullscreen
+  // without a user gesture, so hook the first tap/click anywhere and request it once.
+  (function(){
+    let fsDone = false;
+    function goFullscreen(){
+      if (fsDone) return; fsDone = true;
+      document.removeEventListener('pointerdown', goFullscreen, true);
+      document.removeEventListener('click', goFullscreen, true);
+      const el = document.documentElement;
+      const req = el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen || el.msRequestFullscreen;
+      if (req) { try { req.call(el); } catch(e){ LOG('Fullscreen request skipped -- ' + e.message, 'info'); } }
+    }
+    document.addEventListener('pointerdown', goFullscreen, true);
+    document.addEventListener('click', goFullscreen, true);
+  })();
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden) { setTimeout(chkReady, 200); }
   });
