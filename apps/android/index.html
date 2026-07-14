@@ -903,7 +903,7 @@ function toggleConnLog() {
 
 
 'use strict';
-const VER = '2.1.61-m';
+const VER = '2.1.62-m';
 
 // ── FIREBASE ─────────────────────────────────────────────────
 const FB_CFG = {
@@ -2029,8 +2029,15 @@ function pushReading({ psi, tempC, src, tsMs }) {
     }
   }
 
-  // Firebase upload queue -- deduplicated per bucket key
-  if (A.sess.active && !A.rdMap[k]._qu) { A.rdMap[k]._qu = true; A.upQ.push(k); }
+  // Firebase upload queue -- enqueue whenever the bucket has data not yet uploaded.
+  // Per-sensor upload flags (s1Up/s2Up) flip to true only on server ack, so a bucket
+  // re-queues until both sensors' data is confirmed written (survives failed writes,
+  // and picks up a second-sensor value that arrives after the bucket was first drained).
+  if (A.sess.active) {
+    const _r = A.rdMap[k];
+    const _needs = (_r.psi !== null && !_r.s1Up) || (_r.tempC !== null && !_r.s2Up);
+    if (_needs && !_r._inQ) { _r._inQ = true; A.upQ.push(k); }
+  }
 
   // rdMap holds all readings for the session -- no pruning.
   const keys = Object.keys(A.rdMap);
@@ -2105,13 +2112,12 @@ function drainUpload() {
   if (A.dev || !A.fbPath) return;
   if (!A.sess.active) return;
 
-  // Re-queue any rows that have data but were never queued
+  // Queue any rows with data not yet confirmed uploaded -- covers failed-write retries
+  // and late-arriving second-sensor values. s1Up/s2Up are set only on server ack.
   Object.keys(A.rdMap).forEach(k => {
     const r = A.rdMap[k];
-    if (!r._qu && (r.psi !== null || r.tempC !== null)) {
-      r._qu = true;
-      A.upQ.push(parseInt(k));
-    }
+    const needs = (r.psi !== null && !r.s1Up) || (r.tempC !== null && !r.s2Up);
+    if (needs && !r._inQ) { r._inQ = true; A.upQ.push(parseInt(k)); }
   });
 
   const keys = A.upQ.splice(0, 20);
@@ -2123,7 +2129,13 @@ function drainUpload() {
   let writeCount = 0;
   for (const k of keys) {
     const r = A.rdMap[k]; if (!r) continue;
-    if (r.psi !== null) {
+    r._inQ = false;  // dequeued; the scan above re-queues it if any data is still un-uploaded
+
+    // Guard each write with !sXUp (never re-send acked data) and !sXIF (never double-send
+    // while a request is still in flight). sXUp flips true only on ack, so a failed or
+    // lost write leaves sXUp false and is retried on the next drain.
+    if (r.psi !== null && !r.s1Up && !r.s1IF) {
+      r.s1IF = true;
       fbPush(A.fbPath + '/sensor1/readings', {
         ts: r.s1TsMs ? new Date(r.s1TsMs).toISOString() : r.ts,
         tsMs: r.s1TsMs || r.tsMs,
@@ -2133,11 +2145,12 @@ function drainUpload() {
         role: 'InletPressure',
         uclPSI: ucl,
         aboveUCL: ucl !== null && r.psi > ucl
-      }).then(() => { A.fbWrites++; A.fbLastWrite = Date.now(); })
-        .catch(e => { A.fbErrors++; LOG('Firebase S1 write error: ' + e.message, 'err'); });
+      }).then(() => { r.s1Up = true; r.s1IF = false; A.fbWrites++; A.fbLastWrite = Date.now(); })
+        .catch(e => { r.s1IF = false; A.fbErrors++; LOG('Firebase S1 write error: ' + e.message, 'err'); });
       writeCount++;
     }
-    if (r.tempC !== null) {
+    if (r.tempC !== null && !r.s2Up && !r.s2IF) {
+      r.s2IF = true;
       fbPush(A.fbPath + '/sensor2/readings', {
         ts: r.s2TsMs ? new Date(r.s2TsMs).toISOString() : r.ts,
         tsMs: r.s2TsMs || r.tsMs,
@@ -2145,8 +2158,8 @@ function drainUpload() {
         truckId: truck, sensorId: 'sensor2',
         job, shot, segment: seg,
         role: 'InletTemperature'
-      }).then(() => { A.fbWrites++; A.fbLastWrite = Date.now(); })
-        .catch(e => { A.fbErrors++; LOG('Firebase S2 write error: ' + e.message, 'err'); });
+      }).then(() => { r.s2Up = true; r.s2IF = false; A.fbWrites++; A.fbLastWrite = Date.now(); })
+        .catch(e => { r.s2IF = false; A.fbErrors++; LOG('Firebase S2 write error: ' + e.message, 'err'); });
       writeCount++;
     }
   }
@@ -3338,6 +3351,7 @@ function updateSessionInfoDisplays() {
 
 
 const CHANGELOG = [
+  ['2.1.62-m','Firebase uploads now retry on failure instead of being dropped. Previously a reading whose REST write failed (cell/wifi hiccup, offline) was marked queued and never resent, so the remote dashboard silently lost those seconds. Uploads are now tracked per sensor and marked done only on server ack, so failed writes re-queue and retry every 2s, and a second-sensor value that arrives after its bucket was first sent now uploads too. No duplicate writes.'],
   ['2.1.61-m','Sensor cards on Setup screen now have a permanent color-coded left rail (S1 green, S2 blue) and light background tint, always visible not just when connected, so it is obvious at a glance which controls belong to which sensor on tablet. Also fixed stale class names (sensor-card, sc-dot, sc-status) in the connect UI JS that were preventing the connected-state tint from ever rendering.'],
   ['2.1.60-m','Wake Lock failure log now includes error name, document.visibilityState and document.hasFocus() to diagnose why NotAllowedError is thrown (Samsung Power Saving, tab not focused, etc)'],
   ['2.1.59-m','Tablet landscape split layout: Setup panel left, Monitor panel right on wide landscape screens (Galaxy Tab A11+ etc). Portrait and phones keep the single-page tab UX unchanged.'],
