@@ -927,7 +927,7 @@ function toggleConnLog() {
 
 
 'use strict';
-const VER = '2.1.69-m';
+const VER = '2.1.70-m';
 
 // ── FIREBASE ─────────────────────────────────────────────────
 const FB_CFG = {
@@ -1042,14 +1042,10 @@ function LOG(msg, type='info') {
       const arrow = $('clog-arrow');
       if (arrow) arrow.style.transform = 'rotate(180deg)';
     }
-    // Scroll the setup page to show the log
-    const setupPage = document.getElementById('page-setup');
-    if (setupPage && wrap && wrap.offsetParent !== null) {
-      const wrapTop = wrap.getBoundingClientRect().top + setupPage.scrollTop;
-      if (wrapTop > setupPage.clientHeight * 0.5) {
-        setupPage.scrollTop = wrapTop - 80;
-      }
-    }
+    // (Removed the auto-scroll-the-page-to-the-log behavior: after the setup reorder the
+    //  Connection Log sits below the sensors, so scrolling the page to it on boot hid the
+    //  Session Info the operator must fill in first. The log box above still auto-scrolls
+    //  to its newest entry without moving the page.)
     // Pulse the dot when activity happens
     const dot = $('su-log-dot');
     if (dot) { dot.classList.add('active'); clearTimeout(dot._t); dot._t = setTimeout(() => dot.classList.remove('active'), 600); }
@@ -3380,6 +3376,7 @@ function updateSessionInfoDisplays() {
 
 
 const CHANGELOG = [
+  ['2.1.70-m','Setup screen now opens scrolled to the top so the operator immediately sees the Session Info fields to fill in. Previously boot-time connection-log messages auto-scrolled the page down to the log (which sits below the sensors after the recent reorder), opening the app mid-scroll on empty space. Removed that page auto-scroll; the log box still auto-scrolls to its newest line on its own.'],
   ['2.1.69-m','Chart now defaults to the All timebase so you see every data point of the session. Previously the chart opened on a 5-minute window, which could look like only part of the cure was captured. The All button is the default, and pressing Start Session forces the chart back to All.'],
   ['2.1.68-m','Setup data-entry card now visually separates the two sections with a colored left rail: indigo for Session Info, teal for Tube Specs. Makes it clear at a glance which fields belong to which, matching the colored-rail style already used on the sensor cards.'],
   ['2.1.67-m','Moved the NOT RECORDING banner from the top of Setup to the top of the Monitor panel, directly above the Inlet Pressure and Temperature tiles (top-right in the tablet split layout), so it reads as a warning that those live values are not being saved yet. Still disappears once Start Session is pressed.'],
@@ -3621,6 +3618,9 @@ window.addEventListener('DOMContentLoaded', () => {
   setTimeout(chkReady, 300);
   setTimeout(chkReady, 1000);
   setTimeout(chkReady, 2500);
+  // Pin the Setup page to the top on open so the operator immediately sees Session Info to fill in
+  const _setupPg = document.getElementById('page-setup');
+  if (_setupPg) { _setupPg.scrollTop = 0; setTimeout(() => { _setupPg.scrollTop = 0; }, 400); }
   // Expand to full screen on the first user interaction. Browsers block auto-fullscreen
   // without a user gesture, so hook the first tap/click anywhere and request it once.
   (function(){
