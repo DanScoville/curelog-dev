@@ -927,7 +927,7 @@ function toggleConnLog() {
 
 
 'use strict';
-const VER = '2.1.74-m';
+const VER = '2.1.75-m';
 
 // ── FIREBASE ─────────────────────────────────────────────────
 const FB_CFG = {
@@ -2643,6 +2643,7 @@ function startSession() {
   LOG('Session started -- ' + A.sess.truck + ' Job:' + A.sess.job + ' Shot:' + A.sess.shot + ' Seg:' + A.sess.seg, 'ok');
   setTimeout(updateSessionInfoDisplays, 100);
   acquireWakeLock();
+  startWakeLockHeartbeat();
 }
 
 function devBypass() {
@@ -3392,6 +3393,7 @@ function updateSessionInfoDisplays() {
 
 
 const CHANGELOG = [
+  ['2.1.75-m','Wake Lock hardening: added a 15s heartbeat that re-acquires the screen wake lock if the device silently drops it during a session, plus guards so re-acquire only runs while the screen is on. This helps against transient drops, but it can NOT keep the screen on once the OS forces it off -- for a full cure the tablet MUST be plugged in with screen timeout set high and battery optimization disabled for the app. A web app cannot capture sensor data while the screen is off/backgrounded.'],
   ['2.1.74-m','New app icon -- the CureLog capture mark: a green rounded square with a white ring and live pulse. Updated the header logo, browser-tab favicon, iOS apple-touch-icon, and the PWA install icon (home-screen / installed-app icon) to match.'],
   ['2.1.73-m','Fixed Start Session firing even while disabled. On Android a disabled button still fires touch events, so tapping the greyed-out button ran the ontouchend handler and started a shot with no sensor connected and empty fields. startSession() now hard-blocks unless all session + tube fields are filled and a sensor is connected, and the touch handler ignores taps while disabled.'],
   ['2.1.72-m','Start Session is now disabled until every field is filled -- Truck ID, Job, Shot, Segment AND Tube Diameter, Thickness, Length -- and at least one sensor is connected. Previously tube specs were not required and typing in them did not update the button; now they do. The hint lists exactly which fields are still missing.'],
@@ -3590,21 +3592,40 @@ function checkBleAvailability() {
 
 // -- WAKE LOCK -------------------------------------------------------------
 let _wakeLock = null;
+let _wlTimer = null;
 async function acquireWakeLock() {
   if (!('wakeLock' in navigator)) { LOG('Wake Lock: not supported on this browser', 'warn'); return; }
+  if (document.visibilityState !== 'visible') return;   // can only acquire while the screen is on
+  if (_wakeLock && !_wakeLock.released) return;          // already held
   try {
     _wakeLock = await navigator.wakeLock.request('screen');
     LOG('Wake Lock: screen will stay ON during session OK', 'ok');
     _wakeLock.addEventListener('release', () => {
-      LOG('Wake Lock released -- Android may dim screen', 'warn');
-      if (A.sess && A.sess.active) setTimeout(acquireWakeLock, 2000);
+      LOG('Wake Lock released -- re-acquiring while session active', 'warn');
+      if (A.sess && A.sess.active) setTimeout(acquireWakeLock, 1000);
     });
   } catch(e) {
     const diag = 'name=' + (e && e.name || '?') + ' vis=' + document.visibilityState + ' focus=' + document.hasFocus();
     LOG('Wake Lock failed: ' + (e && e.message || e) + ' [' + diag + '] -- keep screen on manually', 'warn');
   }
 }
+// Heartbeat: some devices (esp. Samsung) silently drop the screen wake lock. While a session
+// is active and the screen is on, verify it every 15s and re-acquire if lost. NOTE: this can
+// NOT re-acquire once the screen has actually gone off (the page is hidden then) -- keeping the
+// screen on through a full cure requires device power settings (plug in, screen timeout, and
+// disabling battery optimization for the app). A web app cannot capture BLE while backgrounded.
+function startWakeLockHeartbeat() {
+  if (_wlTimer) return;
+  _wlTimer = setInterval(() => {
+    if (!A.sess || !A.sess.active) return;
+    if (document.visibilityState === 'visible' && (!_wakeLock || _wakeLock.released)) {
+      LOG('Wake Lock heartbeat: lock not held -- re-acquiring', 'warn');
+      acquireWakeLock();
+    }
+  }, 15000);
+}
 function releaseWakeLock() {
+  if (_wlTimer) { clearInterval(_wlTimer); _wlTimer = null; }
   if (_wakeLock) { _wakeLock.release().catch(()=>{}); _wakeLock = null; }
 }
 document.addEventListener('visibilitychange', () => {
