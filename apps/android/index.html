@@ -927,7 +927,7 @@ function toggleConnLog() {
 
 
 'use strict';
-const VER = '2.1.75-m';
+const VER = '2.1.76-m';
 
 // ── FIREBASE ─────────────────────────────────────────────────
 const FB_CFG = {
@@ -1424,7 +1424,11 @@ function updS2UI() {
 // ── BLE CONNECT S1 ────────────────────────────────────────────
 // The button calls blePickS1() directly -- requestDevice is the FIRST await
 async function blePickS1() {
-  // requestDevice MUST be first -- no awaits, no DOM writes before this
+  // requestDevice MUST be the first await. Synchronously cancel any pending auto-reconnect
+  // first so a manual connect doesn't fight the reconnect loop for the BLE stack (which could
+  // leave this Connect button unresponsive). clearTimeout is sync -- safe before requestDevice.
+  if (A.s1.reConHandle) { clearTimeout(A.s1.reConHandle); A.s1.reConHandle = null; }
+  A.s1.reConAttempts = 0;
   const fVal = $('sf1') ? $('sf1').value.trim() : '';
   const fUse = $('sf1-use') && $('sf1-use').checked && fVal.length > 0;
   let dev;
@@ -1446,8 +1450,11 @@ async function blePickS1() {
   $('scb1').disabled   = true;
   $('scb1').textContent = 'Connecting...';
   LOG('S1: device picked -- ' + (dev.name||'(no name)') + (fUse?' [filter: '+fVal+']':' [no filter]'), 'info');
-  await doConnectS1(dev);
-  $('scb1').disabled = false;
+  try {
+    await doConnectS1(dev);
+  } finally {
+    $('scb1').disabled = false;   // always re-enable, even if the connect fails or hangs
+  }
 }
 
 async function doConnectS1(dev) {
@@ -1681,6 +1688,9 @@ function discS1() {
 
 // ── BLE CONNECT S2 ────────────────────────────────────────────
 async function blePickS2() {
+  // Cancel any pending auto-reconnect first (see blePickS1) so a manual connect doesn't fight it.
+  if (A.s2.reConHandle) { clearTimeout(A.s2.reConHandle); A.s2.reConHandle = null; }
+  A.s2.reConAttempts = 0;
   const fVal = $('sf2') ? $('sf2').value.trim() : '';
   const fUse = $('sf2-use') && $('sf2-use').checked && fVal.length > 0;
   let dev;
@@ -1701,8 +1711,11 @@ async function blePickS2() {
   $('scb2').disabled   = true;
   $('scb2').textContent = 'Connecting...';
   LOG('S2: device picked -- ' + (dev.name||'(no name)') + (fUse?' [filter: '+fVal+']':' [no filter]'), 'info');
-  await doConnectS2(dev);
-  $('scb2').disabled = false;
+  try {
+    await doConnectS2(dev);
+  } finally {
+    $('scb2').disabled = false;   // always re-enable, even if the connect fails or hangs
+  }
 }
 
 async function doConnectS2(dev) {
@@ -2691,17 +2704,27 @@ function initFB() {
     LOG('Firebase path: ' + A.fbPath, 'info');
     $('sf-fb').textContent = 'curelog-phase1-default-rtdb.firebaseio.com';
     // Write session start timestamp so dashboard can measure duration correctly
-    A.sessStart = Date.now();
-    // Use REST API for _session write -- works from content:// origin on Android
-    fbSet(A.fbPath + '/_session', {
-      startMs: A.sessStart,
-      truck: A.sess.truck, job: A.sess.job, shot: A.sess.shot, seg: A.sess.seg,
-      startIso: new Date(A.sessStart).toISOString(),
-      tubeDia:   A.sess.tubeDia   || null,
-      tubeThick: A.sess.tubeThick || null,
-      tubeLen:   A.sess.tubeLen   || null
-    }).then(() => LOG('Session metadata written OK', 'ok'))
-      .catch(e => LOG('Session meta write failed: ' + e.message, 'warn'));
+    // Resume-aware start: if this shot already has a _session (e.g. the tablet restarted
+    // mid-cure), KEEP the original start time so the dashboard shows the WHOLE cure --
+    // including the gap while the tablet was off -- instead of hiding everything captured
+    // before the restart. Readings append to the same path either way. (A brand-new,
+    // unrelated cure should use a new Shot # so it isn't merged with an old one.)
+    fetch(FB_REST + '/' + A.fbPath + '/_session.json').then(r => r.ok ? r.json() : null).catch(() => null)
+      .then(prev => {
+        const resuming = !!(prev && prev.startMs);
+        A.sessStart = resuming ? prev.startMs : Date.now();
+        if (resuming) LOG('Resuming shot -- kept original start ' + new Date(A.sessStart).toLocaleString() + ' (data before the restart is preserved)', 'ok');
+        return fbSet(A.fbPath + '/_session', {
+          startMs: A.sessStart,
+          truck: A.sess.truck, job: A.sess.job, shot: A.sess.shot, seg: A.sess.seg,
+          startIso: new Date(A.sessStart).toISOString(),
+          tubeDia:   A.sess.tubeDia   || null,
+          tubeThick: A.sess.tubeThick || null,
+          tubeLen:   A.sess.tubeLen   || null,
+          resumed:   resuming || null
+        });
+      }).then(() => LOG('Session metadata written OK', 'ok'))
+        .catch(e => LOG('Session meta write failed: ' + e.message, 'warn'));
 
     // Run comprehensive write test
     testFirebaseWrite();
@@ -3393,6 +3416,7 @@ function updateSessionInfoDisplays() {
 
 
 const CHANGELOG = [
+  ['2.1.76-m','Resume a shot without losing data. If you press Start Session on a shot that already has data (e.g. the tablet restarted mid-cure), it now KEEPS the original session start time instead of overwriting it, so the dashboard shows the whole cure -- including the gap while the tablet was off -- and Firebase keeps every reading. Also made the Connect buttons more reliable after a disconnect: a manual Connect now cancels any auto-reconnect in progress (so they do not fight for the Bluetooth stack), and the button always re-enables even if a connect attempt fails, so it can no longer get stuck unresponsive.'],
   ['2.1.75-m','Wake Lock hardening: added a 15s heartbeat that re-acquires the screen wake lock if the device silently drops it during a session, plus guards so re-acquire only runs while the screen is on. This helps against transient drops, but it can NOT keep the screen on once the OS forces it off -- for a full cure the tablet MUST be plugged in with screen timeout set high and battery optimization disabled for the app. A web app cannot capture sensor data while the screen is off/backgrounded.'],
   ['2.1.74-m','New app icon -- the CureLog capture mark: a green rounded square with a white ring and live pulse. Updated the header logo, browser-tab favicon, iOS apple-touch-icon, and the PWA install icon (home-screen / installed-app icon) to match.'],
   ['2.1.73-m','Fixed Start Session firing even while disabled. On Android a disabled button still fires touch events, so tapping the greyed-out button ran the ontouchend handler and started a shot with no sensor connected and empty fields. startSession() now hard-blocks unless all session + tube fields are filled and a sensor is connected, and the touch handler ignores taps while disabled.'],
