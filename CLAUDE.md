@@ -58,12 +58,14 @@ Each app file is ~1,300–3,600 lines. The truck app at `apps/android/index.html
 - Access is via **REST API only** (`fetch()` with `?auth=` token or open rules) — **no Firebase SDK**.
 - RTDB host in use: `curelog-phase1-default-rtdb.firebaseio.com` (project may host multiple DB instances; each app suite can point at its own).
 - Uploads are batched in `_uploadQueue`, drained every 2 seconds.
-- Data path:
+- Data path (segments sanitized via `fbKey()` — no `. # $ [ ] /`):
   ```
-  sessions/{TRUCK_ID}/{JOB_NUMBER}/{SHOT_ID}/
-    _session   { startMs, truck, job, ... }
-    readings/  { ts: { psi, temp, ... } }
+  shots/{JOB}/{SHOT}/{SEG}/{TRUCK}/            # TRUCK is BTK-xxxx
+    _session           { startMs, startIso, truck, job, shot, seg, tubeDia, tubeThick, tubeLen }
+    sensor1/readings/  { <pushId>: { pressRaw, tsMs, ts, role:'InletPressure', ... } }    # S1 pressure
+    sensor2/readings/  { <pushId>: { tempC,    tsMs, ts, role:'InletTemperature', ... } } # S2 temperature
   ```
+  Note: readings are keyed by Firebase push IDs (not by timestamp); field names are `pressRaw`/`tempC`/`tsMs`. The dashboards read this via the Firebase JS SDK (the REST-only rule above is the truck apps only).
 
 ## App conventions
 

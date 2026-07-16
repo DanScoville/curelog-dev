@@ -7,7 +7,7 @@ Refines the root `CLAUDE.md`. Same nature as `apps/dashboard/` — read-only liv
 - **Firebase JS SDK v8.10.1** (namespaced v8 API), **not** REST. Do not migrate to v9 modular.
 - **No BLE / no capture** — read-only. None of the sensor/BLE hard rules apply.
 - Chart.js `4.4.1` + `chartjs-plugin-annotation` `3.0.1` from cdnjs.
-- Reads `sessions/{TRUCK_ID}/{JOB_NUMBER}/{SHOT_ID}/...` — keep in sync with truck-app data shape.
+- Reads `shots/{JOB}/{SHOT}/{SEG}/{TRUCK}/{_session, sensor1/readings, sensor2/readings}` (fields `pressRaw`/`tempC`/`tsMs`) — keep in sync with truck-app data shape.
 
 ## Phone-specific
 

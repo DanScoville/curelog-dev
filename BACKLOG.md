@@ -49,7 +49,7 @@ Source: parallel code review of all five app files. HIGH items were re-verified 
 
 | ID | Summary | Status |
 |----|---------|--------|
-| D1 | `CLAUDE.md` Firebase section documents path `sessions/{TRUCK_ID}/{JOB_NUMBER}/{SHOT_ID}/`, but all code uses `shots/{job}/{shot}/{seg}/{truck}/sensor1\|sensor2/readings` (fields `pressRaw`/`tempC`/`tsMs`). Doc is stale — correct it. | Open |
+| D1 | `CLAUDE.md` Firebase section documented path `sessions/{TRUCK_ID}/{JOB_NUMBER}/{SHOT_ID}/`, but all code uses `shots/{job}/{shot}/{seg}/{truck}/sensor1\|sensor2/readings` (fields `pressRaw`/`tempC`/`tsMs`). | **Fixed (2026-07-16)** — corrected in root + both dashboard CLAUDE.md. |
 
 ### Enhancements
 
@@ -63,9 +63,8 @@ Source: parallel code review of all five app files. HIGH items were re-verified 
 | E4 | Android | **Password-protect (or PIN/hold-to-confirm) the Dev Bypass button.** It is functional today and bypasses Firebase with simulated data -- an operator could hit it by accident. Dan wants it gated. | Open |
 | E5 | Android | **True launch-fullscreen.** 2.1.66-m goes fullscreen on first tap (browser blocks auto-fullscreen without a gesture). For fullscreen *on launch* with no tap, install as a PWA (Add to Home screen) with a web manifest `"display":"fullscreen"`. Single-file app has no manifest today; could embed one via data-URI or add a small manifest file. | Open |
 
-### Suggested fix order
-1. ~~Android trio H2/H3/H4~~ done. ~~Pre-test dashboard + collection-gate (E1)~~ done.
-2. **E2** design (NOT RECORDING state + append/resume) — with Dan, after field-testing E1.
-3. **H1** PC (delete duplicated block).
-4. **H5** PC (zero calibration).
-5. iPad/PC ports of H2/H3/H4; remaining LOW items.
+### Suggested next (open items)
+1. **H1** + **H5** — PC app (Settings/Monitor blanks the dashboard; Zero double-counts offset). Highest-severity still open. *(only when PC app is back in scope — Dan paused iPad/PC.)*
+2. **iPad port** of the Android fixes (H2/H3/H4/M2/L2/L3) if the iPad app is still used.
+3. **E6 / E7** — live-shot indicator / far-end second sensor, when you want the new features.
+4. **E4** Dev Bypass lock, **E5** launch-fullscreen, remaining LOW (L1/L4/L5/L6/L7).

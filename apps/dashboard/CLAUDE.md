@@ -16,4 +16,4 @@ Read-only live monitor of Firebase session data for office/remote viewers. It do
 
 - Single-file HTML, no build step (root rule holds).
 - `const VER` at top; `const CHANGELOG` prepend-newest, **ASCII only** (root rule holds).
-- Reads the same Firebase path as the truck apps: `sessions/{TRUCK_ID}/{JOB_NUMBER}/{SHOT_ID}/{_session, readings}`. If the truck-app data shape changes, update the dashboard parser to match.
+- Reads the same Firebase path as the truck apps: `shots/{JOB}/{SHOT}/{SEG}/{TRUCK}/{_session, sensor1/readings, sensor2/readings}` (fields `pressRaw`/`tempC`/`tsMs`, readings keyed by push IDs). If the truck-app data shape changes, update the dashboard parser to match.
